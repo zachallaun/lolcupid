@@ -1,0 +1,50 @@
+Terms
+==========
+'Favored' - Top ~10-20 champs of a person. Cut off if there is less than ~10-5% of total mastery points on champ.
+'Devotion level' - Of people who favor a champ, what fraction of their mastery points are for this champ. Can come up with fun names like Fanatical, Well Loved, or perhaps other more well-memed titles. Could be accompanied by a meter.
+
+
+Homepage
+=========
+- Enter either champion name or summoner name
+- A hyperlinked tiled display of all the champions' icons.
+- A list of the X most recently visited summoners (by you)
+- Information about how many summoners we've analyzed (just something simple like "Summoners analyzed: 1,303,789" in the top right.)
+
+
+About page
+=========
+- How did we make it?
+- Bring up lolrecommender.com. Why is ours better? It accounts for things like how the champ feels. Maybe renekton players don't care about aoe damage, they like the visceral sound and animation, the blood.
+- How is it bad? Mastery hasn't been around too long. Unduly influenced by FotM. Doesn't account for dramatic reworks like Taric.
+
+
+Champion page
+=========
+- A list of other similarly 'favored' champions.
+- Break down list by role. "If I like x in top, who might I like as adc?" is an interesting question.
+- Break down list by league? Seems less meaningful to me. Don't know how we could do both simultaneously.
+
+
+Summoner page
+=========
+- Similar to chamion page, but account for all of the users favored champs. Weight input based on fraction of mastery points.
+- Perhaps mention: you might like x b/c you like y.
+
+
+Champion model (when displaying the lists)
+=========
+- Icon, name, riot designated roles, IP/RP costs
+- 'Devotion level'
+- Average win rate
+- Average kda
+- Average damage to chamions
+- Etc. to give the user a picture of what this champ is
+
+
+
+Questions
+==========
+- How do we get summoner list? Start with list of challengers and traverse their match list. Add in anyone how manually enters their summoner name.
+- How do we determine 'devotion level'? Something to do with fraction of mastery points relative to the summoner's other favored champs. Then, relative to other champions, which champs tend to have the highest average ratio.
+- How do we determine which champs are similarly 'favored'? Of summoners who highly favor champ x, determine who else they highly favor. Somehow weight based on relative position in their favored list.
