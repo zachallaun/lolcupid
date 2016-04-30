@@ -16,9 +16,12 @@ gem 'sprockets-es6'
 gem 'react-rails'
 gem 'lodash-rails'
 
+gem 'unirest'
+
 gem 'pry-rails'
 
 group :development, :test do
+  gem 'dotenv-rails'
   gem 'pry-remote'
   gem 'pry-doc'
 end
