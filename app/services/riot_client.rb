@@ -24,6 +24,12 @@ class RiotClient
     )
   end
 
+  def matchlist
+    @matchlist ||= Resource.new(@api_key, "v2.2/matchlist",
+      by_id: 'by-summoner/:summoner_id'
+    )
+  end
+
   private
 
   class Resource
