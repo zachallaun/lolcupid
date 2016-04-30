@@ -1,6 +1,7 @@
 class RiotClient
   class RequestError < StandardError; end
 
+  ASSET_PREFIX = "https://ddragon.leagueoflegends.com/cdn/"
   REGIONS = ["br", "eune", "euw", "jp", "kr", "lan", "las", "na", "oce", "ru", "tr"]
 
   def initialize
@@ -71,7 +72,11 @@ class RiotClient
       resp = Unirest.get(url(region, path), parameters: {api_key: @api_key}.merge(query_params))
 
       if resp.code == 200
-        resp.body.with_indifferent_access
+        if resp.body.is_a? Hash
+          resp.body.with_indifferent_access
+        else
+          resp.body
+        end
       else
         raise RequestError, "\nRiotClient::Resource GET failure\nResponse code: #{resp.code}\nResponse body: #{resp.raw_body}".gsub(/^/, "  ")
       end
