@@ -15,6 +15,8 @@ gem 'sprockets-es6'
 gem 'react-rails'
 gem 'lodash-rails'
 
+gem 'ruby-lol'
+
 gem 'pry-rails'
 
 group :development, :test do
