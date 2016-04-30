@@ -1,5 +1,4 @@
 require 'unirest'
-require 'json'
 
 class RiotClient
   class RequestError < StandardError; end
