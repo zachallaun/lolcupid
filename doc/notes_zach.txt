@@ -1,0 +1,25 @@
+Big ideas
+==========
+- High mastery on two champions is an indicator that someone with high mastery on one of them would like to play the other
+- Find new champions to play based on what you already like to play (what you have high mastery on)
+  - I love Wukong, so I should play...
+  - I have high mastery with these 3 champions, so I should play...
+- Now I've found a champ to play, how should I play it?
+  - Some sort of simpler/cleaner champion.gg interface: which lanes is the champ played in, what do high mastery people build, what do high winrate people build, what runes/masteries/etc.
+
+Homepage
+==========
+- Search by champion or summoner
+- Top champions by most total mastery points
+- Top champions by most dedicated following (basically mastery points / people who play the champion, e.g. Heimer, not many people play him but those that do are likely to have high master)
+
+Summoner page
+==========
+- Show top 5 (or whatever) champions you've mastered and recommendations of what you should play based on that
+  - Clicking on any champion takes you to that champion's page
+
+Champion page
+==========
+- Master-based recommendations based on this champion
+- Simplified champion.gg information (builds/etc.) but based on what high-mastery players build
+- If this is a champion you've played, it would be cool to show how you usually build it to compare to other players' builds
