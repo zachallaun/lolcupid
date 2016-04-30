@@ -1,5 +1,3 @@
-require 'unirest'
-
 class RiotClient
   class RequestError < StandardError; end
 
