@@ -32,7 +32,7 @@ module LolCupid
         ]
       )
 
-      env.register_transformer 'text/ecmascript-6', 'application/javascript',
+      env.register_transformer 'text/ecmascript-6', 'application/javascript', es6
     end
   end
 end
