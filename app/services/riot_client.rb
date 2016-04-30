@@ -13,8 +13,7 @@ class RiotClient
   end
 
   def summoner
-    @summoner ||= Resource.new(
-      "summoner",
+    @summoner ||= Resource.new(@api_key, "v1.4/summoner",
       by_name: 'by-name/:summoner_names',
       by_id: ':summoner_ids',
       masteries: ':summoner_ids/masteries',
@@ -26,7 +25,8 @@ class RiotClient
   private
 
   class Resource
-    def initialize(resource_name, method_map={})
+    def initialize(api_key, resource_name, method_map={})
+      @api_key = api_key
       @resource_name = resource_name
 
       method_map.each do |method_name, path_spec|
@@ -40,8 +40,12 @@ class RiotClient
       "https://#{region}.api.pvp.net/api/lol/#{region}"
     end
 
+    def url(region, path)
+      "#{api_url(region)}/#{@resource_name}/#{path}"
+    end
+
     def get(region, path)
-      resp = Unirest.get("#{api_url(region)}/#{path}", parameters: {api_key: @api_key})
+      resp = Unirest.get(url(region, path), parameters: {api_key: @api_key})
 
       if resp.code == 200
         resp.body.with_indifferent_access
