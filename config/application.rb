@@ -22,5 +22,17 @@ module RiotApiChallenge
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.assets.configure do |env|
+      es6 = Sprockets::ES6.new(
+        stage: 1,
+        optional: [
+          'es7.classProperties',
+          'es7.functionBind'
+        ]
+      )
+
+      env.register_transformer 'text/ecmascript-6', 'application/javascript',
+    end
   end
 end
