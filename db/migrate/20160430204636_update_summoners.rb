@@ -5,5 +5,6 @@ class UpdateSummoners < ActiveRecord::Migration
     rename_column :summoners, :name, :display_name
     add_column :summoners, :first_match, :datetime
     add_column :summoners, :profile_icon_id, :integer
+    add_column :summoners, :last_scraped_at, :datetime
   end
 end
