@@ -30,7 +30,24 @@ class RiotClient
     )
   end
 
+  def static
+    @static ||= StaticDataClient.new(@api_key)
+  end
+
   private
+
+  class StaticDataClient
+    def initialize(api_key)
+      @api_key = api_key
+    end
+
+    def champion
+      @champion ||= StaticResource.new(@api_key, "v1.2/champion",
+        all: '',
+        by_id: ':id'
+      )
+    end
+  end
 
   class Resource
     def initialize(api_key, resource_name, method_map={})
@@ -38,9 +55,9 @@ class RiotClient
       @resource_name = resource_name
 
       method_map.each do |method_name, path_spec|
-        define_singleton_method method_name do |region, *args|
+        define_singleton_method method_name do |region, *args, **query_params|
           validate_region! region
-          get region, make_path(path_spec, args)
+          get region, make_path(path_spec, args), query_params
         end
       end
     end
@@ -53,8 +70,8 @@ class RiotClient
       "#{api_url(region)}/#{@resource_name}/#{path}"
     end
 
-    def get(region, path)
-      resp = Unirest.get(url(region, path), parameters: {api_key: @api_key})
+    def get(region, path, query_params)
+      resp = Unirest.get(url(region, path), parameters: {api_key: @api_key}.merge(query_params))
 
       if resp.code == 200
         resp.body.with_indifferent_access
@@ -83,6 +100,12 @@ class RiotClient
       unless region.in?(REGIONS)
         raise "Invalid Riot API region: #{region}"
       end
+    end
+  end
+
+  class StaticResource < Resource
+    def api_url(region)
+      "https://global.api.pvp.net/api/lol/static-data/#{region}"
     end
   end
 end
