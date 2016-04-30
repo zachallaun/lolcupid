@@ -4,6 +4,17 @@ class Summoner < ActiveRecord::Base
 
   validate :validate_tier_and_division
 
+  def self.save_from_api(api_data)
+    find_or_initialize(summoner_id: api_data[:summoner_id]) do |summoner|
+      if summoner.persisted?
+        summoner.summoner_level = nil
+        summoner.save!
+      else # new_record? will be true
+
+      end
+    end
+  end
+
   private
 
   def validate_tier_and_division
