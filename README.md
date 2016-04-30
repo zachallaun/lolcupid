@@ -44,3 +44,45 @@ LolCupid
 LolCupid's advanced matching algorithm is designed to find a true connection between *Summoner* and *Champion*. We take a quick look through your profile and champion mastery points and find a champion you're going to love!
 
 Copy OkCupid logo?
+
+
+
+
+**Notes from brainstorm:**
+
+Champion
+=========
+- ip/rp values
+- icon
+- date since release
+
+Summoner
+=========
+- All champions mastery values
+
+
+
+Data
+=========
+summoner
+---------
+Mastery rate = mastery points per day since the champion was released (or mastery was introduced)
+Devotion level = champions mastery rate / total mastery rate
+Weighted devotion level = devotion level / total mastery points
+
+champion
+---------
+--- all of these should be weighted by total mastery points (an indicator of how much you play)
+Global interest = mastery points for champ / total mastery points for all champs
+Global devotion = the sum of all the devotion for champ / total devotion
+Fanaticism level = of the people who have have champ in top ten, what is the average devotion relative to other champs
+
+
+Features
+==========
+recommendations
+---------
+by champion X = look at all summoners, find their weighted devotion level for X, then go through each champ and multiply those devotion levels by their devotion for X, then sum across all summoners, present the top 5
+by role = tag the champ with their roles. present top five with that tag
+composite recommendation (by summoner) = (by chapion x array for 150 champs), get that array for your top 5 (or represent most of ~90% of your devotion), sum up the arrays weighted by your devotion.
+composite recommendation (by champ) = like by summoner, but weight all you choose evenly
