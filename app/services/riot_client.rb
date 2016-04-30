@@ -4,6 +4,8 @@ require 'json'
 class RiotClient
   class RequestError < StandardError; end
 
+  REGIONS = ["br", "eune", "euw", "jp", "kr", "lan", "las", "na", "oce", "ru", "tr"]
+
   def initialize
     @api_key = ENV['RIOT_API_KEY']
 
@@ -31,6 +33,7 @@ class RiotClient
 
       method_map.each do |method_name, path_spec|
         define_singleton_method method_name do |region, *args|
+          validate_region! region
           get region, make_path(path_spec, args)
         end
       end
@@ -68,6 +71,12 @@ class RiotClient
           part
         end
       end.join("/")
+    end
+
+    def validate_region!(region)
+      unless region.in?(REGIONS)
+        raise "Invalid Riot API region: #{region}"
+      end
     end
   end
 end
