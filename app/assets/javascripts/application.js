@@ -14,4 +14,5 @@
 //= require react
 //= require react_ujs
 //
+//= require 'lol_cupid'
 //= require_tree .

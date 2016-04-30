@@ -1,0 +1,31 @@
+.region-selector {
+  @extend .dropdown;
+
+  position: relative;
+  min-width: 24px;
+  height: 100%;
+}
+
+.region-selector__button {
+  @extend .btn;
+  @extend .btn-info;
+
+  width: 100%;
+  height: 100%;
+  padding: 0 6px;
+  font-size: 12px;
+}
+
+.region-selector__menu {
+  @extend .dropdown-menu;
+  @extend .dropdown-menu-right;
+
+  display: block;
+  min-width: inherit;
+  background-color: darken($brand-info, 15%);
+
+  > li a {
+    padding: 3px 10px;
+    background-color: darken($brand-info, 15%);
+  }
+}

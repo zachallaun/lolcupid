@@ -1,0 +1,25 @@
+.search {
+  @include flexbox;
+  @include align-items(baseline);
+
+  width: 500px;
+  padding: 1rem;
+  background-color: $gray-light;
+}
+
+.search__input-container {
+  position: relative;
+  width: 100%;
+  margin-right: 1rem;
+}
+
+.search__input {
+  padding-right: 54px;
+}
+
+.search__region-selector {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  height: 24px;
+}
