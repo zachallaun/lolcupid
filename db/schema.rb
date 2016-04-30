@@ -11,23 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160430183134) do
+ActiveRecord::Schema.define(version: 20160430204636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "summoners", force: :cascade do |t|
-    t.integer  "riot_id",         limit: 8, null: false
-    t.string   "normalized_name",           null: false
-    t.string   "name",                      null: false
+    t.integer  "summoner_id",       limit: 8, null: false
+    t.string   "standardized_name",           null: false
+    t.string   "display_name",                null: false
     t.integer  "summoner_level"
     t.integer  "tier"
     t.integer  "division"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.datetime "first_match"
+    t.integer  "profile_icon_id"
   end
 
-  add_index "summoners", ["normalized_name"], name: "index_summoners_on_normalized_name", using: :btree
-  add_index "summoners", ["riot_id"], name: "index_summoners_on_riot_id", using: :btree
+  add_index "summoners", ["standardized_name"], name: "index_summoners_on_standardized_name", using: :btree
+  add_index "summoners", ["summoner_id"], name: "index_summoners_on_summoner_id", using: :btree
 
 end
