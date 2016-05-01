@@ -1,47 +1,31 @@
 class GenIds
+    TIER_BREAKDOWN = [0.0001, 0.0007, 0.0185, 0.0735, 0.1842, 0.383, 0.34]
 
     def initialize
         @client = RiotClient.new
-        @tier_breakdown = [0.0001, 0.0007, 0.0185, 0.0735, 0.1842, 0.383, 0.34]
     end
 
     def seed
-        # # challenger
-        # # add_summoner_by_name_to_db "na", "Superman Rip"
-        # # add_summoner_by_name_to_db "na", "Grigne"
-        # # add_summoner_by_name_to_db "na", "Janna Mechanics"
-        # # add_summoner_by_name_to_db "na", "Zaganox"
-        # add_summoner_by_name_to_db "na", "Linsanityy"
-        # # add_summoner_by_name_to_db "na", "HvK Porky"
-        # # add_summoner_by_name_to_db "na", "Myrna"
-        # # add_summoner_by_name_to_db "na", "I Am Revenge"
-        # # add_summoner_by_name_to_db "na", "OfSerenity"
-        # # add_summoner_by_name_to_db "na", "FeedPally"
-        # # add_summoner_by_name_to_db "na", "BillysBoss"
-        # # add_summoner_by_name_to_db "na", "Ablazeolive"
-        # # add_summoner_by_name_to_db "na", "GladeGleamBright"
-        # # add_summoner_by_name_to_db "na", "iMysterious"
+        na_challenger = ["Superman Rip", "Grigne", "Janna Mechanics", "Zaganox", "Linsanityy", "HvK Porky", "Myrna", "I Am Revenge", "OfSerenity", "FeedPally", "BillysBoss", "Ablazeolive", "GladeGleamBright", "iMysterious"]
+        na_master = ["Viaz"]
+        na_diamond = ["Wingsofdeath", "Mahir"]
+        na_platinum = []
+        na_gold = ["rekabat", "mutinyonthebay"]
+        na_silver = ["nerd time"]
+        na_bronze = ["shashad"]
+        na_unranked = ["gorper", "theburninator"]
 
-        # # master
-        # add_summoner_by_name_to_db "na", "Viaz"
+        for s in na_challenger + na_master + na_diamond + na_platinum + na_gold + na_silver + na_bronze + na_unranked
+            add_summoner_by_name_to_db "na", s
+        end
+    end
 
-        # #diamond
-        # add_summoner_by_name_to_db "na", "Wingsofdeath"
-        # add_summoner_by_name_to_db "na", "Mahir"
-
-        # #platinum
-
-        # #gold
-        add_summoner_by_name_to_db "na", "mutinyonthebay"
-
-        # #silver
-        # add_summoner_by_name_to_db "na", "nerd time"
-
-        # #bronze
-        # add_summoner_by_name_to_db "na", "shashad"
-
-        # #unranked
-        # add_summoner_by_name_to_db "na", "gorper"
+    def seed_with_file(file)
+        File.open(file, "r") do |f|
+            while line = f.gets
+                add_summoner_by_id_to_db "na", line.to_i
+            end
+        end
     end
 
     def add_summoner_by_name_to_db(region, name)
@@ -110,14 +94,22 @@ class GenIds
         db_tbd = db_tier_breakdown
         db_total = Summoner.count
 
-        return Array.new(7) {|i| (db_tbd[i].to_f/db_total) / @tier_breakdown[i]}
+        return Array.new(7) {|i| (db_tbd[i].to_f/db_total) / TIER_BREAKDOWN[i]}
+    end
+
+    def db_dump_ids(file)
+        output = File.open(file, "w")
+        for s_id in Summoner.all.map(&:id)
+            output << s_id << "\n"
+        end
+        output.close
     end
 
     def balancing_sample
         db_tbd = db_tier_breakdown
         db_total = Summoner.count
 
-        ratio = Array.new(7) {|i| (db_tbd[i].to_f/db_total) / @tier_breakdown[i]}
+        ratio = Array.new(7) {|i| (db_tbd[i].to_f/db_total) / TIER_BREAKDOWN[i]}
         puts "#{ratio}"
 
         min = ratio.max+1

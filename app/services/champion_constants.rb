@@ -163,6 +163,7 @@ module ChampionConstants
         "Soraka" => "the Banana Tosser",
         "Taric" => "the Truly Outrageous",
         "Teemo" => "the Literal Devil",
+        "Udyr" => "the ManBearPig",
         "Urgot" => "the Furgot",
         "Yasuo" => "the HASAGI!",
         "Yorick" => "Wait who?",
