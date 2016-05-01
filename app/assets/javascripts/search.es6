@@ -50,6 +50,16 @@
     }
   }
 
+  function championNameMatchParts(query, champion) {
+    const matchEndIndex = champion.matchAt + query.length;
+
+    const firstPart = champion.name.slice(0, champion.matchAt);
+    const matchPart = champion.name.slice(champion.matchAt, matchEndIndex);
+    const lastPart = champion.name.slice(matchEndIndex);
+
+    return [ firstPart, matchPart, lastPart ];
+  }
+
   class ChampionSelector extends Component {
     state = {
       query: '',
@@ -86,21 +96,53 @@
     renderResult = (result) => {
       const { query, selected } = this.state;
 
+      const [ firstPart, matchPart, lastPart ] = championNameMatchParts(query, result);
+
       return (
-        <li key={ result.id }>
-          <a href="">{ result.name }</a>
+        <li key={result.id}>
+          <a className="champion-option" href="">
+            <div className="champion-option__content">
+              <img
+                className="champion-option__portrait"
+                src={result.image_url}
+                alt={result.name}
+              />
+              <div className="champion-option__text">
+                <span className="champion-option__name">
+                  {firstPart}
+                  <span className="champion-option__highlighted">{matchPart}</span>
+                  {lastPart}
+                  &nbsp;
+                </span>
+                <span className="champion-option__title">
+                  {result.title}
+                </span>
+              </div>
+            </div>
+          </a>
         </li>
       );
     }
 
     renderResults() {
-      if (this.state.results.length === 0) {
+      if (this.state.query.trim() === '') {
         return null;
       }
 
       return (
         <ul className="champion-selector__menu">
           {this.state.results.map(this.renderResult)}
+          <li>
+            <a className="champion-option champion-option--is-default" href="">
+              <div className="champion-option__content">
+                <div className="champion-option__text">
+                  <span className="champion-option__title champion-option__title">
+                    Search for summoner '{this.state.query}'
+                  </span>
+                </div>
+              </div>
+            </a>
+          </li>
         </ul>
       );
     }

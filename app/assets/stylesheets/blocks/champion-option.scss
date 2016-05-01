@@ -1,0 +1,43 @@
+.champion-option {
+  padding: 3px !important;
+}
+
+.champion-option--is-default {
+  padding: 3px 10px 6px !important;
+  border-top: 1px solid darken($gray-light, 5%);
+}
+
+.champion-option__content {
+  @include flexbox;
+  @include align-items(center);
+}
+
+.champion-option__portrait {
+  width: 30px;
+  height: 30px;
+}
+
+.champion-option__text {
+  @include flexbox;
+  @include align-items(baseline);
+}
+
+.champion-option__name {
+  margin-left: 6px;
+  font-size: 16px;
+}
+
+.champion-option__highlighted {
+  font-weight: normal;
+}
+
+.champion-option__title {
+  font-size: 13px;
+  color: lighten($gray-light, 25%);
+}
+
+.champion-option:hover {
+  .champion-option__title {
+    color: lighten($gray-light, 35%);
+  }
+}
