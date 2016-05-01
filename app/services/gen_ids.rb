@@ -6,24 +6,42 @@ class GenIds
     end
 
     def seed
-        add_summoner_by_name_to_db "na", "rekabat"
-        # add_summoner_by_name_to_db "na", "nerd time"
-        # add_summoner_by_name_to_db "na", "gorper"
-
-        # add_summoner_by_name_to_db "na", "Superman Rip"
-        # add_summoner_by_name_to_db "na", "Grigne"
-        # add_summoner_by_name_to_db "na", "Janna Mechanics"
-        # add_summoner_by_name_to_db "na", "Zaganox"
+        # # challenger
+        # # add_summoner_by_name_to_db "na", "Superman Rip"
+        # # add_summoner_by_name_to_db "na", "Grigne"
+        # # add_summoner_by_name_to_db "na", "Janna Mechanics"
+        # # add_summoner_by_name_to_db "na", "Zaganox"
         # add_summoner_by_name_to_db "na", "Linsanityy"
-        # add_summoner_by_name_to_db "na", "HvK Porky"
-        # add_summoner_by_name_to_db "na", "Myrna"
-        # add_summoner_by_name_to_db "na", "I Am Revenge"
-        # add_summoner_by_name_to_db "na", "OfSerenity"
-        # add_summoner_by_name_to_db "na", "FeedPally"
-        # add_summoner_by_name_to_db "na", "BillysBoss"
-        # add_summoner_by_name_to_db "na", "Ablazeolive"
-        # add_summoner_by_name_to_db "na", "GladeGleamBright"
-        # add_summoner_by_name_to_db "na", "iMysterious"
+        # # add_summoner_by_name_to_db "na", "HvK Porky"
+        # # add_summoner_by_name_to_db "na", "Myrna"
+        # # add_summoner_by_name_to_db "na", "I Am Revenge"
+        # # add_summoner_by_name_to_db "na", "OfSerenity"
+        # # add_summoner_by_name_to_db "na", "FeedPally"
+        # # add_summoner_by_name_to_db "na", "BillysBoss"
+        # # add_summoner_by_name_to_db "na", "Ablazeolive"
+        # # add_summoner_by_name_to_db "na", "GladeGleamBright"
+        # # add_summoner_by_name_to_db "na", "iMysterious"
+
+        # # master
+        # add_summoner_by_name_to_db "na", "Viaz"
+
+        # #diamond
+        # add_summoner_by_name_to_db "na", "Wingsofdeath"
+        # add_summoner_by_name_to_db "na", "Mahir"
+
+        # #platinum
+
+        # #gold
+        # add_summoner_by_name_to_db "na", "rekabat"
+
+        # #silver
+        # add_summoner_by_name_to_db "na", "nerd time"
+
+        # #bronze
+        add_summoner_by_name_to_db "na", "shashad"
+
+        # #unranked
+        # add_summoner_by_name_to_db "na", "gorper"
     end
 
     def add_summoner_by_name_to_db(region, name)
@@ -71,7 +89,10 @@ class GenIds
 
     def test
         puts "Test function:"
-        add_summoner_by_name_to_db("na", "windmilldave")
+        db_tb = db_tier_balance
+        db_total = count
+
+        puts "#{db_total} summoners: #{db_tb}"
     end
 
     def db_tier_breakdown
@@ -83,6 +104,13 @@ class GenIds
             Summoner.gold.count,
             Summoner.silver.count,
             Summoner.bronze.count ]
+    end
+
+    def db_tier_balance
+        db_tbd = db_tier_breakdown
+        db_total = Summoner.count
+
+        return Array.new(7) {|i| (db_tbd[i].to_f/db_total) / @tier_breakdown[i]}
     end
 
     def balancing_sample
@@ -121,10 +149,14 @@ class GenIds
         end
     end
 
+    def top_sample
+        return Summoner.order(tier: :asc, division: :asc).drop.first
+        # return Summoner.order(tier: :asc, division: :asc).drop(pos).first
+    end
+
     def grow
         # s = Summoner.first
         # smnr = Summoner.order("RANDOM()").first
-        # smnr = Summoner.order(tier: :asc, division: :asc).drop(pos).first
         smnr = balancing_sample
         puts "Beginning with: #{smnr.tier}, #{smnr.division}"
 
