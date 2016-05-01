@@ -134,6 +134,7 @@ module ChampionConstants
         "Zyra" =>           Date.parse("2012-07-24")
     }
 
+    # http://titlecapitalization.com/
     CHAMP_NICKNAMES = {
         "Alistar" => "the Unmilkable",
         "Annie" => "the Girl Who Lost Her Bear",
@@ -145,6 +146,7 @@ module ChampionConstants
         "Darius" => "the Dunkmaster",
         "Draven" => "the DRAAAAAAAVEN",
         "Graves" => "the Cigarless",
+        # "Graves" => "the Man with No Cigar",
         "Lulu" => "the LCS Hype \\s",
         "Malphite" => "He's a rock",
         # "Morgana" => "(There's something here... OMG I still can't move)",
