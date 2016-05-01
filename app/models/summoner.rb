@@ -55,9 +55,9 @@ class Summoner < ActiveRecord::Base
   def validate_tier_and_division
     if challenger? && !i? || master? && !i?
       errors[:division] << "must be I if tier is Challenger or Master. Attempted to set to #{:division}."
-    elsif tier? && !division?
+    elsif tier && !division
       errors[:division] << "must be set if tier is set."
-    elsif division? && !tier?
+    elsif division && !tier
       errors[:tier] << "must be set if division is set."
     end
   end

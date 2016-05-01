@@ -9,23 +9,12 @@ class RiotClient
   REGIONS = ["br", "eune", "euw", "jp", "kr", "lan", "las", "na", "oce", "ru", "tr"]
   GAME_QUEUE_TYPE = ["RANKED_SOLO_5x5", "RANKED_TEAM_3x3", "RANKED_TEAM_5x5"]
 
-  # 10 per 10 seconds = 1 s/r
-  # 500 per 10 minutes (600 seconds) = 1.2 s/r
-  MILLISECONDS_BETWEEN_REQUESTS = 3000
-  # MILLISECONDS_BETWEEN_REQUESTS = 1200
-
-  def initialize
-    @api_key = ENV['RIOT_API_KEY']
-    @last_request = Time.now.to_f
-
-    unless @api_key
-      raise "ENV['RIOT_API_KEY'] must be set to use RiotClient"
-    end
+  def initialize(retries: 1)
+    @config = Config.new(retries: retries)
   end
 
   def league
-    wait_on_request
-    @league ||= Resource.new(@api_key, "v2.5/league",
+    @league ||= Resource.new(@config, "v2.5/league",
       by_id:         'by-summoner/:summoner_ids',
       by_id_entry:   'by-summoner/:summoner_ids/entry'
       # by_id_entry:   'by-summoner/:summoner_ids/entry',
@@ -37,26 +26,23 @@ class RiotClient
   end
 
   def match
-    wait_on_request
-    @match ||= Resource.new(@api_key, "v2.2/match",
+    @match ||= Resource.new(@config, "v2.2/match",
       by_match_id: ':match_id'
     )
   end
 
   def matchlist
-    wait_on_request
-    @matchlist ||= Resource.new(@api_key, "v2.2/matchlist",
+    @matchlist ||= Resource.new(@config, "v2.2/matchlist",
       by_id: 'by-summoner/:summoner_id'
     )
   end
 
   def static
-    @static ||= StaticDataClient.new(@api_key)
+    @static ||= StaticDataClient.new(@config)
   end
 
   def summoner
-    wait_on_request
-    @summoner ||= Resource.new(@api_key, "v1.4/summoner",
+    @summoner ||= Resource.new(@config, "v1.4/summoner",
       by_name: 'by-name/:summoner_names',
       by_id: ':summoner_ids',
       masteries: ':summoner_ids/masteries',
@@ -67,27 +53,9 @@ class RiotClient
 
   private
 
-  def wait_on_request
-    current_time = Time.now.to_f
-    s_since_last_request = current_time - @last_request
-    ms_since_last_request = s_since_last_request*1000.0
-    sleep_time_in_ms = MILLISECONDS_BETWEEN_REQUESTS - ms_since_last_request
-    sleep_time = sleep_time_in_ms/1000.0
-    if sleep_time > 0 then
-      puts "Waiting: #{sleep_time}"
-      sleep(sleep_time)
-      puts "Done"
-    end
-
-    # really this should come after the request has been fulfilled
-    @last_request = current_time
-  end
-
-
-
   class Resource
-    def initialize(api_key, resource_name, method_map={})
-      @api_key = api_key
+    def initialize(config, resource_name, method_map={})
+      @config = config
       @resource_name = resource_name
 
       method_map.each do |method_name, path_spec|
@@ -106,8 +74,10 @@ class RiotClient
       "#{api_url(region)}/#{@resource_name}/#{path}"
     end
 
-    def get(region, path, query_params)
-      resp = Unirest.get(url(region, path), parameters: {api_key: @api_key}.merge(query_params))
+    def get(region, path, query_params, attempt: 0)
+      resp = Unirest.get(url(region, path), parameters: {api_key: @config.api_key}.merge(query_params))
+
+      wait_for_rate_limiter(region)
 
       if resp.code == 200
         if resp.body.is_a? Hash
@@ -115,12 +85,23 @@ class RiotClient
         else
           resp.body
         end
+      elsif attempt < @config.retries
+        get(region, path, query_params, attempt: attempt + 1)
       else
         raise RequestError, "\nRiotClient::Resource GET failure\nResponse code: #{resp.code}\nResponse body: #{resp.raw_body}".gsub(/^/, "  ")
       end
     end
 
     private
+
+    def wait_for_rate_limiter(region)
+      l1 = @config.limiter_per_10_seconds.wait(region)
+      l2 = @config.limiter_per_10_minutes.wait(region)
+
+      if l1 || l2
+        puts "Warning: rate limited #{l1} #{l2}"
+      end
+    end
 
     def make_path(path_spec, args)
       parts = path_spec.split("/")
@@ -160,6 +141,36 @@ class RiotClient
   class StaticResource < Resource
     def api_url(region)
       "https://global.api.pvp.net/api/lol/static-data/#{region}"
+    end
+  end
+
+  class Config
+    REQUIRED_VARS = ['RIOT_API_KEY', 'RIOT_REQUESTS_PER_10_SECONDS', 'RIOT_REQUESTS_PER_10_MINUTES']
+
+    attr_reader :retries, :api_key, :limiter_per_10_seconds, :limiter_per_10_minutes
+
+    def initialize(retries:)
+      validate_env_vars!
+
+      @retries = retries
+      @api_key = ENV['RIOT_API_KEY']
+      @limiter_per_10_seconds = RateLimiter.new(
+        interval: 10 * 1000,
+        max_in_interval: ENV['RIOT_REQUESTS_PER_10_SECONDS'].to_i
+      )
+      @limiter_per_10_minutes = RateLimiter.new(
+        interval: 10 * 60 * 1000,
+        max_in_interval: ENV['RIOT_REQUESTS_PER_10_MINUTES'].to_i
+      )
+    end
+
+    private
+
+    def validate_env_vars!
+      missing = REQUIRED_VARS.select { |v| !ENV[v] }
+      if missing.present?
+        raise "Missing ENV vars: #{missing.join(", ")}"
+      end
     end
   end
 end
