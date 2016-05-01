@@ -23,3 +23,40 @@ Champion page
 - Master-based recommendations based on this champion
 - Simplified champion.gg information (builds/etc.) but based on what high-mastery players build
 - If this is a champion you've played, it would be cool to show how you usually build it to compare to other players' builds
+
+
+
+
+Summoner
+=========
+mastery_points
+first_match_on = day of first match or day mastery was introduced, whichever was later
+mastery_rate = mastery_points / days since first_match_on
+
+MasteryEntries
+==========
+summoner_id
+champion_id
+champion_points
+mastery_rate = champion_points / days since champ released or summoner first_match_on
+devotion = mastery_rate / summoner master_rate
+weighted_devotion = devotion * champion mastery_points # means more if you've played champ a lot
+
+Champions
+==========
+champion_id
+global_interest = all of champion's points / all mastery points total
+global_devotion = all of champion's devotion / all devotion total
+
+
+mastery_points = 1,000,000
+days = 10
+mastery_rate = 100,000 # average points per day
+
+wukong champion_points = 500,000
+mastery_rate = 500,000 / 2 = 250,000
+devotion = 250,000 / 100,000 = 2.5 # huge devotion in small amount of time
+
+akali champion_points = 500,000
+mastery_rate = 500,000 / 10 = 50,000
+devotion = 50,000 / 100,000 = 0.5 # less devotion, played as much as wukong but over more time
