@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160430213954) do
+ActiveRecord::Schema.define(version: 20160501040938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20160430213954) do
     t.string  "title",         null: false
     t.string  "image",         null: false
     t.string  "asset_version"
+    t.string  "nickname"
   end
 
   add_index "champions", ["champion_id"], name: "index_champions_on_champion_id", using: :btree

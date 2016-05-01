@@ -12,4 +12,8 @@ class Champion < ActiveRecord::Base
   def image_url
     RiotClient::ASSET_PREFIX + "#{asset_version}/img/champion/#{image}"
   end
+
+  def display_title
+    nickname || title
+  end
 end

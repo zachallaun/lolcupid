@@ -153,7 +153,7 @@
                 &nbsp;
               </span>
               <span className="champion-option__title">
-                {result.title}
+                {result.display_title}
               </span>
             </div>
           </div>
