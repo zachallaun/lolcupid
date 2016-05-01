@@ -1,12 +1,14 @@
 class Summoner < ActiveRecord::Base
+  enum region: [:br, :eune, :euw, :jp, :kr, :lan, :las, :na, :oce, :ru, :tr]
   enum tier: [:challenger, :master, :diamond, :platinum, :gold, :silver, :bronze]
   enum division: [:i, :ii, :iii, :iv, :v]
 
   has_many :champion_masteries
 
+  validates :region, presence: true
   validate :validate_tier_and_division
 
-  def self.save_from_api(summoner_api_data, league_api_data)
+  def self.save_from_api(summoner_api_data, league_api_data, region)
     tier_map = {"CHALLENGER"=>:challenger, "MASTER"=>:master, "DIAMOND"=>:diamond, "PLATINUM"=>:platinum, "GOLD"=>:gold, "SILVER"=>:silver, "BRONZE"=>:bronze}
     division_map = {"I"=>:i, "II"=>:ii, "III"=>:iii, "IV"=>:iv, "V"=>:v}
 
@@ -20,6 +22,7 @@ class Summoner < ActiveRecord::Base
         summoner.display_name = s[:name]
         summoner.summoner_level = s[:summonerLevel]
         summoner.profile_icon_id = s[:profileIconId]
+        summoner.region = region
 
         # what happens if unranked? returned 404 earlier
         if league_api_data then

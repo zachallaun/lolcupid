@@ -32,13 +32,13 @@ class GenIds
         # #platinum
 
         # #gold
-        # add_summoner_by_name_to_db "na", "rekabat"
+        add_summoner_by_name_to_db "na", "mutinyonthebay"
 
         # #silver
         # add_summoner_by_name_to_db "na", "nerd time"
 
         # #bronze
-        add_summoner_by_name_to_db "na", "shashad"
+        # add_summoner_by_name_to_db "na", "shashad"
 
         # #unranked
         # add_summoner_by_name_to_db "na", "gorper"
@@ -53,7 +53,7 @@ class GenIds
 
         league = get_league_api_info region, id
         # league   = @client.league.by_id_entry region, id
-        Summoner.save_from_api(summoner, league)
+        Summoner.save_from_api(summoner, league, region)
     end
 
     def add_summoner_by_id_to_db(region, id)

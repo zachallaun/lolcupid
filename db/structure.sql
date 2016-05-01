@@ -121,7 +121,8 @@ CREATE TABLE summoners (
     first_match timestamp without time zone,
     profile_icon_id integer,
     last_scraped_at timestamp without time zone,
-    mastery_points integer
+    mastery_points integer,
+    region integer
 );
 
 
@@ -272,4 +273,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160430213954');
 INSERT INTO schema_migrations (version) VALUES ('20160501040938');
 
 INSERT INTO schema_migrations (version) VALUES ('20160501153855');
+
+INSERT INTO schema_migrations (version) VALUES ('20160501162319');
 
