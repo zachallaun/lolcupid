@@ -62,7 +62,7 @@ class GenIds
         summoner = @client.summoner.by_name region, summoner[id.to_s][:name]
         league = get_league_api_info region, id
         # league   = @client.league.by_id_entry region, id
-        Summoner.save_from_api(summoner, league)
+        Summoner.save_from_api(summoner, league, region)
     end
 
     # return nil if user can't be found
