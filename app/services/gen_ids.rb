@@ -15,55 +15,20 @@ class GenIds
         na_bronze = ["shashad"]
         na_unranked = ["gorper", "theburninator"]
 
-        for s in na_challenger + na_master + na_diamond + na_platinum + na_gold + na_silver + na_bronze + na_unranked
-            add_summoner_by_name_to_db "na", s
+        na_combo_list = na_challenger + na_master + na_diamond + na_platinum + na_gold + na_silver + na_bronze + na_unranked
+
+        fs = FetchSummoner.new
+        for s in na_combo_list
+            fs.fetch_by_name "na", s
         end
     end
 
     def seed_with_file(file)
+        fs = FetchSummoner.new
         File.open(file, "r") do |f|
             while line = f.gets
-                add_summoner_by_id_to_db "na", line.to_i
+                fs.fetch_by_name "na", line.to_i
             end
-        end
-    end
-
-    def add_summoner_by_name_to_db(region, name)
-        summoner = get_summoner_api_info region, name
-        if summoner == nil then return end
-
-        standardized_name = summoner.keys[0]
-        id = summoner[standardized_name][:id]
-
-        league = get_league_api_info region, id
-        # league   = @client.league.by_id_entry region, id
-        Summoner.save_from_api(summoner, league, region)
-    end
-
-    def add_summoner_by_id_to_db(region, id)
-        summoner = @client.summoner.by_id region, id
-        # this is kind of dumb, i make another call just to get their standardized name + it's in the format Summoner class expects
-        summoner = @client.summoner.by_name region, summoner[id.to_s][:name]
-        league = get_league_api_info region, id
-        # league   = @client.league.by_id_entry region, id
-        Summoner.save_from_api(summoner, league, region)
-    end
-
-    # return nil if user can't be found
-    def get_summoner_api_info(region, name)
-        begin
-            return @client.summoner.by_name region, name
-        rescue
-            return nil
-        end
-    end
-
-    # return nil if user not ranked
-    def get_league_api_info(region, id)
-        begin
-            return @client.league.by_id_entry region, id
-        rescue
-            return nil
         end
     end
 
@@ -146,6 +111,12 @@ class GenIds
         # return Summoner.order(tier: :asc, division: :asc).drop(pos).first
     end
 
+    def grow_until(desired_size)
+        while count < desired_size
+            grow
+        end
+    end
+
     def grow
         # s = Summoner.first
         # smnr = Summoner.order("RANDOM()").first
@@ -160,8 +131,10 @@ class GenIds
         if s_ids.empty? then return end
 
         filtered_s_ids = Summoner.filter_out_saved_ids s_ids
+        fs = FetchSummoner.new
         for id in filtered_s_ids do
-            add_summoner_by_id_to_db("na", id)
+            puts "Adding summoner: #{id}"
+            fs.fetch_by_id "na", id
         end
     end
 
