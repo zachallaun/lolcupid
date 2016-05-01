@@ -9,4 +9,8 @@ namespace :champions do
       Champion.from_api(champion_static_data[:version], champ).save!
     end
   end
+
+  task clean: :environment do
+    Champion.destroy_all
+  end
 end
