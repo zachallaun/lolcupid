@@ -86,3 +86,51 @@ by champion X = look at all summoners, find their weighted devotion level for X,
 by role = tag the champ with their roles. present top five with that tag
 composite recommendation (by summoner) = (by chapion x array for 150 champs), get that array for your top 5 (or represent most of ~90% of your devotion), sum up the arrays weighted by your devotion.
 composite recommendation (by champ) = like by summoner, but weight all you choose evenly
+
+
+
+
+
+
+
+
+
+
+summoner
+========
+uw_mastery_points      # total mastery points for a summoner
+mastery_points         # sum of all weighted_champion_points
+
+
+champion_mastery
+========
+summoner_id
+champion_id
+uw_champion_points          # points for a particular champion
+champion_points             # uw_champion_points * (days mastery has been released / days since champion has been released)
+uw_devotion                 # champion_points / summoner mastery_points          -- we don't need to store this
+devotion                    # champion_points / avg summoner mastery_points      -- this accounts for players who don't play much
+                            # uw_devotion * (summoner mastery_points / avg summoner mastery_points)
+
+champion
+========
+release_date        # or the date mastery started
+
+
+recommendations
+========
+recommendations(champion X):
+    devotion_array(S) -> [devotion(S, X) for all champions X]
+    devotion_array(X, S) = devotion_array(S) * devotion_level(X, S)
+    sum devotion_array(X, S) for all summoners S
+
+recommendations(champions X1..XN, W1..WN (weights)):
+    all_recs = [recommendations(X) * W for champions zip(X1..XN, W1..WN)]
+    sum all_recs
+
+recommendations(summoner S):
+    XS = get top N champions sorted by devotion
+    recommendations(XS, [devotion(X) / sum(XS->devotion) for X in XS])
+
+recommendations(champions X1..XN):
+    recommendations(XS, 1/N)
