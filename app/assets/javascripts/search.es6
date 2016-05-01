@@ -4,6 +4,11 @@
 
   const REGIONS = ['br', 'eune', 'euw', 'jp', 'kr', 'lan', 'las', 'na', 'oce', 'ru', 'tr'];
 
+  const KEY_CODES = {
+    up: 38,
+    down: 40,
+  };
+
   class RegionSelector extends Component {
     state = {
       dropdown: false,
@@ -84,41 +89,89 @@
         }
 
         if (results.length > 0) {
-          this.setState({ results, selected: 0 });
+          this.setState({ results: results.concat({ querySummoner: true }), selected: 0 });
+        } else if (this.state.query.trim() !== '') {
+          this.setState({ results: results.concat({ querySummoner: true }), selected: 0 });
         } else {
-          this.setState({ results, selected: null });
+          this.setState({ results: [], selected: null });
         }
       }
     }
 
-    updateQuery = (e) => this.setState({ query: e.target.value });
+    updateQuery = (e) => {
+      this.setState({ query: e.target.value });
+    }
 
-    renderResult = (result) => {
+    handleKeyDown = (e) => {
+      if (e.keyCode === KEY_CODES.down) {
+        e.preventDefault();
+        if (this.state.selected + 1 >= this.state.results.length) {
+          this.setState({ selected: 0 });
+        } else {
+          this.setState({ selected: this.state.selected + 1 });
+        }
+      } else if (e.keyCode === KEY_CODES.up) {
+        e.preventDefault();
+        if (this.state.selected - 1 < 0) {
+          this.setState({ selected: this.state.results.length - 1 });
+        } else {
+          this.setState({ selected: this.state.selected - 1 });
+        }
+      }
+    }
+
+    renderResult = (result, index) => {
       const { query, selected } = this.state;
 
-      const [ firstPart, matchPart, lastPart ] = championNameMatchParts(query, result);
+      let content;
+
+      if (result.querySummoner) {
+        content = (
+          <div className="champion-option__content">
+            <div className="champion-option__text">
+              <span className="champion-option__title champion-option__title">
+                Search for summoner '{this.state.query}'
+              </span>
+            </div>
+          </div>
+        );
+      } else {
+        const [ firstPart, matchPart, lastPart ] = championNameMatchParts(query, result);
+
+        content = (
+          <div className="champion-option__content">
+            <img
+              className="champion-option__portrait"
+              src={result.image_url}
+              alt={result.name}
+            />
+            <div className="champion-option__text">
+              <span className="champion-option__name">
+                {firstPart}
+                <span className="champion-option__highlighted">{matchPart}</span>
+                {lastPart}
+                &nbsp;
+              </span>
+              <span className="champion-option__title">
+                {result.title}
+              </span>
+            </div>
+          </div>
+        );
+      }
+
+      let championOptionClass = 'champion-option';
+      if (result.querySummoner) championOptionClass += ' champion-option--is-query-summoner';
+      if (index === selected)   championOptionClass += ' champion-option--is-selected';
 
       return (
-        <li key={result.id}>
-          <a className="champion-option" href="">
-            <div className="champion-option__content">
-              <img
-                className="champion-option__portrait"
-                src={result.image_url}
-                alt={result.name}
-              />
-              <div className="champion-option__text">
-                <span className="champion-option__name">
-                  {firstPart}
-                  <span className="champion-option__highlighted">{matchPart}</span>
-                  {lastPart}
-                  &nbsp;
-                </span>
-                <span className="champion-option__title">
-                  {result.title}
-                </span>
-              </div>
-            </div>
+        <li key={result.querySummoner ? 'query-summoner' : result.id}>
+          <a
+            className={championOptionClass}
+            href=""
+            onMouseEnter={e => this.setState({ selected: index })}
+          >
+            {content}
           </a>
         </li>
       );
@@ -132,17 +185,6 @@
       return (
         <ul className="champion-selector__menu">
           {this.state.results.map(this.renderResult)}
-          <li>
-            <a className="champion-option champion-option--is-default" href="">
-              <div className="champion-option__content">
-                <div className="champion-option__text">
-                  <span className="champion-option__title champion-option__title">
-                    Search for summoner '{this.state.query}'
-                  </span>
-                </div>
-              </div>
-            </a>
-          </li>
         </ul>
       );
     }
@@ -155,6 +197,7 @@
           <input
             className="form-control champion-selector__input"
             value={query}
+            onKeyDown={this.handleKeyDown}
             onChange={this.updateQuery}
             placeholder="Search champion or summoner"
           />

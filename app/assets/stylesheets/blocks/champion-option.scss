@@ -2,9 +2,13 @@
   padding: 3px !important;
 }
 
-.champion-option--is-default {
+.champion-option--is-query-summoner {
   padding: 3px 10px 6px !important;
   border-top: 1px solid darken($gray-light, 5%);
+}
+
+.champion-option--is-selected {
+  background-color: darken($gray-light, 5%) !important;
 }
 
 .champion-option__content {
