@@ -1,6 +1,6 @@
 !function () {
 
-  const { Component } = React;
+  const { Component, PropTypes } = React;
 
   const REGIONS = ['br', 'eune', 'euw', 'jp', 'kr', 'lan', 'las', 'na', 'oce', 'ru', 'tr'];
 
@@ -50,7 +50,83 @@
     }
   }
 
+  class ChampionSelector extends Component {
+    state = {
+      query: '',
+      results: [],
+      selected: null,
+    };
+
+    componentDidUpdate(_prevProps, prevState) {
+      if (prevState.query !== this.state.query) {
+        let results = [];
+
+        if (this.state.query.trim() !== '') {
+          results = _(this.props.champions.reduce((results, champion) => {
+            const matchAt = champion.name.toLowerCase().indexOf(this.state.query.toLowerCase());
+
+            if (matchAt !== -1) {
+              results.push({ ...champion, matchAt });
+            }
+
+            return results;
+          }, [])).sortBy('matchAt').take(8).value();
+        }
+
+        if (results.length > 0) {
+          this.setState({ results, selected: 0 });
+        } else {
+          this.setState({ results, selected: null });
+        }
+      }
+    }
+
+    updateQuery = (e) => this.setState({ query: e.target.value });
+
+    renderResult = (result) => {
+      const { query, selected } = this.state;
+
+      return (
+        <li key={ result.id }>
+          <a href="">{ result.name }</a>
+        </li>
+      );
+    }
+
+    renderResults() {
+      if (this.state.results.length === 0) {
+        return null;
+      }
+
+      return (
+        <ul className="champion-selector__menu">
+          {this.state.results.map(this.renderResult)}
+        </ul>
+      );
+    }
+
+    render() {
+      const { query } = this.state;
+
+      return (
+        <div className="champion-selector">
+          <input
+            className="form-control champion-selector__input"
+            value={query}
+            onChange={this.updateQuery}
+            placeholder="Search champion or summoner"
+          />
+          {this.renderResults()}
+        </div>
+      );
+    }
+  }
+
   class Search extends Component {
+    static propTypes = {
+      champions: PropTypes.arrayOf(PropTypes.object).isRequired,
+    };
+
     render() {
       return (
         <div className="centered-content">
@@ -59,7 +135,7 @@
 
           <div className="search">
             <div className="search__input-container">
-              <input className="form-control search__input" placeholder="Search champion or summoner"/>
+              <ChampionSelector champions={this.props.champions} />
               <div className="search__region-selector">
                 <RegionSelector />
               </div>

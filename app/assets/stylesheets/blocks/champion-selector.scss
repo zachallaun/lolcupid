@@ -1,0 +1,16 @@
+.champion-selector {
+  @extend .dropdown;
+
+  position: relative;
+  width: 100%;
+}
+
+.champion-selector__input {
+  padding-right: 54px;
+}
+
+.champion-selector__menu {
+  @extend .dropdown-menu;
+
+  display: block;
+}
