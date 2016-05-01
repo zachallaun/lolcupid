@@ -23,6 +23,8 @@ module LolCupid
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
+    config.active_record.schema_format = :sql
+
     config.assets.configure do |env|
       es6 = Sprockets::ES6.new(
         stage: 1,

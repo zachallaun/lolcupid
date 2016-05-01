@@ -6,8 +6,9 @@ class RiotClient
   class RequestError < StandardError; end
 
   ASSET_PREFIX = "https://ddragon.leagueoflegends.com/cdn/"
-  REGIONS = ["br", "eune", "euw", "jp", "kr", "lan", "las", "na", "oce", "ru", "tr"]
   GAME_QUEUE_TYPE = ["RANKED_SOLO_5x5", "RANKED_TEAM_3x3", "RANKED_TEAM_5x5"]
+  REGIONS = ["br", "eune", "euw", "jp", "kr", "lan", "las", "na", "oce", "ru", "tr"]
+  CHAMPION_MASTERY_REGIONS = {"br" => "br1", "eune" => "eun1", "euw" => "euw1", "jp" => "jp1", "kr" => "kr", "lan" => "la1", "las" => "la2", "na" => "na1", "oce" => "oc1", "ru" => "ru", "tr" => "tr1"}
 
   def initialize(retries: 1)
     @config = Config.new(retries: retries)
@@ -48,6 +49,13 @@ class RiotClient
       masteries: ':summoner_ids/masteries',
       names: ':summoner_ids/name',
       runes: ':summoner_ids/runes'
+    )
+  end
+
+  def champion_mastery
+    @champion_mastery ||= ChampionMasteryResource.new(@config, "player",
+      summoner_champions: ":summoner_id/champions",
+      summoner_score: ":summoner_id/score"
     )
   end
 
@@ -141,6 +149,16 @@ class RiotClient
   class StaticResource < Resource
     def api_url(region)
       "https://global.api.pvp.net/api/lol/static-data/#{region}"
+    end
+  end
+
+  class ChampionMasteryResource < Resource
+    def api_url(region)
+      unless CHAMPION_MASTERY_REGIONS[region]
+        raise "No champion mastery region for '#{region}'"
+      end
+
+      "https://#{region}.api.pvp.net/championmastery/location/#{CHAMPION_MASTERY_REGIONS[region]}"
     end
   end
 

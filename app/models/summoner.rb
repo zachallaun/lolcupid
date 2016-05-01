@@ -2,6 +2,8 @@ class Summoner < ActiveRecord::Base
   enum tier: [:challenger, :master, :diamond, :platinum, :gold, :silver, :bronze]
   enum division: [:i, :ii, :iii, :iv, :v]
 
+  has_many :champion_masteries
+
   validate :validate_tier_and_division
 
   def self.save_from_api(summoner_api_data, league_api_data)
