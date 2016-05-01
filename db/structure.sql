@@ -25,6 +25,28 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: summoner_mastery_rate(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION summoner_mastery_rate() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+            DECLARE
+                days_since_first_mastery integer;
+
+            BEGIN
+                days_since_first_mastery = now()::date - NEW.first_mastery_on;
+
+                IF (TG_OP = 'INSERT' OR NEW.mastery_points != OLD.mastery_points) THEN
+                    NEW.mastery_rate := NEW.mastery_points::float / days_since_first_mastery;
+                END IF;
+
+                RETURN NEW;
+            END;
+        $$;
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -102,7 +124,9 @@ CREATE TABLE summoners (
     profile_icon_id integer,
     last_scraped_at timestamp without time zone,
     mastery_points integer,
-    region integer
+    region integer,
+    first_mastery_on date,
+    mastery_rate double precision
 );
 
 
@@ -188,6 +212,13 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: summoner_mastery_rate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER summoner_mastery_rate BEFORE INSERT OR UPDATE ON summoners FOR EACH ROW EXECUTE PROCEDURE summoner_mastery_rate();
+
+
+--
 -- Name: fk_rails_620c5d91ce; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -226,4 +257,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160501162319');
 INSERT INTO schema_migrations (version) VALUES ('20160501170204');
 
 INSERT INTO schema_migrations (version) VALUES ('20160501173906');
+
+INSERT INTO schema_migrations (version) VALUES ('20160501194146');
 

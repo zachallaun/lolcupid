@@ -38,8 +38,8 @@ MasteryEntries
 summoner_id
 champion_id
 champion_points
-mastery_rate = champion_points / days since champ released or summoner first_match_on
-devotion = mastery_rate / summoner master_rate
+mastery_rate = champion_points / days since champ released or summoner first_match_on, whichever is later
+devotion = mastery_rate / summoner mastery_rate
 weighted_devotion = devotion * champion mastery_points # means more if you've played champ a lot
 
 Champions
@@ -60,3 +60,54 @@ devotion = 250,000 / 100,000 = 2.5 # huge devotion in small amount of time
 akali champion_points = 500,000
 mastery_rate = 500,000 / 10 = 50,000
 devotion = 50,000 / 100,000 = 0.5 # less devotion, played as much as wukong but over more time
+
+
+
+
+CREATE OR REPLACE FUNCTION summoner_mastery_rate() RETURNS trigger
+AS $summoner_mastery_rate$
+    DECLARE
+        days_since_first_mastery integer;
+
+    BEGIN
+        days_since_first_mastery = now()::date - NEW.first_mastery_on;
+
+        IF (NEW.mastery_points != OLD.mastery_points) THEN
+            NEW.mastery_rate := NEW.mastery_points::float / days_since_first_mastery;
+        END IF;
+
+        RETURN NEW;
+    END;
+$summoner_mastery_rate$ LANGUAGE plpgsql;
+
+CREATE TRIGGER summoner_mastery_rate BEFORE INSERT OR UPDATE ON summoners
+    FOR EACH ROW EXECUTE PROCEDURE summoner_mastery_rate();
+
+
+
+CREATE OR REPLACE FUNCTION champion_mastery_fields() RETURNS trigger
+AS $champion_mastery_fields$
+    DECLARE
+        days_since_first_mastery integer;
+
+    BEGIN
+        IF (NEW.champion_points != OLD.champion_points) THEN
+            SELECT * INTO STRICT summoner
+                FROM summoners WHERE summoners.id = NEW.summoner_id;
+
+            SELECT max(x) INTO STRICT d
+                FROM unnest(ARRAY[NEW.release_date, summoner.first_mastery_on]);
+
+            days_since_first_mastery = now()::date - d;
+
+            NEW.mastery_rate := NEW.champion_points::float / days_since_first_mastery;
+            NEW.devotion     := NEW.mastery_rate / summoner.mastery_rate;
+            NEW.weighted_devotion := NEW.devotion * NEW.champion_points;
+        END IF;
+
+        RETURN NEW;
+    END;
+$champion_mastery_fields$ LANGUAGE plpgsql;
+
+CREATE TRIGGER champion_mastery_fields BEFORE INSERT OR UPDATE ON champion_masteries
+    FOR EACH ROW EXECUTE PROCEDURE champion_mastery_fields();

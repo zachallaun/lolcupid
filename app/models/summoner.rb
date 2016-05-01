@@ -5,6 +5,9 @@ class Summoner < ActiveRecord::Base
 
   has_many :champion_masteries
 
+  before_create :set_standardized_name
+  before_update :set_standardized_name, if: :display_name_changed?
+
   validates :region, presence: true
   validate :validate_tier_and_division
 
@@ -12,33 +15,28 @@ class Summoner < ActiveRecord::Base
     tier_map = {"CHALLENGER"=>:challenger, "MASTER"=>:master, "DIAMOND"=>:diamond, "PLATINUM"=>:platinum, "GOLD"=>:gold, "SILVER"=>:silver, "BRONZE"=>:bronze}
     division_map = {"I"=>:i, "II"=>:ii, "III"=>:iii, "IV"=>:iv, "V"=>:v}
 
-    for standardized_name in summoner_api_data.keys() do
-      s = summoner_api_data[standardized_name]
-      s_id = s[:id]
-      where(id: s_id).first_or_initialize do |summoner|
-        summoner.standardized_name = standardized_name
-        summoner.display_name = s[:name]
-        summoner.summoner_level = s[:summonerLevel]
-        summoner.profile_icon_id = s[:profileIconId]
-        summoner.region = region
+    s = summoner_api_data
+    s_id = s[:id]
 
-        # what happens if unranked? returned 404 earlier
-        if league_api_data then
-          leagues = league_api_data[s[:id].to_s]
-          for league in leagues do
-            if league[:queue] == "RANKED_SOLO_5x5" then
-              summoner.tier = tier_map[league[:tier]]
-              # I don't understand what the zero is for... Why is it a list of entries
-              summoner.division = division_map[league[:entries][0][:division]]
-            end
+    where(id: s_id).first_or_initialize do |summoner|
+      summoner.display_name = s[:name]
+      summoner.summoner_level = s[:summonerLevel]
+      summoner.profile_icon_id = s[:profileIconId]
+      summoner.region = region
+
+      # what happens if unranked? returned 404 earlier
+      if league_api_data then
+        league_api_data[s[:id].to_s].each do |league|
+          if league[:queue] == "RANKED_SOLO_5x5" then
+            summoner.tier = tier_map[league[:tier]]
+            # I don't understand what the zero is for... Why is it a list of entries
+            summoner.division = division_map[league[:entries][0][:division]]
           end
         end
-
-        summoner.save!
       end
-    end
 
-    # if summoner.persisted?
+      summoner.save!
+    end
   end
 
 
@@ -57,5 +55,9 @@ class Summoner < ActiveRecord::Base
     elsif division && !tier
       errors[:tier] << "must be set if division is set."
     end
+  end
+
+  def set_standardized_name
+    self.standardized_name = display_name.downcase.gsub(' ', '')
   end
 end

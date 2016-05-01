@@ -118,7 +118,7 @@ class RiotClient
       parts.map do |part|
         if part.starts_with?(":")
           arg_n += 1
-          args[arg_n]
+          URI.encode_www_form_component(args[arg_n].to_s.gsub(' ', ''))
         else
           part
         end

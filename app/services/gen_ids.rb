@@ -49,17 +49,15 @@ class GenIds
         if summoner == nil then return end
 
         standardized_name = summoner.keys[0]
-        id = summoner[standardized_name][:id]
+        summoner = summoner[standardized_name]
 
-        league = get_league_api_info region, id
+        league = get_league_api_info region, summoner[:id]
         # league   = @client.league.by_id_entry region, id
         Summoner.save_from_api(summoner, league, region)
     end
 
     def add_summoner_by_id_to_db(region, id)
         summoner = @client.summoner.by_id region, id
-        # this is kind of dumb, i make another call just to get their standardized name + it's in the format Summoner class expects
-        summoner = @client.summoner.by_name region, summoner[id.to_s][:name]
         league = get_league_api_info region, id
         # league   = @client.league.by_id_entry region, id
         Summoner.save_from_api(summoner, league, region)
