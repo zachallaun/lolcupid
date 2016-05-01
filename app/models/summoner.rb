@@ -6,7 +6,6 @@ class Summoner < ActiveRecord::Base
 
   def self.save_from_api(summoner_api_data, league_api_data)
     tier_map = {"CHALLENGER"=>:challenger, "MASTER"=>:master, "DIAMOND"=>:diamond, "PLATINUM"=>:platinum, "GOLD"=>:gold, "SILVER"=>:silver, "BRONZE"=>:bronze}
-    # tier_map = {"CHALLENGER"=>0, "MASTER"=>1, "DIAMOND"=>2, "PLATINUM"=>3, "GOLD"=>4, "SILVER"=>5, "BRONZE"=>6}
     division_map = {"I"=>:i, "II"=>:ii, "III"=>:iii, "IV"=>:iv, "V"=>:v}
 
     for standardized_name in summoner_api_data.keys() do
