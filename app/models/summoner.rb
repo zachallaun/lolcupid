@@ -15,9 +15,7 @@ class Summoner < ActiveRecord::Base
     for standardized_name in summoner_api_data.keys() do
       s = summoner_api_data[standardized_name]
       s_id = s[:id]
-      where(summoner_id: summoner_api_data[s_id]).first_or_initialize do |summoner|
-      # find_or_initialize_by(summoner_id: summoner_api_data[s_id]) do |summoner|
-        summoner.summoner_id = s_id
+      where(id: s_id).first_or_initialize do |summoner|
         summoner.standardized_name = standardized_name
         summoner.display_name = s[:name]
         summoner.summoner_level = s[:summonerLevel]
@@ -45,12 +43,7 @@ class Summoner < ActiveRecord::Base
 
 
   def self.filter_out_saved_ids(list_of_ids)
-    list_of_ids.delete_if {|id| find_by(summoner_id: id) != nil}
-    # list_of_ids.delete_if do |id|
-    #   if summoner.find_by(summoner_id: id) == nil then
-    #     true
-    #   end
-    # end
+    list_of_ids.delete_if {|id| find(id) != nil}
   end
 
 

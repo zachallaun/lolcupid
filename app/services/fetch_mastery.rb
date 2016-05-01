@@ -8,7 +8,7 @@ class FetchMastery
   end
 
   def fetch_mastery(summoner)
-    mastery_data = @client.champion_mastery.summoner_champions(summoner.region, summoner.summoner_id)
+    mastery_data = @client.champion_mastery.summoner_champions(summoner.region, summoner.id)
     mastery_points = 0
     last_scraped_at = Time.zone.now
 
@@ -16,7 +16,7 @@ class FetchMastery
       mastery_points += champion_mastery["championPoints"]
       ChampionMastery.where(
         summoner_id: summoner.id,
-        champion_id: Champion.where(champion_id: champion_mastery["championId"]).pluck(:id).first
+        champion_id: champion_mastery["championId"]
       ).first_or_initialize do |c|
         c.champion_points = champion_mastery["championPoints"]
         c.save!

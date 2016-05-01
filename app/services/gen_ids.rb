@@ -160,7 +160,7 @@ class GenIds
         smnr = balancing_sample
         puts "Beginning with: #{smnr.tier}, #{smnr.division}"
 
-        m_ids = get_match_ids_from_summoner_id "na", smnr.summoner_id
+        m_ids = get_match_ids_from_summoner_id "na", smnr.id
         if m_ids.empty? then return end
 
         # s_ids = get_summoner_ids_from_match_ids m_ids

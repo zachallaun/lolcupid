@@ -2,7 +2,7 @@ class Champion < ActiveRecord::Base
   has_many :champion_masteries
 
   def self.from_api(asset_version, api_data)
-    where(champion_id: api_data[:id]).first_or_initialize do |champion|
+    where(id: api_data[:id]).first_or_initialize do |champion|
       champion.asset_version = asset_version
       champion.name = api_data[:name]
       champion.key = api_data[:key]

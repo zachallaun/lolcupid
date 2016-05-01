@@ -66,7 +66,6 @@ ALTER SEQUENCE champion_masteries_id_seq OWNED BY champion_masteries.id;
 
 CREATE TABLE champions (
     id integer NOT NULL,
-    champion_id integer NOT NULL,
     name character varying NOT NULL,
     key character varying NOT NULL,
     title character varying NOT NULL,
@@ -74,25 +73,6 @@ CREATE TABLE champions (
     asset_version character varying,
     nickname character varying
 );
-
-
---
--- Name: champions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE champions_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: champions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE champions_id_seq OWNED BY champions.id;
 
 
 --
@@ -109,8 +89,7 @@ CREATE TABLE schema_migrations (
 --
 
 CREATE TABLE summoners (
-    id integer NOT NULL,
-    summoner_id bigint NOT NULL,
+    id bigint NOT NULL,
     standardized_name character varying NOT NULL,
     display_name character varying NOT NULL,
     summoner_level integer,
@@ -127,43 +106,10 @@ CREATE TABLE summoners (
 
 
 --
--- Name: summoners_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE summoners_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: summoners_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE summoners_id_seq OWNED BY summoners.id;
-
-
---
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY champion_masteries ALTER COLUMN id SET DEFAULT nextval('champion_masteries_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY champions ALTER COLUMN id SET DEFAULT nextval('champions_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY summoners ALTER COLUMN id SET DEFAULT nextval('summoners_id_seq'::regclass);
 
 
 --
@@ -213,10 +159,17 @@ CREATE INDEX index_champion_masteries_on_summoner_id ON champion_masteries USING
 
 
 --
--- Name: index_champions_on_champion_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_champions_on_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_champions_on_champion_id ON champions USING btree (champion_id);
+CREATE INDEX index_champions_on_id ON champions USING btree (id);
+
+
+--
+-- Name: index_summoners_on_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_summoners_on_id ON summoners USING btree (id);
 
 
 --
@@ -224,13 +177,6 @@ CREATE INDEX index_champions_on_champion_id ON champions USING btree (champion_i
 --
 
 CREATE INDEX index_summoners_on_standardized_name ON summoners USING btree (standardized_name);
-
-
---
--- Name: index_summoners_on_summoner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_summoners_on_summoner_id ON summoners USING btree (summoner_id);
 
 
 --
@@ -275,4 +221,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160501040938');
 INSERT INTO schema_migrations (version) VALUES ('20160501153855');
 
 INSERT INTO schema_migrations (version) VALUES ('20160501162319');
+
+INSERT INTO schema_migrations (version) VALUES ('20160501170204');
 
