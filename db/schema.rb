@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20160430204636) do
     t.datetime "updated_at",                  null: false
     t.datetime "first_match"
     t.integer  "profile_icon_id"
+    t.datetime "last_scraped_at"
   end
 
   add_index "summoners", ["standardized_name"], name: "index_summoners_on_standardized_name", using: :btree
