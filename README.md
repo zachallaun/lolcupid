@@ -134,3 +134,18 @@ recommendations(summoner S):
 
 recommendations(champions X1..XN):
     recommendations(XS, 1/N)
+
+
+
+
+
+
+
+new
+======
+devotion - should be positive or negative and sum to zero
+
+preference(s, x) = champion_points(s, x) / mastery_points(s)
+uw_devotion(s, x) = preference(s, x) - (1 / champs_played(s))
+                  = (champion_points(s, x) - (mastery_points(s) / champs_played(s))) / mastery_points(s)
+devotion = uw_devotion * (summoner mastery_points / avg summoner mastery_points)

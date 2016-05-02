@@ -91,12 +91,35 @@ class FetchMastery
     SQL
   end
 
+  # def update_devotion
+  #   avg_mastery_points = Summoner.average(:mastery_points).to_i
+
+  #   ChampionMastery.update_all(
+  #     "devotion = champion_points::float / #{avg_mastery_points}"
+  #   )
+  # end
+
+
   def update_devotion
     avg_mastery_points = Summoner.average(:mastery_points).to_i
+    Summoner.all.each { |s| update_devotion_s(s.id, avg_mastery_points) }
+    return nil
+  end
 
-    ChampionMastery.update_all(
-      "devotion = champion_points::float / #{avg_mastery_points}"
+  def update_devotion_s(s_id, avg_mastery_points)
+    mastery_points_s = Summoner.find(s_id).mastery_points
+    champs_played_s = ChampionMastery.where(summoner_id: s_id).count
+    champs_played_s_frac = 1 / champs_played_s.to_f
+    ChampionMastery.where(summoner_id: s_id).update_all(
+      "devotion = (champion_points::float / #{mastery_points_s} - #{champs_played_s_frac}) * (#{mastery_points_s} / #{avg_mastery_points.to_f})"
     )
+
+    # preference(s, x) = champion_points::float / #{mastery_points_s}
+    # uw_devotion = preference(s, x) - #{champs_played_s_frac}
+    # devotion = uw_devotion * (#{mastery_points_s} / #{avg_mastery_points.to_f})
+
+    # devotion = (champion_points::float / #{mastery_points_s} - #{champs_played_s_frac}) * (#{mastery_points_s} / #{avg_mastery_points.to_f})
+    return nil
   end
 
   # def update_devotion
@@ -129,6 +152,16 @@ class FetchMastery
     update_champion_points
     update_mastery_points
     update_devotion
+  end
+
+
+  def devotion_of(s_id)
+    printhash = Hash.new(0)
+    ChampionMastery.where(summoner_id: s_id).each do |champ|
+      printhash[Champion.find(champ.champion_id).name] = champ.devotion
+    end
+    printlist = printhash.sort_by {|_key, value| value}.reverse
+    puts printlist
   end
 end
 
