@@ -4,8 +4,12 @@ class FetchMastery
 
   RECENCY_DAMPENING = 0.6
 
-  MASTERY_CUTOFF = MASTERY_AGE * 300 #should be average mastery points earned per day, not 300
-  # MASTERY_CUTOFF = MASTERY_AGE * 200 #should be average mastery points earned per day, not 300
+  # cutoff should be
+  # => ~mastery_age * (avg_mastery / mastery_age / num_champs)
+  # => MASTERY_AGE * (1500 / 370 /130) = MASTERY_AGE * 11
+  MASTERY_CUTOFF = MASTERY_AGE * 300
+  # MASTERY_CUTOFF = MASTERY_AGE * 11
+  # MASTERY_CUTOFF = MASTERY_AGE * 200
   MASTERY_DAMPENING = 1.136
   # MASTERY_DAMPENING = 1.33
 
@@ -21,6 +25,7 @@ class FetchMastery
     too_old = 3.days.ago
     # too_old = 1.hour.ago
     Summoner.where("last_scraped_at < :too_old", {:too_old => too_old}).each { |s| fetch_mastery(s) }
+    Summoner.where(last_scraped_at: nil).each { |s| fetch_mastery(s) }
   end
 
   def fetch_mastery(summoner)
@@ -94,8 +99,27 @@ class FetchMastery
     )
   end
 
+  # def update_devotion
+  #   Summoner.all.each { |s| update_devotion_s(s) }
+  # end
+
+  # def update_devotion_s(s_id)
+  #   s_points = Summoner.find(s_id).mastery_points
+  #   ChampionMastery.where(summoner_id: s_id).update_all(
+  #     "devotion = champion_points::float / #{s_points}"
+  #   )
+  #   return nil
+  # end
+
   def update_all_mastery_data
     fetch_all
+    update_champion_points
+    update_mastery_points
+    update_devotion
+  end
+
+  def update_outdated_mastery_data
+    fetch_outdated
     update_champion_points
     update_mastery_points
     update_devotion
