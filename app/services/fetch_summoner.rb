@@ -17,8 +17,6 @@ class FetchSummoner
         tier = solo5x5league[0]
         division = solo5x5league[1]
 
-        # first_match = fetch_first_match(region, id)[:timestamp]
-        first_match = nil
 
         profile_icon_id = summoner[standardized_name][:profileIconId]
         last_scraped_at = nil
@@ -31,7 +29,6 @@ class FetchSummoner
             summoner_level, # integer,
             tier, # integer,
             division, # integer,
-            first_match, # timestamp without time zone,
             profile_icon_id, # integer,
             last_scraped_at, # timestamp without time zone,
             mastery_points, # integer,

@@ -51,7 +51,6 @@ class Summoner < ActiveRecord::Base
     summoner_level, # integer,
     tier, # integer,
     division, # integer,
-    first_match, # timestamp without time zone,
     profile_icon_id, # integer,
     last_scraped_at, # timestamp without time zone,
     mastery_points, # integer,
@@ -67,7 +66,6 @@ class Summoner < ActiveRecord::Base
       summoner.summoner_level = summoner_level
       summoner.tier = TIER_MAP[tier]
       summoner.division = DIVISION_MAP[division]
-      summoner.first_match = first_match
       summoner.profile_icon_id = profile_icon_id
       summoner.last_scraped_at = last_scraped_at
       summoner.region = region

@@ -27,7 +27,7 @@ class GenIds
         fs = FetchSummoner.new
         File.open(file, "r") do |f|
             while line = f.gets
-                fs.fetch_by_name "na", line.to_i
+                fs.fetch_by_id "na", line.to_i
             end
         end
     end

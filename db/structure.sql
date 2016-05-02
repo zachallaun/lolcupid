@@ -37,7 +37,9 @@ CREATE TABLE champion_masteries (
     id integer NOT NULL,
     summoner_id integer,
     champion_id integer,
-    champion_points integer
+    uw_champion_points integer,
+    champion_points integer,
+    devotion double precision
 );
 
 
@@ -98,11 +100,11 @@ CREATE TABLE summoners (
     division integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    first_match timestamp without time zone,
     profile_icon_id integer,
     last_scraped_at timestamp without time zone,
-    mastery_points integer,
-    region integer
+    uw_mastery_points integer,
+    region integer,
+    mastery_points integer
 );
 
 
@@ -226,4 +228,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160501162319');
 INSERT INTO schema_migrations (version) VALUES ('20160501170204');
 
 INSERT INTO schema_migrations (version) VALUES ('20160501173906');
+
+INSERT INTO schema_migrations (version) VALUES ('20160501232018');
+
+INSERT INTO schema_migrations (version) VALUES ('20160502010742');
 
