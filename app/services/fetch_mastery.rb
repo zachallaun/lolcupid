@@ -1,5 +1,13 @@
 class FetchMastery
   MASTERY_INTRODUCED_ON = Date.parse('2015-04-28')
+  MASTERY_AGE = (Date.today - MASTERY_INTRODUCED_ON).to_i
+
+  RECENCY_DAMPENING = 0.6
+
+  MASTERY_CUTOFF = MASTERY_AGE * 300 #should be average mastery points earned per day, not 300
+  # MASTERY_CUTOFF = MASTERY_AGE * 200 #should be average mastery points earned per day, not 300
+  MASTERY_DAMPENING = 1.136
+  # MASTERY_DAMPENING = 1.33
 
   def initialize
     @client = RiotClient.new
@@ -7,6 +15,12 @@ class FetchMastery
 
   def fetch_all
     Summoner.all.each { |s| fetch_mastery(s) }
+  end
+
+  def fetch_outdated
+    too_old = 3.days.ago
+    # too_old = 1.hour.ago
+    Summoner.where("last_scraped_at < :too_old", {:too_old => too_old}).each { |s| fetch_mastery(s) }
   end
 
   def fetch_mastery(summoner)
@@ -33,21 +47,32 @@ class FetchMastery
   end
 
   def update_champion_points
-    days_since_mastery_introduced = (Date.today - MASTERY_INTRODUCED_ON).to_i
-
+    # multiplicative factor to account for release date > mastery introduction
+    mult_factors = []
     Champion.all.each do |champion|
       if champion.release_date < MASTERY_INTRODUCED_ON
         mult_factor = 1
       else
         days_since_release = (Date.today - champion.release_date.to_date).to_i
-        mult_factor = days_since_mastery_introduced.to_f / days_since_release
-        puts "hmmmm", mult_factor
+        mult_factor = MASTERY_AGE.to_f / days_since_release
+        mult_factor = 1 + (mult_factor-1)*RECENCY_DAMPENING
+        mult_factors.push([champion.name, mult_factor])
       end
 
       champion.champion_masteries.update_all(
         "champion_points = uw_champion_points * #{mult_factor}"
       )
     end
+    puts mult_factors
+
+    # Champion.where("release_date > :mastery_intro", {:mastery_intro => MASTERY_INTRODUCED_ON}).each do |champion|
+    # end
+
+    # dampening to account for mastery levels over 100,000
+    md = (1.0/MASTERY_DAMPENING)
+    ChampionMastery.where("champion_points > #{MASTERY_CUTOFF}").update_all(
+      "champion_points = #{MASTERY_CUTOFF} + (champion_points - #{MASTERY_CUTOFF})^(#{md})"
+    )
   end
 
   def update_mastery_points
@@ -71,6 +96,12 @@ class FetchMastery
 
   def update_all_mastery_data
     fetch_all
+    update_champion_points
+    update_mastery_points
+    update_devotion
+  end
+
+  def update_without_fetch
     update_champion_points
     update_mastery_points
     update_devotion
