@@ -215,19 +215,14 @@
 
     render() {
       return (
-        <div className="centered-content zoom">
-          <h1>lolCupid</h1>
-          <h4>Champion recommendations based on what you already love</h4>
-
-          <div className="search">
-            <div className="search__input-container">
-              <ChampionSelector champions={this.props.champions} />
-              <div className="search__region-selector">
-                <RegionSelector />
-              </div>
+        <div className="search">
+          <div className="search__input-container">
+            <ChampionSelector champions={this.props.champions} />
+            <div className="search__region-selector">
+              <RegionSelector />
             </div>
-            <button className="btn btn-primary">Search</button>
           </div>
+          <button className="btn btn-primary">Search</button>
         </div>
       );
     }
