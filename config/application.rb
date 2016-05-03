@@ -25,6 +25,8 @@ module LolCupid
 
     config.active_record.schema_format = :sql
 
+    config.active_job.queue_adapter = :delayed_job
+
     config.assets.configure do |env|
       es6 = Sprockets::ES6.new(
         stage: 1,

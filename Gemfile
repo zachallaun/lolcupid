@@ -6,6 +6,8 @@ gem 'rails', '4.2.5.2'
 gem 'pg'
 gem 'puma'
 
+gem 'delayed_job_active_record'
+
 gem 'rails_12factor'
 
 gem 'jbuilder', '~> 2.0'
