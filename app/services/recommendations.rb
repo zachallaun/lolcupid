@@ -31,7 +31,7 @@ class Recommendations
     end
 
     def for_champion_print(x)
-        print_recommendation_hash(for_champion_wo_db(x))
+        print_recommendation_hash(for_champion_wo_db(x), 15)
         return nil
     end
 
