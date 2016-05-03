@@ -27,13 +27,23 @@ class Recommendations
     end
 
     def for_champion_wo_db(x)
-        devotion_x = devotion_hash_x(x)
-        return devotion_x.sort_by {|_key, value| value}.reverse
+        return devotion_hash_x(x)
     end
 
     def for_champion_print(x)
+        print_recommendation_hash(for_champion_wo_db(x))
+        return nil
+    end
+
+    def for_champion_name_print(x)
+        c_id = Champion.where(name: x).first.id
+        for_champion_print(c_id)
+        return nil
+    end
+
+    def print_recommendation_hash(h, top_x)
         printlist = []
-        for c_id, rec in for_champion_wo_db(x).first(15)
+        for c_id, rec in h.sort_by {|_key, value| value}.reverse.first(top_x)
             c_name = Champion.where(id: c_id).first.name
             printlist.push([c_name, rec])
         end
@@ -41,11 +51,6 @@ class Recommendations
             puts "#{c_name}:\t#{rec}"
         end
         return nil
-    end
-
-    def for_champion_name_print(x)
-        c_id = Champion.where(name: x).first.id
-        for_champion_print(c_id)
     end
 
     # xs is an array of champion_ids, ws is a hash from champion_id to weight

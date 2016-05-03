@@ -196,6 +196,7 @@
         <div className="champion-selector">
           <input
             className="form-control champion-selector__input"
+            autoFocus
             value={query}
             onKeyDown={this.handleKeyDown}
             onChange={this.updateQuery}
