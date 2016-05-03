@@ -4,18 +4,9 @@ RiotClient
 - not thread-safe at all
 
 
-Homepage (minor details)
+Homepage
 ===========
 - Link to about
-
-
-About page
-==========
-- Write about the math
-- Write about the tech
-    - we use ruby on rails
-    - postgres, our models look like this:
-- Figure out mathjax
 
 
 Mockup
@@ -23,7 +14,14 @@ Mockup
 - Separately draw what the recommendation page looks like
 
 
-Other tasks
+About page
 ==========
-- setup
-- clean up readme
+- Write about the math: doc/about_math.txt
+    - Figure out mathjax
+- Write about the tech: doc/about_tech.txt
+
+
+Other documentation
+==========
+- More detailed setup: doc/setup_basic.txt
+- Improve readme: README.md

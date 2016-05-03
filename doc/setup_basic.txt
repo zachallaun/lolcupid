@@ -1,0 +1,26 @@
+# clone repo
+# go to directory
+# open terminal
+# run the following
+
+bundle
+
+bin/rake db:create
+bin/rake db:migrate    #do you need to do this at setup?
+bin/rake champions:pull
+
+bin/rails c
+    # na
+    GenIds.new.seed_from_file("na_seed_troy.txt")
+    GenIds.new.grow_until(20000)
+
+    FetchMastery.new.update_outdated_mastery_data
+
+    Recommendations.new.for_champion_name_print("Blitzcrank")
+    Recommendations.new.for_summoner_print(32638411)
+
+    # euw
+    GenIds.new("euw").seed_from_file("euw_seed_troy.txt")
+    ...
+
+foreman start   # view at "http://localhost:5000/"
