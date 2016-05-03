@@ -3,19 +3,33 @@ class Recommendations
     # => a database ChampionRecommendation with a column for champion_in, champion_out, and recommend_val
 
     def update_all_champions
-        Champion.all do |x|
+        Champion.all.each do |x|
             update_champion(x.id)
         end
     end
 
     def update_champion(x)
-        devotion_x = devotion_hash_x(x)
-
-        for champ in devotion_x.keys
-            # ChampionRecommendation.where(
-            #     champion_in: x, champion_out: y)
-            ChampionRecommendation.set_entry(x, champ, devotion_x[champ])
+        recommendations_for(x).each do |champ|
+            rec = ChampionRecommendation.where(
+                champion_in_id: x,
+                champion_out_id: champ.id
+            ).first_or_initialize
+            rec.score = champ.score
+            rec.save!
         end
+    end
+
+    def recommendations_for(x)
+        Champion.
+            select(:id, "sum(cm.devotion * target.devotion) AS score").
+            joins("JOIN champion_masteries cm ON cm.champion_id = champions.id").
+            joins("
+                LEFT JOIN LATERAL (
+                    SELECT cm2.devotion FROM champion_masteries cm2 JOIN champions ON champions.id = cm2.champion_id
+                        WHERE champions.id = #{x}
+                        AND cm2.summoner_id = cm.summoner_id
+                ) target ON true").
+            group(:id)
     end
 
     def for_champion(x)
