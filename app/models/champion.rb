@@ -15,6 +15,10 @@ class Champion < ActiveRecord::Base
     champion.release_date = ChampionConstants::CHAMP_RELEASE_DATES[name]
     champion.nickname     = ChampionConstants::CHAMP_NICKNAMES[name]
 
+    ChampionConstants.roles_for(name).each do |role|
+      champion.send("#{role}=", true)
+    end
+
     champion
   end
 

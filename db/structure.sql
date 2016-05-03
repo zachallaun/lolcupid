@@ -105,7 +105,12 @@ CREATE TABLE champions (
     image character varying NOT NULL,
     asset_version character varying,
     nickname character varying,
-    release_date timestamp without time zone
+    release_date timestamp without time zone,
+    can_top boolean DEFAULT false,
+    can_jungle boolean DEFAULT false,
+    can_mid boolean DEFAULT false,
+    can_bot_carry boolean DEFAULT false,
+    can_bot_support boolean DEFAULT false
 );
 
 
@@ -310,4 +315,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160501232018');
 INSERT INTO schema_migrations (version) VALUES ('20160502010742');
 
 INSERT INTO schema_migrations (version) VALUES ('20160503005452');
+
+INSERT INTO schema_migrations (version) VALUES ('20160503010211');
 

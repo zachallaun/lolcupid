@@ -134,7 +134,14 @@ module ChampionConstants
         "Zyra" =>           Date.parse("2012-07-24")
     }
 
-    ROLE_MAP = [0=>"top", 1=>"jungle", 2=>"mid", 3=>"bot carry", 4=>"bot support"]
+    ROLE_MAP = {
+      0 => "can_top",
+      1 => "can_jungle",
+      2 => "can_mid",
+      3 => "can_bot_carry",
+      4 => "can_bot_support"
+    }
+
     CHAMP_ROLES = {
         "Aatrox" =>         [0, 1],
         "Ahri" =>           [2],
@@ -313,5 +320,9 @@ module ChampionConstants
         for nt in names.zip(titles) do
             puts "#{nt[0]}: #{nt[1]}"
         end
+    end
+
+    def self.roles_for(champ_name)
+      CHAMP_ROLES[champ_name].map { |role_key| ROLE_MAP[role_key] }
     end
 end
