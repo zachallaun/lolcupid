@@ -85,7 +85,7 @@
             }
 
             return results;
-          }, [])).sortBy('matchAt').take(8).value();
+          }, [])).sortBy('matchAt').take(6).value();
         }
 
         if (results.length > 0) {
@@ -215,7 +215,7 @@
 
     render() {
       return (
-        <div className="centered-content">
+        <div className="centered-content zoom">
           <h1>lolCupid</h1>
           <h4>Champion recommendations based on what you already love</h4>
 

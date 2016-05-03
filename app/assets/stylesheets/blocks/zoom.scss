@@ -1,0 +1,5 @@
+.zoom {
+  -moz-transform: scale(1.5, 1.5); /* Moz-browsers */
+  zoom: 1.5; /* Other non-webkit browsers */
+  zoom: 150%; /* Webkit browsers */
+}
