@@ -1,5 +1,5 @@
 class SeedDbJob < ActiveJob::Base
-  def perform
-    GenIds.new.seed_with_file "seed.txt"
+  def perform(region, file)
+    GenIds.new(region).seed_with_file file
   end
 end
