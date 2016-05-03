@@ -1,5 +1,5 @@
 class GrowDbJob < ActiveJob::Base
-  def perform(region, final_target_size)
+  def perform(final_target_size, region="na")
     n = Summoner.where(region: Summoner.regions[region]).count
 
     if n >= final_target_size
