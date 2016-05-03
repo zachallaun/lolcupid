@@ -21,11 +21,11 @@ class FetchMastery
     Summoner.all.each { |s| fetch_mastery(s) }
   end
 
-  def fetch_outdated
+  def fetch_outdated(region="na")
     too_old = 3.days.ago
     # too_old = 1.hour.ago
-    Summoner.where("last_scraped_at < :too_old", {:too_old => too_old}).each { |s| fetch_mastery(s) }
-    Summoner.where(last_scraped_at: nil).each { |s| fetch_mastery(s) }
+    Summoner.where(region: Summoner.regions[region]).where("last_scraped_at < :too_old", {:too_old => too_old}).each { |s| fetch_mastery(s) }
+    Summoner.where(region: Summoner.regions[region], last_scraped_at: nil).each { |s| fetch_mastery(s) }
   end
 
   def fetch_mastery(summoner)

@@ -1,8 +1,13 @@
 class GenIds
     TIER_BREAKDOWN = [0.0001, 0.0007, 0.0185, 0.0735, 0.1842, 0.383, 0.34]
 
-    def initialize
+    def initialize(region = "na")
         @client = RiotClient.new
+        @region = region
+    end
+
+    def summoners
+        Summoner.where(region: Summoner.regions[@region])
     end
 
     def seed
@@ -27,13 +32,13 @@ class GenIds
         fs = FetchSummoner.new
         File.open(file, "r") do |f|
             while line = f.gets
-                fs.fetch_by_id "na", line.to_i
+                fs.fetch_by_id @region, line.to_i
             end
         end
     end
 
     def count
-        Summoner.count
+        summoners.count
     end
 
     def test
@@ -46,18 +51,18 @@ class GenIds
 
     def db_tier_breakdown
         return [
-            Summoner.challenger.count,
-            Summoner.master.count,
-            Summoner.diamond.count,
-            Summoner.platinum.count,
-            Summoner.gold.count,
-            Summoner.silver.count,
-            Summoner.bronze.count ]
+            summoners.challenger.count,
+            summoners.master.count,
+            summoners.diamond.count,
+            summoners.platinum.count,
+            summoners.gold.count,
+            summoners.silver.count,
+            summoners.bronze.count ]
     end
 
     def db_tier_balance
         db_tbd = db_tier_breakdown
-        db_total = Summoner.count
+        db_total = summoners.count
 
         return Array.new(7) {|i| (db_tbd[i].to_f/db_total) / TIER_BREAKDOWN[i]}
     end
@@ -72,7 +77,7 @@ class GenIds
 
     def balancing_sample
         db_tbd = db_tier_breakdown
-        db_total = Summoner.count
+        db_total = summoners.count
 
         ratio = Array.new(7) {|i| (db_tbd[i].to_f/db_total) / TIER_BREAKDOWN[i]}
         puts "#{ratio}"
@@ -90,25 +95,24 @@ class GenIds
 
         case min_idx
         when 0
-            return Summoner.challenger.order("RANDOM()").first
+            return summoners.challenger.order("RANDOM()").first
         when 1
-            return Summoner.master.order("RANDOM()").first
+            return summoners.master.order("RANDOM()").first
         when 2
-            return Summoner.diamond.order("RANDOM()").first
+            return summoners.diamond.order("RANDOM()").first
         when 3
-            return Summoner.platinum.order("RANDOM()").first
+            return summoners.platinum.order("RANDOM()").first
         when 4
-            return Summoner.gold.order("RANDOM()").first
+            return summoners.gold.order("RANDOM()").first
         when 5
-            return Summoner.silver.order("RANDOM()").first
+            return summoners.silver.order("RANDOM()").first
         when 6
-            return Summoner.bronze.order("RANDOM()").first
+            return summoners.bronze.order("RANDOM()").first
         end
     end
 
     def top_sample
-        return Summoner.order(tier: :asc, division: :asc).drop.first
-        # return Summoner.order(tier: :asc, division: :asc).drop(pos).first
+        return summoners.order(tier: :asc, division: :asc).drop.first
     end
 
     def grow_until(desired_size)
@@ -118,23 +122,21 @@ class GenIds
     end
 
     def grow
-        # s = Summoner.first
-        # smnr = Summoner.order("RANDOM()").first
         smnr = balancing_sample
         puts "Beginning with: #{smnr.tier}, #{smnr.division}"
 
-        m_ids = get_match_ids_from_summoner_id "na", smnr.id
+        m_ids = get_match_ids_from_summoner_id smnr.region, smnr.id
         if m_ids.empty? then return end
 
         # s_ids = get_summoner_ids_from_match_ids m_ids
         s_ids = get_summoner_ids_from_match_ids m_ids[0,10]
         if s_ids.empty? then return end
 
-        filtered_s_ids = Summoner.filter_out_saved_ids s_ids
+        filtered_s_ids = summoners.filter_out_saved_ids s_ids
         fs = FetchSummoner.new
         for id in filtered_s_ids do
             puts "Adding summoner: #{id}"
-            fs.fetch_by_id "na", id
+            fs.fetch_by_id smnr.region, id
         end
     end
 
@@ -162,7 +164,7 @@ class GenIds
 
     def get_all_summoners_from_match(m_id)
         # id_list = [19062366, 32638411, 192034, 123, 643, 19062366]
-        match = @client.match.by_match_id "na", m_id
+        match = @client.match.by_match_id @region, m_id
         participants = match[:participantIdentities]
         return participants.map {|x| x[:player][:summonerId]}
     end
