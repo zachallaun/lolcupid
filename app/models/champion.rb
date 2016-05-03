@@ -1,5 +1,6 @@
 class Champion < ActiveRecord::Base
   has_many :champion_masteries
+  has_many :recommendations, -> { order(score: :desc) }, foreign_key: 'champion_in_id', class_name: 'ChampionRecommendation'
 
   def self.from_api(asset_version, api_data)
     champion = where(id: api_data[:id]).first_or_initialize
