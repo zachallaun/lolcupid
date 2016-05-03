@@ -109,7 +109,10 @@ class FetchMastery
   def update_devotion_s(s_id, avg_mastery_points)
     mastery_points_s = Summoner.find(s_id).mastery_points
     champs_played_s = ChampionMastery.where(summoner_id: s_id).count
+    if champs_played_s == 0 then return nil end
+
     champs_played_s_frac = 1 / champs_played_s.to_f
+
     ChampionMastery.where(summoner_id: s_id).update_all(
       "devotion = (champion_points::float / #{mastery_points_s} - #{champs_played_s_frac}) * (#{mastery_points_s} / #{avg_mastery_points.to_f})"
     )
