@@ -6,5 +6,24 @@ RiotClient
 
 Homepage (minor details)
 ===========
-- Automatically start with cursor in text box
-- enlarge (I think it looks best around 150%)
+- Link to about
+
+
+About page
+==========
+- Write about the math
+- Write about the tech
+    - we use ruby on rails
+    - postgres, our models look like this:
+- Figure out mathjax
+
+
+Mockup
+==========
+- Separately draw what the recommendation page looks like
+
+
+Other tasks
+==========
+- setup
+- clean up readme
