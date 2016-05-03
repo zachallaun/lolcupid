@@ -1,7 +1,4 @@
 class Recommendations
-    # what we really need is:
-    # => a database ChampionRecommendation with a column for champion_in, champion_out, and recommend_val
-
     def update_all_champions
         Champion.all.each do |x|
             update_champion(x.id)
@@ -59,7 +56,7 @@ class Recommendations
     def for_champion(x)
         rec_x = Hash.new
         ChampionRecommendation.where(champion_in: x) do |rec_entry|
-            rec_x[rec_entry.champion_out] = rec_entry.recommend_val
+            rec_x[rec_entry.champion_out] = rec_entry.score
         end
         return rec_x
     end
