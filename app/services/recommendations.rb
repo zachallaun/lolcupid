@@ -9,14 +9,38 @@ class Recommendations
     end
 
     def update_champion(x)
-        recommendations_for(x).each do |champ|
-            rec = ChampionRecommendation.where(
-                champion_in_id: x,
-                champion_out_id: champ.id
-            ).first_or_initialize
-            rec.score = champ.score
-            rec.save!
-        end
+        recs = recommendations_for(x)
+
+        values_tuples = recs.map do |champ|
+            "(#{x}, #{champ.id}, #{champ.score})"
+        end.join(", ")
+
+        upsert_sql = <<-SQL
+            WITH new_recs (champion_in_id, champion_out_id, score) AS (
+              VALUES #{values_tuples}
+            ),
+            upsert AS
+            (
+                UPDATE champion_recommendations recs
+                    SET score = new_recs.score
+                FROM new_recs
+                WHERE recs.champion_in_id  = new_recs.champion_in_id
+                AND   recs.champion_out_id = new_recs.champion_out_id
+                RETURNING recs.*
+            )
+            INSERT INTO champion_recommendations
+                (champion_in_id, champion_out_id, score)
+            SELECT champion_in_id, champion_out_id, score
+            FROM new_recs
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM upsert up
+                WHERE up.champion_in_id  = new_recs.champion_in_id
+                AND   up.champion_out_id = new_recs.champion_out_id
+            )
+        SQL
+
+        ChampionRecommendation.connection.update_sql(upsert_sql)
     end
 
     def recommendations_for(x)
