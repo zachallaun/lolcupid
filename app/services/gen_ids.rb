@@ -1,5 +1,15 @@
 class GenIds
-    TIER_BREAKDOWN = [0.0001, 0.0007, 0.0185, 0.0735, 0.1842, 0.383, 0.34]
+    TIER_BREAKDOWN = {
+        "challenger" => 0.0001,
+        "master"     => 0.0007,
+        "diamond"    => 0.0185,
+        "platinum"   => 0.0735,
+        "gold"       => 0.1842,
+        "silver"     => 0.383,
+        "bronze"     => 0.34
+    }
+
+    GROW_FROM_MOST_RECENT_X_MATCHES = 10
 
     def initialize(region = "na")
         @client = RiotClient.new
@@ -51,36 +61,6 @@ class GenIds
         end
     end
 
-    def count
-        summoners.count
-    end
-
-    def test
-        puts "Test function:"
-        db_tb = db_tier_balance
-        db_total = count
-
-        puts "#{db_total} summoners: #{db_tb}"
-    end
-
-    def db_tier_breakdown
-        return [
-            summoners.challenger.count,
-            summoners.master.count,
-            summoners.diamond.count,
-            summoners.platinum.count,
-            summoners.gold.count,
-            summoners.silver.count,
-            summoners.bronze.count ]
-    end
-
-    def db_tier_balance
-        db_tbd = db_tier_breakdown
-        db_total = summoners.count
-
-        return Array.new(7) {|i| (db_tbd[i].to_f/db_total) / TIER_BREAKDOWN[i]}
-    end
-
     def db_dump_ids(file)
         output = File.open(file, "w")
         for s_id in summoners.map(&:id)
@@ -89,48 +69,44 @@ class GenIds
         output.close
     end
 
+    def db_tier_breakdown
+        return {
+            "challenger" => summoners.challenger.count,
+            "master"     => summoners.master.count,
+            "diamond"    => summoners.diamond.count,
+            "platinum"   => summoners.platinum.count,
+            "gold"       => summoners.gold.count,
+            "silver"     => summoners.silver.count,
+            "bronze"     => summoners.bronze.count
+        }
+    end
+
+    def db_tier_balance
+        db_region_total = summoners.count
+
+        ret = Hash.new
+        for tier, count in db_tier_breakdown
+            ret[tier] = (count.to_f / db_region_total) / TIER_BREAKDOWN[tier]
+        end
+        return ret
+    end
+
     def balancing_sample
-        db_tbd = db_tier_breakdown
-        db_total = summoners.count
+        ratios = db_tier_balance
+        puts "#{ratios}"
 
-        ratio = Array.new(7) {|i| (db_tbd[i].to_f/db_total) / TIER_BREAKDOWN[i]}
-        puts "#{ratio}"
+        tier, ratio = ratios.sort_by {|_key, value| value}.first
+        puts "Most imbalanced tier: #{tier}=> #{ratio}"
 
-        min = ratio.max+1
-        min_idx = 0
-        for i in 0..6
-            if db_tbd[i] != 0 then
-                if ratio[i] < min then
-                    min = ratio[i]
-                    min_idx = i
-                end
-            end
-        end
-
-        case min_idx
-        when 0
-            return summoners.challenger.order("RANDOM()").first
-        when 1
-            return summoners.master.order("RANDOM()").first
-        when 2
-            return summoners.diamond.order("RANDOM()").first
-        when 3
-            return summoners.platinum.order("RANDOM()").first
-        when 4
-            return summoners.gold.order("RANDOM()").first
-        when 5
-            return summoners.silver.order("RANDOM()").first
-        when 6
-            return summoners.bronze.order("RANDOM()").first
-        end
+        return summoners.where(tier: Summoner.tiers[tier]).order("RANDOM()").first
     end
 
     def top_sample
-        return summoners.order(tier: :asc, division: :asc).drop.first
+        return summoners.order(tier: :asc, division: :asc).first
     end
 
-    def grow_until(desired_size)
-        while count < desired_size
+    def grow_until(minimum_desired_size)
+        while summoners.count < minimum_desired_size
             grow
         end
     end
@@ -139,23 +115,25 @@ class GenIds
         smnr = balancing_sample
         puts "Beginning with: #{smnr.tier}, #{smnr.division}"
 
-        m_ids = get_match_ids_from_summoner_id smnr.region, smnr.id
+        m_ids = get_match_ids_from_summoner_id smnr.id
         if m_ids.empty? then return end
 
         # s_ids = get_summoner_ids_from_match_ids m_ids
-        s_ids = get_summoner_ids_from_match_ids m_ids[0,10]
+        s_ids = get_summoner_ids_from_match_ids m_ids.first(GROW_FROM_MOST_RECENT_X_MATCHES)
         if s_ids.empty? then return end
 
         filtered_s_ids = summoners.filter_out_saved_ids s_ids
         fs = FetchSummoner.new
         for id in filtered_s_ids do
             puts "Adding summoner: #{id}"
-            fs.fetch_by_id smnr.region, id
+            fs.fetch_by_id @region, id
         end
     end
 
-    def get_match_ids_from_summoner_id(region, s_id)
-        ml = @client.matchlist.by_id region, s_id
+private
+
+    def get_match_ids_from_summoner_id(s_id)
+        ml = @client.matchlist.by_id @region, s_id
 
         if ml[:matches].empty? then
             return []
@@ -177,7 +155,6 @@ class GenIds
     end
 
     def get_all_summoners_from_match(m_id)
-        # id_list = [19062366, 32638411, 192034, 123, 643, 19062366]
         match = @client.match.by_match_id @region, m_id
         participants = match[:participantIdentities]
         return participants.map {|x| x[:player][:summonerId]}
