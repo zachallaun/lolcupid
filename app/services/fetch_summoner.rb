@@ -36,8 +36,12 @@ class FetchSummoner
     end
 
     def fetch_by_id(region, id)
-        # this is kind of dumb, i make another call just to get their standardized name + it's in the format Summoner class expects
-        summoner = @client.summoner.by_id region, id
+        begin
+            # this is kind of dumb, i make another call just to get their standardized name + it's in the format Summoner class expects
+            summoner = @client.summoner.by_id region, id
+        rescue
+            return nil
+        end
         fetch_by_name region, summoner[id.to_s][:name]
     end
 

@@ -11,20 +11,34 @@ class GenIds
     end
 
     def seed
-        na_challenger = ["Superman Rip", "Grigne", "Janna Mechanics", "Zaganox", "Linsanityy", "HvK Porky", "Myrna", "I Am Revenge", "OfSerenity", "FeedPally", "BillysBoss", "Ablazeolive", "GladeGleamBright", "iMysterious"]
-        na_master = ["Viaz"]
-        na_diamond = ["Wingsofdeath", "Mahir"]
-        na_platinum = []
-        na_gold = ["rekabat", "mutinyonthebay"]
-        na_silver = ["nerd time"]
-        na_bronze = ["shashad"]
-        na_unranked = ["gorper", "theburninator"]
+        combo_list = []
+        if (@region == "na") then
+            challenger = ["Superman Rip", "Grigne", "Janna Mechanics", "Zaganox", "Linsanityy", "HvK Porky", "Myrna", "I Am Revenge", "OfSerenity", "FeedPally", "BillysBoss", "Ablazeolive", "GladeGleamBright", "iMysterious"]
+            master = ["Viaz"]
+            diamond = ["Wingsofdeath", "Mahir"]
+            platinum = []
+            gold = ["rekabat", "mutinyonthebay"]
+            silver = ["nerd time"]
+            bronze = ["shashad"]
+            unranked = ["gorper", "theburninator"]
 
-        na_combo_list = na_challenger + na_master + na_diamond + na_platinum + na_gold + na_silver + na_bronze + na_unranked
+            combo_list = challenger + master + diamond + platinum + gold + silver + bronze + unranked
+        elsif @region == "euw" then
+            challenger = ["Christofferos"]
+            master = ["William", "heliolite"]
+            diamond = ["h4h4lolz"]
+            platinum = ["LittleDejavue"]
+            gold = ["Get Patriced"]
+            silver = ["darkxx"]
+            bronze = ["OvaLeona211"]
+            unranked = ["lescootard"]
+
+            combo_list = challenger + master + diamond + platinum + gold + silver + bronze + unranked
+        end
 
         fs = FetchSummoner.new
-        for s in na_combo_list
-            fs.fetch_by_name "na", s
+        for s in combo_list
+            fs.fetch_by_name @region, s
         end
     end
 
@@ -69,7 +83,7 @@ class GenIds
 
     def db_dump_ids(file)
         output = File.open(file, "w")
-        for s_id in Summoner.all.map(&:id)
+        for s_id in summoners.map(&:id)
             output << s_id << "\n"
         end
         output.close
