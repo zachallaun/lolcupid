@@ -5,7 +5,7 @@ class GrowDbJob < ActiveJob::Base
     if n >= final_target_size
       FetchMastery.new.update_without_fetch
     else
-      GenIds.new.grow_until(n + 100)
+      GenIds.new.grow_until(n + 1)
       FetchMastery.new.fetch_outdated
       GrowDbJob.perform_later(final_target_size)
     end
