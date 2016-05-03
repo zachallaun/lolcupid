@@ -112,10 +112,11 @@ class FetchMastery
     if champs_played_s == 0 then return nil end
 
     champs_played_s_frac = 1 / champs_played_s.to_f
-
-    ChampionMastery.where(summoner_id: s_id).update_all(
-      "devotion = (champion_points::float / #{mastery_points_s} - #{champs_played_s_frac}) * (#{mastery_points_s} / #{avg_mastery_points.to_f})"
-    )
+    if mastery_points_s.present?
+      ChampionMastery.where(summoner_id: s_id).update_all(
+        "devotion = (champion_points::float / #{mastery_points_s} - #{champs_played_s_frac}) * (#{mastery_points_s} / #{avg_mastery_points.to_f})"
+      )
+    end
 
     # preference(s, x) = champion_points::float / #{mastery_points_s}
     # uw_devotion = preference(s, x) - #{champs_played_s_frac}
