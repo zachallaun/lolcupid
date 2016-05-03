@@ -7,7 +7,7 @@ class GrowDbJob < ActiveJob::Base
     else
       GenIds.new(region).grow_until(n + 1)
       FetchMastery.new.fetch_outdated
-      GrowDbJob.perform_later(region, final_target_size)
+      GrowDbJob.perform_later(final_target_size, region)
     end
   end
 end
