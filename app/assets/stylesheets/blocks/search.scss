@@ -1,6 +1,5 @@
 .search {
   @include flexbox;
-  @include align-items(baseline);
 
   width: 500px;
   padding: 1rem;
