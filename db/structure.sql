@@ -63,6 +63,37 @@ ALTER SEQUENCE champion_masteries_id_seq OWNED BY champion_masteries.id;
 
 
 --
+-- Name: champion_recommendations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE champion_recommendations (
+    id integer NOT NULL,
+    champion_in_id integer,
+    champion_out_id integer,
+    score double precision
+);
+
+
+--
+-- Name: champion_recommendations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE champion_recommendations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: champion_recommendations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE champion_recommendations_id_seq OWNED BY champion_recommendations.id;
+
+
+--
 -- Name: champions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -116,11 +147,26 @@ ALTER TABLE ONLY champion_masteries ALTER COLUMN id SET DEFAULT nextval('champio
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY champion_recommendations ALTER COLUMN id SET DEFAULT nextval('champion_recommendations_id_seq'::regclass);
+
+
+--
 -- Name: champion_masteries_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY champion_masteries
     ADD CONSTRAINT champion_masteries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: champion_recommendations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY champion_recommendations
+    ADD CONSTRAINT champion_recommendations_pkey PRIMARY KEY (id);
 
 
 --
@@ -162,6 +208,20 @@ CREATE INDEX index_champion_masteries_on_summoner_id ON champion_masteries USING
 
 
 --
+-- Name: index_champion_recommendations_on_champion_in_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_champion_recommendations_on_champion_in_id ON champion_recommendations USING btree (champion_in_id);
+
+
+--
+-- Name: index_champion_recommendations_on_champion_out_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_champion_recommendations_on_champion_out_id ON champion_recommendations USING btree (champion_out_id);
+
+
+--
 -- Name: index_champions_on_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -190,6 +250,14 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: fk_rails_516c9ad6b1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY champion_recommendations
+    ADD CONSTRAINT fk_rails_516c9ad6b1 FOREIGN KEY (champion_out_id) REFERENCES champions(id);
+
+
+--
 -- Name: fk_rails_620c5d91ce; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -203,6 +271,14 @@ ALTER TABLE ONLY champion_masteries
 
 ALTER TABLE ONLY champion_masteries
     ADD CONSTRAINT fk_rails_b432b13266 FOREIGN KEY (summoner_id) REFERENCES summoners(id);
+
+
+--
+-- Name: fk_rails_b7c6bb49e6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY champion_recommendations
+    ADD CONSTRAINT fk_rails_b7c6bb49e6 FOREIGN KEY (champion_in_id) REFERENCES champions(id);
 
 
 --
@@ -232,4 +308,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160501173906');
 INSERT INTO schema_migrations (version) VALUES ('20160501232018');
 
 INSERT INTO schema_migrations (version) VALUES ('20160502010742');
+
+INSERT INTO schema_migrations (version) VALUES ('20160503005452');
 

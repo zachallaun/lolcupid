@@ -1,6 +1,6 @@
 class Recommendations
     # what we really need is:
-    # => a database ChampionRecommendations with a column for champion_in, champion_out, and recommend_val
+    # => a database ChampionRecommendation with a column for champion_in, champion_out, and recommend_val
 
     def update_all_champions
         Champion.all do |x|
@@ -12,15 +12,15 @@ class Recommendations
         devotion_x = devotion_hash_x(x)
 
         for champ in devotion_x.keys
-            # ChampionRecommendations.where(
+            # ChampionRecommendation.where(
             #     champion_in: x, champion_out: y)
-            ChampionRecommendations.set_entry(x, champ, devotion_x[champ])
+            ChampionRecommendation.set_entry(x, champ, devotion_x[champ])
         end
     end
 
     def for_champion(x)
         rec_x = Hash.new
-        ChampionRecommendations.where(champion_in: x) do |rec_entry|
+        ChampionRecommendation.where(champion_in: x) do |rec_entry|
             rec_x[rec_entry.champion_out] = rec_entry.recommend_val
         end
         return rec_x
