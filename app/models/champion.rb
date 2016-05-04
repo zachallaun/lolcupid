@@ -31,6 +31,24 @@ class Champion < ActiveRecord::Base
     RiotClient::ASSET_PREFIX + "img/champion/splash/#{splash_name}.jpg"
   end
 
+  # def self.get_id(name)
+  #   return Champion.where(name: name).first.id
+  # end
+
+  def self.standardize_name(name)
+    name = name.downcase
+    ret = []
+    for part in name.split(" ")
+      ret.push(part.split("'").map(&:capitalize).join("'"))
+    end
+    return ret.join(" ")
+  end
+
+  def self.standardize_name_url(name)
+    name = name.gsub('_', ' ')
+    return standardize_name(name)
+  end
+
   def image_url
     RiotClient::ASSET_PREFIX + "#{asset_version}/img/champion/#{image}"
   end

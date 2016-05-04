@@ -2,12 +2,16 @@
 -- PostgreSQL database dump
 --
 
+-- Dumped from database version 9.5.2
+-- Dumped by pg_dump version 9.5.2
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
+SET row_security = off;
 
 --
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
@@ -30,7 +34,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: champion_masteries; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: champion_masteries; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE champion_masteries (
@@ -63,7 +67,7 @@ ALTER SEQUENCE champion_masteries_id_seq OWNED BY champion_masteries.id;
 
 
 --
--- Name: champion_recommendations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: champion_recommendations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE champion_recommendations (
@@ -94,7 +98,7 @@ ALTER SEQUENCE champion_recommendations_id_seq OWNED BY champion_recommendations
 
 
 --
--- Name: champions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: champions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE champions (
@@ -116,7 +120,7 @@ CREATE TABLE champions (
 
 
 --
--- Name: delayed_jobs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: delayed_jobs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE delayed_jobs (
@@ -155,7 +159,7 @@ ALTER SEQUENCE delayed_jobs_id_seq OWNED BY delayed_jobs.id;
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE schema_migrations (
@@ -164,7 +168,7 @@ CREATE TABLE schema_migrations (
 
 
 --
--- Name: summoners; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: summoners; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE summoners (
@@ -206,7 +210,7 @@ ALTER TABLE ONLY delayed_jobs ALTER COLUMN id SET DEFAULT nextval('delayed_jobs_
 
 
 --
--- Name: champion_masteries_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: champion_masteries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY champion_masteries
@@ -214,7 +218,7 @@ ALTER TABLE ONLY champion_masteries
 
 
 --
--- Name: champion_recommendations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: champion_recommendations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY champion_recommendations
@@ -222,7 +226,7 @@ ALTER TABLE ONLY champion_recommendations
 
 
 --
--- Name: champions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: champions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY champions
@@ -230,7 +234,7 @@ ALTER TABLE ONLY champions
 
 
 --
--- Name: delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY delayed_jobs
@@ -238,7 +242,7 @@ ALTER TABLE ONLY delayed_jobs
 
 
 --
--- Name: summoners_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: summoners_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY summoners
@@ -246,7 +250,7 @@ ALTER TABLE ONLY summoners
 
 
 --
--- Name: unique_summoner_champion_pair; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: unique_summoner_champion_pair; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY champion_masteries
@@ -254,63 +258,63 @@ ALTER TABLE ONLY champion_masteries
 
 
 --
--- Name: delayed_jobs_priority; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: delayed_jobs_priority; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX delayed_jobs_priority ON delayed_jobs USING btree (priority, run_at);
 
 
 --
--- Name: index_champion_masteries_on_champion_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_champion_masteries_on_champion_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_champion_masteries_on_champion_id ON champion_masteries USING btree (champion_id);
 
 
 --
--- Name: index_champion_masteries_on_summoner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_champion_masteries_on_summoner_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_champion_masteries_on_summoner_id ON champion_masteries USING btree (summoner_id);
 
 
 --
--- Name: index_champion_recommendations_on_champion_in_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_champion_recommendations_on_champion_in_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_champion_recommendations_on_champion_in_id ON champion_recommendations USING btree (champion_in_id);
 
 
 --
--- Name: index_champion_recommendations_on_champion_out_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_champion_recommendations_on_champion_out_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_champion_recommendations_on_champion_out_id ON champion_recommendations USING btree (champion_out_id);
 
 
 --
--- Name: index_champions_on_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_champions_on_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_champions_on_id ON champions USING btree (id);
 
 
 --
--- Name: index_summoners_on_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_summoners_on_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_summoners_on_id ON summoners USING btree (id);
 
 
 --
--- Name: index_summoners_on_standardized_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_summoners_on_standardized_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_summoners_on_standardized_name ON summoners USING btree (standardized_name);
 
 
 --
--- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
@@ -352,7 +356,7 @@ ALTER TABLE ONLY champion_recommendations
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO "$user",public;
+SET search_path TO "$user", public;
 
 INSERT INTO schema_migrations (version) VALUES ('20160430183134');
 

@@ -1,4 +1,12 @@
 class Recommendations
+    ROLE_MAP = {
+        0=> "Top",
+        1=> "Jungle",
+        2=> "Middle",
+        3=> "Bottom Carry",
+        4=> "Bottom Support"
+    }
+
     def update_all_champions
         Champion.all.each do |x|
             update_champion(x.id)
@@ -71,6 +79,10 @@ class Recommendations
             # puts "#{idx}=>#{role}"
         end
         return role_hash
+    end
+
+    def top_x_from_hash(h, top_x)
+        return h.sort_by {|_key, value| value}.reverse.first(top_x)
     end
 
     def for_champion_print(c_id)
