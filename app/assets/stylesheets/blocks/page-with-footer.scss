@@ -1,9 +1,32 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
 .page-with-footer {
   @include flexbox;
   @include flex-direction(column);
-  height: 100%;
+
+  min-height: 100%;
+  /*width: 100%;*/
 }
 
 .page-with-footer__content {
   @include flex(1);
+}
+
+.page-with-footer__footer {
+  /*width: 100%;*/
+  padding: 10px 15px;
+
+  background-color: rgba(42, 62, 80, .6);
+
+  a {
+    text-align: right;
+    font-size: 1.5em;
+    color: white;
+  }
 }

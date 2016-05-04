@@ -1,0 +1,24 @@
+.aboutpage-content {
+  @include flexbox;
+  @include flex-direction(column);
+  @include align-items(center);
+
+  margin: 50px auto 0;
+  width: 800px;
+  padding: 2rem;
+  background-color: rgba(100, 62, 80, .6);
+  text-align: center;
+
+  p {
+    text-align: left;
+  }
+}
+
+.aboutpage-content > * {
+  margin: 1em;
+  width: 100%;
+}
+
+.aboutpage-content__header {
+  margin-top: 0;
+}

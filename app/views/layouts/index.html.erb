@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>lolCupid</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+</head>
+<body style="background-color: black;">
+
+  <div class="page-with-footer">
+    <div style="z-index: 0; background-color: black; background-image: url('<%= Champion.random_splash %>'); background-size: auto 100%; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-repeat: no-repeat; background-position: center center;"></div>
+    <div class="page-with-footer__content" style="z-index: 1;">
+      <%= yield %>
+    </div>
+    <div class="page-with-footer__footer" style="z-index: 1;">
+      <a href="about.html"> About </a>
+    </div>
+  </div>
+
+</body>
+</html>

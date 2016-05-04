@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>lolCupid</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <div class="page-with-footer">
+    <div class="page-with-footer__content">
+      <%= yield %>
+    </div>
+    <div class="page-with-footer__footer">
+      <a href="/"> Homepage </a>
+    </div>
+  </div>
+</body>
+</html>
