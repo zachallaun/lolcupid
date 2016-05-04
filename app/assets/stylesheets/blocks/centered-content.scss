@@ -1,8 +1,0 @@
-.centered-content {
-  @include flexbox;
-  @include flex-direction(column);
-  @include align-items(center);
-
-  margin: 4rem auto 0;
-  text-align: center;
-}

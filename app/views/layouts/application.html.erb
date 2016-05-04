@@ -8,7 +8,19 @@
 </head>
 <body>
 
-<%= yield %>
+  <div>
+    <div style="background-image: url('<%= Champion.random_splash %>'); background-size: 100% 100%; background-position: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; background-repeat: no-repeat center center;"></div>
+    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; overflow: scroll;">
+
+      <div class="page-with-footer">
+        <div class="page-with-footer__content">
+          <%= yield %>
+        </div>
+        <p>footer</p>
+      </div>
+
+    </div>
+  </div>
 
 </body>
 </html>

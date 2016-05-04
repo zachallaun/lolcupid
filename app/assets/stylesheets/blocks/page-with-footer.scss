@@ -1,0 +1,9 @@
+.page-with-footer {
+  @include flexbox;
+  @include flex-direction(column);
+  height: 100%;
+}
+
+.page-with-footer__content {
+  @include flex(1);
+}

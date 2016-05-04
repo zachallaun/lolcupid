@@ -12,6 +12,7 @@ class Champion < ActiveRecord::Base
     champion.key   = api_data[:key]
     champion.title = api_data[:title]
     champion.image = api_data[:image][:full]
+    champion.skins = api_data[:skins]
 
     champion.release_date = ChampionConstants::CHAMP_RELEASE_DATES[name]
     champion.nickname     = ChampionConstants::CHAMP_NICKNAMES[name]
@@ -21,6 +22,13 @@ class Champion < ActiveRecord::Base
     end
 
     champion
+  end
+
+  def self.random_splash
+    random_champ = Champion.order("RANDOM()").first
+    random_skin_num = random_champ.skins.sample["num"]
+    splash_name = "#{random_champ.key}_#{random_skin_num}"
+    RiotClient::ASSET_PREFIX + "img/champion/splash/#{splash_name}.jpg"
   end
 
   def image_url
