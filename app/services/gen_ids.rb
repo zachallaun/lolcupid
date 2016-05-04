@@ -1,9 +1,10 @@
 class GenIds
     TIER_BREAKDOWN = {
-        "challenger" => 0.0001,
-        "master"     => 0.0007,
-        "diamond"    => 0.0185,
-        "platinum"   => 0.0735,
+        # Breakdowns artificially inflated to get more high-level summoners
+        "challenger" => 0.005,
+        "master"     => 0.01,
+        "diamond"    => 0.0585,
+        "platinum"   => 0.1035,
         "gold"       => 0.1842,
         "silver"     => 0.383,
         "bronze"     => 0.34
