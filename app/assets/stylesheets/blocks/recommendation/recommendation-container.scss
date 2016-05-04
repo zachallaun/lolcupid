@@ -1,0 +1,17 @@
+.recommendation-container {
+  @include flexbox;
+  @include flex-direction(row);
+  @include flex-wrap(wrap);
+  @include justify-content(space-around);
+  @include align-items(center);
+
+
+  background-color:darken($gray-light, 15%);
+
+  padding:5px;
+}
+
+.recommendation-container > * {
+  margin:5px;
+  padding:5px;
+}

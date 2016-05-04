@@ -1,0 +1,26 @@
+.recommendation-panel {
+  @include flexbox;
+  @include flex-direction(row);
+  @include align-items(center);
+
+  background-color:$gray-light;
+}
+
+.recommendation-panel > *{
+  padding:2px;
+}
+
+.recommendation-panel__portrait {
+  width: 30px;
+  height: 30px;
+}
+
+.recommendation-panel__name {
+  margin-left: 6px;
+  font-size: 16px;
+}
+
+.recommendation-panel__score {
+  font-size: 12px;
+  color: lighten($gray-light, 25%);
+}

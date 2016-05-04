@@ -1,25 +1,10 @@
-<div class="aboutpage-content">
-    <h1 class="aboutpage-content__header">
-        Rec
-    </h1>
-
-    <p>
-        Top <%= @recs_top %>
-    </p>
-
-    <p>
-        Jungle <%= @recs_jungle %>
-    </p>
-
-    <p>
-        Middle <%= @recs_middle %>
-    </p>
-
-    <p>
-        Bottom Carry <%= @recs_bottom_carry %>
-    </p>
-
-    <p>
-        Bottom Support <%= @recs_bottom_support %>
-    </p>
-</div>
+<%=
+react_component "LolCupid.Championpage",
+    {
+        recs_top: @recs_top,
+        recs_jungle: @recs_jungle,
+        recs_middle: @recs_middle,
+        recs_bottom_carry: @recs_bottom_carry,
+        recs_bottom_support: @recs_bottom_support
+    }
+%>
