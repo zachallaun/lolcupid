@@ -4,6 +4,7 @@ class GrowDbJob < ActiveJob::Base
 
     if n >= final_target_size
       FetchMastery.new.update_without_fetch
+      Recommendations.new.update_all_champions
     else
       GenIds.new(region).grow_until(n + 1)
       FetchMastery.new.fetch_outdated
