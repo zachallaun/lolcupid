@@ -9,15 +9,11 @@ class PagesController < ApplicationController
     render layout: "about"
   end
 
-  def rec
-  end
-
   def summoner
   end
 
   def champions
     @query_champions, @recommendations = query_and_recs
-
     render layout: "about"
   end
 end
