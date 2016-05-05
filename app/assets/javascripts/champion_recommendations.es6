@@ -1,7 +1,7 @@
 !function() {
 
   const { Component, PropTypes } = React;
-  const { createStore, compose } = Redux;
+  const { createStore, compose, applyMiddleware } = Redux;
   const { Provider, connect } = ReactRedux;
 
   const DEFAULT_CHAMP_IMAGE_URL = 'https://ddragon.leagueoflegends.com/cdn/6.9.1/img/profileicon/16.png';
@@ -27,15 +27,38 @@
     }
   }
 
+  /*** Actions ***/
+
+  let Actions = {};
+
+  Actions.removeQueryChampion = (champion) => {
+    return {
+      types: [
+        'removeQueryChampion',
+        'removeQueryChampionSuccess',
+        'removeQueryChampionFailure',
+      ],
+      promise: () => API.recommendations, // TODO
+      champion,
+    };
+  };
+
   /*** Components ***/
 
+  @connect()
   class ChampionSelectSidebar extends Component {
     static propTypes = {
+      removableChampions: PropTypes.bool,
       invert: PropTypes.bool,
     }
 
     static defaultProps = {
       champions: [],
+    }
+
+    removeChampion(e, champion) {
+      e.preventDefault();
+      this.props.dispatch(Actions.removeQueryChampion(champion));
     }
 
     renderChampion(champion = {}, i) {
@@ -53,13 +76,20 @@
       }
 
       return (
-        <div className={className} key={i}>
+        <div className={className} key={name || i}>
           <div className="sidebar-champ__image">
             <img src={image_url} alt={name} />
           </div>
           <div className="sidebar-champ__text">
             <div className="sidebar-champ__name">{name}</div>
           </div>
+          {
+            this.props.removableChampions ?
+            <a href="" onClick={e => this.removeChampion(e, champion)}>
+              x
+            </a> :
+            null
+          }
         </div>
       );
     }
@@ -84,7 +114,7 @@
         <div className="champ-select-container">
           <div className="pane-layout">
             <div className="pane-layout__sidebar">
-              <ChampionSelectSidebar champions={queryChampions} />
+              <ChampionSelectSidebar removableChampions champions={queryChampions} />
             </div>
 
             <div className="pane-layout__main">
@@ -149,6 +179,7 @@
       const reducer = makeReducer(this.props);
 
       this.store = createStore(reducer, compose(
+        applyMiddleware(LolCupid.asyncRequestMiddleware),
         window.devToolsExtension ? window.devToolsExtension() : f => f
       ));
     }
