@@ -13,6 +13,8 @@
 //= require lodash
 //= require react
 //= require react_ujs
+//= require redux-3.5.2
+//= require react-redux-4.4.5
 //
 //= require 'lol_cupid'
 //= require_tree .

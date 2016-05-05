@@ -1,8 +1,33 @@
 !function() {
 
+  const { Component, PropTypes } = React;
+  const { createStore, compose } = Redux;
+  const { Provider, connect } = ReactRedux;
+
   const DEFAULT_CHAMP_IMAGE_URL = 'https://ddragon.leagueoflegends.com/cdn/6.9.1/img/profileicon/16.png';
 
-  const { Component, PropTypes } = React;
+  /*** State management ***/
+
+  let handlers = {};
+
+  function makeReducer(serverData) {
+    const initialState = {
+      champions: serverData.champions,
+      queryChampions: serverData.query_champions,
+      recommendations: serverData.recommendations,
+    };
+
+    return function reducer(state = initialState, action) {
+      const handler = handlers[action.type];
+      if (handler) {
+        return handler(state, action);
+      } else {
+        return state;
+      }
+    }
+  }
+
+  /*** Components ***/
 
   class ChampionSelectSidebar extends Component {
     static propTypes = {
@@ -50,15 +75,16 @@
     }
   }
 
+  @connect(state => state)
   class ChampionRecommendations extends Component {
     render() {
-      const { query_champions, recommendations, champions } = this.props;
+      const { queryChampions, recommendations, champions } = this.props;
 
       return (
         <div className="champ-select-container">
           <div className="pane-layout">
             <div className="pane-layout__sidebar">
-              <ChampionSelectSidebar champions={query_champions} />
+              <ChampionSelectSidebar champions={queryChampions} />
             </div>
 
             <div className="pane-layout__main">
@@ -118,6 +144,24 @@
     }
   }
 
-  LolCupid.ChampionRecommendations = ChampionRecommendations
+  class ChampionRecommendationsInitializer extends Component {
+    componentWillMount() {
+      const reducer = makeReducer(this.props);
+
+      this.store = createStore(reducer, compose(
+        window.devToolsExtension ? window.devToolsExtension() : f => f
+      ));
+    }
+
+    render() {
+      return (
+        <Provider store={this.store}>
+          <ChampionRecommendations />
+        </Provider>
+      );
+    }
+  }
+
+  LolCupid.ChampionRecommendations = ChampionRecommendationsInitializer;
 
 }();
