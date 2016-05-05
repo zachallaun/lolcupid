@@ -296,6 +296,13 @@ CREATE INDEX index_champions_on_id ON champions USING btree (id);
 
 
 --
+-- Name: index_champions_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_champions_on_name ON champions USING btree (name);
+
+
+--
 -- Name: index_summoners_on_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -383,4 +390,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160503010211');
 INSERT INTO schema_migrations (version) VALUES ('20160503011152');
 
 INSERT INTO schema_migrations (version) VALUES ('20160504022331');
+
+INSERT INTO schema_migrations (version) VALUES ('20160505191858');
 

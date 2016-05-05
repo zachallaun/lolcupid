@@ -2,6 +2,35 @@ class Champion < ActiveRecord::Base
   has_many :champion_masteries
   has_many :recommendations, -> { order(score: :desc) }, foreign_key: 'champion_in_id', class_name: 'ChampionRecommendation'
 
+  def self.recommendations_for(champions, summoner=nil)
+    if summoner.present?
+      champions_in = champions.select(
+        "champions.*",
+        "coalesce(cm.devotion, 0) AS devotion"
+      ).joins(
+        "LEFT JOIN champion_masteries cm ON cm.champion_id = champions.id AND cm.summoner_id = #{summoner.id}"
+      )
+    else
+      champions_in = champions.select(
+        "champions.*",
+        "#{1.0/champions.count} AS devotion"
+      )
+    end
+
+    Champion.select(
+      "champions.*",
+      "SUM(recs.score * champions_in.devotion) AS score"
+    ).from(
+      "(#{champions_in.to_sql}) champions_in, champions JOIN champion_recommendations recs ON recs.champion_out_id = champions.id"
+    ).where(
+      "champions_in.id = recs.champion_in_id"
+    ).group(
+      "champions.id"
+    ).order(
+      "SUM(recs.score * champions_in.devotion) DESC"
+    )
+  end
+
   def self.from_api(asset_version, api_data)
     champion = where(id: api_data[:id]).first_or_initialize
 
