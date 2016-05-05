@@ -24,8 +24,10 @@ body {
   width: 100%;
 
   padding: 10px 15px;
+  margin:0px 0px 1em 0px;
 
-  background-color: rgba(100, 62, 80, .6);
+  background-color: darken(rgba(42, 62, 80, 1), 10%);
+  /*background-color: rgba(100, 62, 80, 1);*/
 }
 
 .page-with-header-footer__header__logo {
@@ -53,9 +55,10 @@ body {
   /*width: 100%;*/
   text-align: center;
 
+  margin:1em 0px 0px 0px;
   padding: 10px 15px;
 
-  background-color: rgba(42, 62, 80, .6);
+  background-color: darken(rgba(42, 62, 80, 1), 10%);
 
   a {
     text-align: right;

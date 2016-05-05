@@ -3,13 +3,16 @@
   @include flex-direction(column);
   @include align-items(center);
 
-  margin: 50px auto 0;
+  margin: 3em auto;
   width: 800px;
   padding: 2rem;
-  background-color: rgba(100, 62, 80, .6);
+  /*background-color: rgba(46, 100, 80, 1);*/
+  /*background-color: #61552D;*/
+  background-color: #61553D;
   text-align: center;
 
   p {
+    font-size:1.2em;
     text-align: left;
   }
 }
