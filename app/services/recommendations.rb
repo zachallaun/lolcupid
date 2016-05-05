@@ -61,11 +61,6 @@ class Recommendations
             group(:id)
     end
 
-    def for_champion(champ)
-        champ.select("*", "recs.score AS score").
-            joins(:recommendations)
-    end
-
     def for_champion(x)
         rec_x = Hash.new
         ChampionRecommendation.where(champion_in: x).includes(:champion_out).each do |rec_entry|
@@ -78,7 +73,6 @@ class Recommendations
         role_hash = Hash.new
         for idx, role in ChampionConstants::ROLE_MAP
             role_hash[role] = Hash.new
-            h.values.each do |
             Champion.where("#{role}").each do |champ|
                 role_hash[idx][champ.name] = h[champ.id]
             end
