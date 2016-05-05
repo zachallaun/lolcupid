@@ -2,6 +2,16 @@ class Champion < ActiveRecord::Base
   has_many :champion_masteries
   has_many :recommendations, -> { order(score: :desc) }, foreign_key: 'champion_in_id', class_name: 'ChampionRecommendation'
 
+  scope :by_names, -> (names) {
+    values = names.map.with_index { |n, i| "(#{ActiveRecord::Base::sanitize(n)}, #{i})" }.join(", ")
+
+    joins(
+      "JOIN (VALUES #{values}) names(name, index) ON champions.name ILIKE names.name"
+    ).order(
+      "names.index ASC"
+    )
+  }
+
   def self.recommended_for(champions, summoner=nil)
     if summoner.present?
       champions_in = champions.select(

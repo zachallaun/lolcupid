@@ -14,7 +14,7 @@ class PagesController < ApplicationController
   end
 
   def champions
-    @query_champions = Champion.where(name: champ_names_from_params)
+    @query_champions = Champion.by_names(champ_names_from_params)
     @recommendations = Champion.recommended_for(@query_champions)
 
     render layout: "about"
