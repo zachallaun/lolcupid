@@ -2,7 +2,7 @@
   @include flexbox;
   @include flex-direction(row);
   @include flex-wrap(wrap);
-  @include justify-content(space-around);
+  @include justify-content(center);
   @include align-items(center);
 
 

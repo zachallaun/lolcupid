@@ -7,12 +7,22 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div class="page-with-footer">
-    <div class="page-with-footer__content">
+  <div class="page-with-header-footer">
+    <div class="page-with-header-footer__header">
+      <div class="page-with-header-footer__header__logo">
+        <a href="/"> lolCupid </a>
+      </div>
+      <div class="page-with-header-footer__header__searchbar">
+        SEARCH
+      </div>
+    </div>
+    <div class="page-with-header-footer__content">
       <%= yield %>
     </div>
-    <div class="page-with-footer__footer">
-      <a href="/"> Homepage </a>
+    <div class="page-with-header-footer__footer">
+      &copy; 2016
+      &#183;
+      We are not affiliated with Riot Games, Inc. in any manner. See the <a href="/about#terms"> official terms</a>.
     </div>
   </div>
 </body>
