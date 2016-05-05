@@ -6,12 +6,9 @@
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>
-<body style="background-color: black;">
+<body style="background-color: black; background-image: url('<%= Champion.random_splash %>'); background-size: cover; background-attachment: fixed; background-position: center;">
 
   <div class="page-with-footer">
-    <div id="page-background" style="z-index: 0; background-color: black; background-image: url('<%= Champion.random_splash %>'); background-size: auto 100%; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-repeat: no-repeat; background-position: center center;"></div>
-    <script>LolCupid.registerBackgroundImageHandler('page-background')</script>
-
     <div class="page-with-footer__content" style="z-index: 1;">
       <%= yield %>
     </div>
