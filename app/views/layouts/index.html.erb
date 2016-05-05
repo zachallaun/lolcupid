@@ -6,7 +6,8 @@
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>
-<body style="background-color: black; background-image: url('<%= Champion.random_splash %>'); background-size: cover; background-attachment: fixed; background-position: center;">
+<body>
+  <div class="background-image" style="background-image: url('<%= Champion.random_splash %>');"></div>
 
   <div class="page-with-footer">
     <div class="page-with-footer__content" style="z-index: 1;">
