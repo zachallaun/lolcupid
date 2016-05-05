@@ -52,14 +52,13 @@
 
   class ChampionRecommendations extends Component {
     render() {
-      const champions = _.take(this.props.recommended_champions, 3);
-      const recs = _.take(_.drop(this.props.recommended_champions, 3), 3);
+      const { query_champions, recommendations, champions } = this.props;
 
       return (
         <div className="champ-select-container">
           <div className="pane-layout">
             <div className="pane-layout__sidebar">
-              <ChampionSelectSidebar champions={champions} />
+              <ChampionSelectSidebar champions={query_champions} />
             </div>
 
             <div className="pane-layout__main">
@@ -67,7 +66,7 @@
             </div>
 
             <div className="pane-layout__sidebar">
-              <ChampionSelectSidebar invert champions={recs} />
+              <ChampionSelectSidebar invert champions={_.take(recommendations, 5)} />
             </div>
           </div>
         </div>
@@ -119,6 +118,6 @@
     }
   }
 
-  LolCupid.Championpage = ChampionRecommendations;
+  LolCupid.ChampionRecommendations = ChampionRecommendations
 
 }();

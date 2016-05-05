@@ -2,7 +2,7 @@ class Champion < ActiveRecord::Base
   has_many :champion_masteries
   has_many :recommendations, -> { order(score: :desc) }, foreign_key: 'champion_in_id', class_name: 'ChampionRecommendation'
 
-  def self.recommendations_for(champions, summoner=nil)
+  def self.recommended_for(champions, summoner=nil)
     if summoner.present?
       champions_in = champions.select(
         "champions.*",
@@ -24,6 +24,8 @@ class Champion < ActiveRecord::Base
       "(#{champions_in.to_sql}) champions_in, champions JOIN champion_recommendations recs ON recs.champion_out_id = champions.id"
     ).where(
       "champions_in.id = recs.champion_in_id"
+    ).where(
+      "champions.id NOT IN (#{champions.select(:id).to_sql})"
     ).group(
       "champions.id"
     ).order(
