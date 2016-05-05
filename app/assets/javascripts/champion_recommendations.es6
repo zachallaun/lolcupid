@@ -27,38 +27,56 @@
     }
   }
 
+  /*** Action helpers ***/
+
+  const API = {
+    recommendations: {
+      show: (queryString) => {
+        return fetch('/api/recommendations' + queryString).then(r => r.json());
+      },
+    },
+  };
+
+  function championsToQueryString(champions) {
+    const championNames = champions.map(c => c.name.replace(' ', '_')).join(',');
+    return `?name=${championNames}`;
+  }
+
   /*** Actions ***/
 
   let Actions = {};
 
-  Actions.removeQueryChampion = (champion) => {
+  Actions.fetchRecommendations = (champions) => {
+    // TODO handle case where champions is empty
+    // TODO change route query params
     return {
       types: [
-        'removeQueryChampion',
-        'removeQueryChampionSuccess',
-        'removeQueryChampionFailure',
+        'fetchRecommendations',
+        'fetchRecommendationsSuccess',
+        'fetchRecommendationsFailure',
       ],
-      promise: () => API.recommendations, // TODO
-      champion,
+      promise: () => API.recommendations.show(
+        championsToQueryString(champions)
+      ),
+      champions,
     };
   };
 
   /*** Components ***/
 
-  @connect()
   class ChampionSelectSidebar extends Component {
     static propTypes = {
-      removableChampions: PropTypes.bool,
       invert: PropTypes.bool,
+      removeChampion: PropTypes.func,
     }
 
     static defaultProps = {
       champions: [],
     }
 
-    removeChampion(e, champion) {
+    removeChampion = (e, champion) => {
       e.preventDefault();
-      this.props.dispatch(Actions.removeQueryChampion(champion));
+      this.props.removeChampion(champion);
     }
 
     renderChampion(champion = {}, i) {
@@ -84,7 +102,7 @@
             <div className="sidebar-champ__name">{name}</div>
           </div>
           {
-            this.props.removableChampions ?
+            this.props.removeChampion ?
             <a href="" onClick={e => this.removeChampion(e, champion)}>
               x
             </a> :
@@ -107,6 +125,12 @@
 
   @connect(state => state)
   class ChampionRecommendations extends Component {
+    removeChampion = (champion) => {
+      this.props.dispatch(Actions.fetchRecommendations(
+        this.props.queryChampions.filter(c => c.id !== champion.id),
+      ));
+    }
+
     render() {
       const { queryChampions, recommendations, champions } = this.props;
 
@@ -114,7 +138,10 @@
         <div className="champ-select-container">
           <div className="pane-layout">
             <div className="pane-layout__sidebar">
-              <ChampionSelectSidebar removableChampions champions={queryChampions} />
+              <ChampionSelectSidebar
+                champions={queryChampions}
+                removeChampion={this.removeChampion}
+              />
             </div>
 
             <div className="pane-layout__main">
@@ -122,7 +149,10 @@
             </div>
 
             <div className="pane-layout__sidebar">
-              <ChampionSelectSidebar invert champions={_.take(recommendations, 5)} />
+              <ChampionSelectSidebar
+                invert
+                champions={_.take(recommendations, 5)}
+              />
             </div>
           </div>
         </div>
