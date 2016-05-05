@@ -1,7 +1,79 @@
 !function() {
 
+  const DEFAULT_CHAMP_IMAGE_URL = 'https://ddragon.leagueoflegends.com/cdn/6.9.1/img/profileicon/16.png';
+
   const { Component, PropTypes } = React;
 
+  class ChampionSelectSidebar extends Component {
+    static propTypes = {
+      invert: PropTypes.bool,
+    }
+
+    static defaultProps = {
+      champions: [],
+    }
+
+    renderChampion(champion = {}, i) {
+      let { name, image_url } = champion;
+      let className = 'sidebar-champ';
+
+      if (!name) {
+        className += ' sidebar-champ--using-defaults';
+        name = `Champion ${i}`;
+        image_url = DEFAULT_CHAMP_IMAGE_URL;
+      }
+
+      if (this.props.invert) {
+        className += ' sidebar-champ--invert';
+      }
+
+      return (
+        <div className={className} key={i}>
+          <div className="sidebar-champ__image">
+            <img src={image_url} alt={name} />
+          </div>
+          <div className="sidebar-champ__text">
+            <div className="sidebar-champ__name">{name}</div>
+          </div>
+        </div>
+      );
+    }
+
+    render() {
+      const { champions } = this.props;
+
+      return (
+        <div className="champ-select-sidebar">
+          {_.times(5).map(i => this.renderChampion(champions[i], i+1))}
+        </div>
+      );
+    }
+  }
+
+  class ChampionRecommendations extends Component {
+    render() {
+      const champions = _.take(this.props.recommended_champions, 3);
+      const recs = _.take(_.drop(this.props.recommended_champions, 3), 3);
+
+      return (
+        <div className="champ-select-container">
+          <div className="pane-layout">
+            <div className="pane-layout__sidebar">
+              <ChampionSelectSidebar champions={champions} />
+            </div>
+
+            <div className="pane-layout__main">
+              main
+            </div>
+
+            <div className="pane-layout__sidebar">
+              <ChampionSelectSidebar invert champions={recs} />
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
 
   class Championpage extends Component {
     render_rec_panel({ name, score, image_url }) {
@@ -47,6 +119,6 @@
     }
   }
 
-  LolCupid.Championpage = Championpage;
+  LolCupid.Championpage = ChampionRecommendations;
 
 }();

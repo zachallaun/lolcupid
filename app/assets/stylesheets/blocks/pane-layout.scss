@@ -1,0 +1,14 @@
+.pane-layout {
+  @include flexbox;
+
+  width: 100%;
+}
+
+.pane-layout__sidebar {
+  width: 250px;
+}
+
+.pane-layout__main {
+  @include flex(1);
+  background-color: black;
+}

@@ -1,0 +1,44 @@
+.sidebar-champ {
+  @include flexbox;
+  @include align-items(center);
+
+  padding: 1rem;
+
+  &.sidebar-champ--using-defaults {
+    @include filter(grayscale(100%));
+    opacity: .5;
+  }
+
+  &.sidebar-champ--invert {
+    @include flex-direction(row-reverse);
+
+    .sidebar-champ__text {
+      text-align: right;
+    }
+  }
+}
+
+.sidebar-champ__image {
+  width: 86px;
+  height: 86px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50px;
+  border: 3px solid rgba(243, 193, 101, .3);
+
+  > img {
+    position: absolute;
+    height: 92px;
+    width: 92px;
+    left: -6px;
+    top: -6px;
+  }
+}
+
+.sidebar-champ__text {
+  margin: 0 1rem;
+}
+
+.sidebar-champ__name {
+  font-weight: normal;
+}
