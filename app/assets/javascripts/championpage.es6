@@ -4,38 +4,44 @@
 
 
   class Championpage extends Component {
-    render_rec_panel(name, score) {
+    render_rec_panel({ name, score, image_url }) {
       return (
         <div className="recommendation-panel">
-          <div className="recommendation-panel__portrait"> </div>
+          <img className="recommendation-panel__portrait" src={image_url} />
           <div className="recommendation-panel__name"> {name} </div>
           <div className="recommendation-panel__score"> {score.toPrecision(2)} </div>
         </div>
       );
     }
 
-    render_recs_for_role(role_name, role_rec_list) {
+    render_recs_for_role(role_name, champs) {
       return (
         <div>
             <h4> {role_name} </h4>
             <div className="recommendation-container">
-              {role_rec_list.map(rec => this.render_rec_panel(rec[0], rec[1]))}
+              {_.take(champs, 10).map(champ => this.render_rec_panel(champ))}
             </div>
         </div>
       );
     }
 
     render() {
+      const recs_top = _.filter(this.props.recommended_champions, 'can_top');
+      const recs_jungle = _.filter(this.props.recommended_champions, 'can_jungle');
+      const recs_mid = _.filter(this.props.recommended_champions, 'can_mid');
+      const recs_bot_carry = _.filter(this.props.recommended_champions, 'can_bot_carry');
+      const recs_bot_support = _.filter(this.props.recommended_champions, 'can_bot_support');
+
       return (
         <div className="aboutpage-content">
             <h1 className="aboutpage-content__header">
                 Recommendations
             </h1>
-            {this.render_recs_for_role("Top", this.props.recs_top)}
-            {this.render_recs_for_role("Jungle", this.props.recs_jungle)}
-            {this.render_recs_for_role("Middle", this.props.recs_middle)}
-            {this.render_recs_for_role("Bottom Carry", this.props.recs_bottom_carry)}
-            {this.render_recs_for_role("Bottom Support", this.props.recs_bottom_support)}
+            {this.render_recs_for_role("Top", recs_top)}
+            {this.render_recs_for_role("Jungle", recs_jungle)}
+            {this.render_recs_for_role("Middle", recs_mid)}
+            {this.render_recs_for_role("Bottom Carry", recs_bot_carry)}
+            {this.render_recs_for_role("Bottom Support", recs_bot_support)}
         </div>
       );
     }
