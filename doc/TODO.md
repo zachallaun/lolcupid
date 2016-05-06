@@ -8,6 +8,11 @@ Homepage
 ===========
 - Link to about
 
+Recommendation page
+==========
+- Center the selector panel
+- Make x's bigger
+
 
 Mockup
 ==========

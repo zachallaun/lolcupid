@@ -20,7 +20,7 @@
 
     selectRegion(e, region) {
       e.preventDefault();
-      this.setState({ selected: region, dropdown: false });
+      this.setState({ selected: region, dropdown: false }, this.props.alertParent(region));
     }
 
     renderMenuOptions() {
@@ -72,6 +72,16 @@
       selected: null,
     };
 
+    selectedChanged = () => {
+      if (this.state.selected == null) {
+        this.props.alertParent('', true);
+      } else if (this.state.results[this.state.selected].querySummoner) {
+        this.props.alertParent(this.state.query, true);
+      } else {
+        this.props.alertParent(this.state.results[this.state.selected].name, false);
+      }
+    }
+
     componentDidUpdate(_prevProps, prevState) {
       if (prevState.query !== this.state.query) {
         let results = [];
@@ -99,24 +109,32 @@
     }
 
     updateQuery = (e) => {
-      this.setState({ query: e.target.value });
+      this.setState({ query: e.target.value }, this.selectedChanged);
     }
 
     handleKeyDown = (e) => {
       if (e.keyCode === KEY_CODES.down) {
         e.preventDefault();
+        let new_select;
         if (this.state.selected + 1 >= this.state.results.length) {
-          this.setState({ selected: 0 });
+          new_select = 0;
+          // this.setState({ selected: 0 });
         } else {
-          this.setState({ selected: this.state.selected + 1 });
+          new_select = this.state.selected + 1;
+          // this.setState({ selected: this.state.selected + 1 });
         }
+        this.setState({ selected: new_select }, this.selectedChanged);
       } else if (e.keyCode === KEY_CODES.up) {
         e.preventDefault();
+        let new_select;
         if (this.state.selected - 1 < 0) {
-          this.setState({ selected: this.state.results.length - 1 });
+          new_select = this.state.results.length - 1;
+          // this.setState({ selected: this.state.results.length - 1 });
         } else {
-          this.setState({ selected: this.state.selected - 1 });
+          new_select = this.state.selected - 1;
+          // this.setState({ selected: this.state.selected - 1 });
         }
+        this.setState({ selected: new_select }, this.selectedChanged);
       }
     }
 
@@ -169,7 +187,7 @@
           <a
             className={championOptionClass}
             href=""
-            onMouseEnter={e => this.setState({ selected: index })}
+            onMouseEnter={e => this.setState({ selected: index }, this.selectedChanged)}
           >
             {content}
           </a>
@@ -209,20 +227,46 @@
   }
 
   class Search extends Component {
+    state = {
+      selected: '',
+      isSummoner: true,
+      region: 'na'
+    };
+
     static propTypes = {
       champions: PropTypes.arrayOf(PropTypes.object).isRequired,
     };
+
+    regionChanged = (region) => {
+        this.setState({region: region});
+    }
+
+    selectedChanged = (selected, isSummoner) => {
+      if (selected == '') {
+        this.setState({selected: '', isSummoner: true});
+      } else {
+        this.setState({selected: selected, isSummoner: isSummoner});
+      }
+    }
+
+    commenceSearch = () => {
+      if (this.state.selected != '' && this.state.isSummoner) {
+        window.location.href = "/summoner?region="+this.state.region+"&name="+this.state.selected;
+      } else if (this.state.selected != '' && !this.state.isSummoner) {
+        window.location.href = "/champions?name="+this.state.selected;
+      }
+    }
 
     render() {
       return (
         <div className="search">
           <div className="search__input-container">
-            <ChampionSelector champions={this.props.champions} />
+            <ChampionSelector champions={this.props.champions} alertParent={this.selectedChanged} />
             <div className="search__region-selector">
-              <RegionSelector />
+              <RegionSelector defaultRegion='na' alertParent={this.regionChanged} />
             </div>
           </div>
-          <button className="btn btn-primary">Search</button>
+          <button className="btn btn-primary" onClick={this.commenceSearch}>Search</button>
         </div>
       );
     }
