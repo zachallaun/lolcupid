@@ -7,13 +7,22 @@
   width: 800px;
   padding: 2rem;
   /*background-color: rgba(46, 100, 80, 1);*/
+  background-color: rgba(0, 0, 0, 0.2);
   /*background-color: #61552D;*/
-  background-color: #61553D;
+  /*background-color: #61553D;*/
   text-align: center;
 
   p {
     font-size:1.2em;
     text-align: left;
+  }
+
+  .code {
+    text-align: left;
+    display: block;
+    unicode-bidi: embed;
+    font-family: monospace;
+    white-space: pre;
   }
 }
 

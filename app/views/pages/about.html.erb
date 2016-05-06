@@ -12,24 +12,89 @@
     </p>
 
     <h2>
+        The API Challenge
+    </h2>
+
+    <p>
+        The official challenge statement can be found <a href="https://developer.riotgames.com/discussion/announcements/show/eoq3tZd1">here</a>. TL;DR: "Submit a piece of software that utilizes Champion Mastery data which excels primarily in 'Usability/Practicality.'"
+    </p>
+
+    <h2>
         Mathematical Aspects
     </h2>
 
     <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sed facilisis tortor. Pellentesque sed est eget enim porta mollis. Vivamus eget nisi nisi. Vivamus ut turpis vel odio efficitur posuere id sit amet felis. Etiam vitae erat leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla molestie massa quis cursus bibendum. Pellentesque a nunc pulvinar, finibus ipsum nec, condimentum orci. Vivamus aliquet lorem et posuere gravida. Nullam iaculis ipsum ac magna tempor, vestibulum efficitur nisi aliquet.
+        How do we come up with the recommendations? Without some insight into this, the entire project is meaningless. We begin with the mastery points of a large collection of summoners (distributed across all tiers of ranked.)
     </p>
+
+    <div class="code">
+MP(S, C) = Mastery points for summoner S on champion C
+MP(S) = Total mastery points for summoner S
+    </div>
+
     <p>
-        In hendrerit mi sed congue mollis. Vivamus eget elit nulla. Aenean ac velit sit amet nunc sollicitudin tempor. Cras dignissim ornare felis et semper. Sed cursus neque mauris, eu rhoncus felis semper non. Cras a ante quis eros consequat consectetur. Etiam ligula leo, rutrum id accumsan at, accumsan sit amet lorem. Morbi ultricies metus ac vestibulum porttitor. Praesent in orci non mi imperdiet bibendum vel eu odio. Nam ut tincidunt enim. Quisque et ex et quam ornare ornare sit amet non ex.
+        What does a champion mastery point mean? Does it mean that the summoner has mastered the champion? Perhaps. What it really means is that the summoner played the champion. The more points you have the more you played (or perhaps you played a little less, but you got higher rankings.) So this is the premise. As such, we need to account for recently released champions that haven't been around as long as the mastery system.
     </p>
+
+    <div class="code">
+MRD = Days since mastery system release date
+RD(C) = Days since champion C's release date
+aMP(S, C) = MP(S, C) * ( MRD / RD(C) )     // adjusted MP
+aMP(S) = Total aMP for summoner S
+    </div>
+
     <p>
-        Aliquam eu pretium justo, quis hendrerit leo. Morbi ornare risus ut mattis laoreet. Cras eros lacus, volutpat in nisl sed, eleifend scelerisque dolor. Vivamus pretium est tortor. Vivamus quis tincidunt est. Curabitur at odio dolor. Nunc eleifend eget urna sit amet aliquet. Vestibulum facilisis felis nibh, eget fermentum dolor mattis vitae. In hac habitasse platea dictumst. Fusce nec viverra leo, sed lacinia erat. Etiam et dui congue, rhoncus nulla quis, auctor odio. Ut non augue eros. Nulla sollicitudin turpis id ligula pretium vulputate.
+        If a mastery point on champion X means you played X a lot, then supposedly you like X. Therefore, having high mastery on Y also is an indication that players who like X also like Y. If you have low mastery on Z, this means you played Z, but probably didn't like Z as much; therefore, people who like X might not like Z. If you never played W, then nothing can be inferred. So we needed some unit to reflect this. It should be positive for your champions with high mastery, zero for those with none, and negative for those with relatively little. We call this unit 'devotion.'
     </p>
+
+    <div class="code">
+CP(S) = Number of champions C for which MP(S, C) > 0
+P(S, C) = aMP(S, C) / aMP(S)     // 'Preference' by summoner S for champion C
+D(S, C) = if (P(S, C) > 0)  P(S, C) - ( 1 / CP(S) )
+          else              0
+    </div>
+
     <p>
-        Curabitur non quam id erat lobortis molestie a non erat. Ut sit amet eleifend ligula. Maecenas at molestie turpis, id dignissim sem. Proin interdum auctor massa vel accumsan. Pellentesque ac quam in mauris commodo semper at ac ex. Vivamus et sapien at velit rhoncus elementum sit amet sed purus. Morbi dictum eros sit amet lectus sodales feugiat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce volutpat eros enim, sed gravida justo vulputate quis. Duis consequat ipsum diam, id dapibus ex eleifend quis. Phasellus sit amet urna felis. Etiam pharetra blandit odio non dictum. Curabitur accumsan sapien non odio volutpat, in varius orci viverra. In eu suscipit ligula. Duis varius nulla urna, nec malesuada turpis egestas a.
+        However, a summoner with very little play time should not influence recommendations as much as someone with a very high play time. We assume high play time summoners have a more developed sense of what they enjoy. Mastery points (MP) is a proxy for play time.
     </p>
+
+    <div class="code">
+avg(MP) = The average MP(S) for all summoners S
+aD(S, C) = D(S, C) * ( aMP(S) / avg(MP) )
+    </div>
+
     <p>
-        Donec interdum odio id dignissim convallis. Sed sed turpis gravida, accumsan est in, venenatis urna. Praesent mi neque, pulvinar a pulvinar a, pharetra ullamcorper ex. Aenean ut blandit eros, ac tempus elit. Phasellus tincidunt vestibulum dui pulvinar ultricies. Mauris blandit, lorem laoreet condimentum semper, massa metus luctus purus, at tempor sapien leo sit amet orci. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec auctor scelerisque ante, eget sodales velit efficitur id. Donec in lobortis nibh. Sed pulvinar nec nisi sit amet semper. Phasellus ac metus in mi elementum dictum. Sed vel porta enim, vitae tempus mi. Nunc bibendum est et congue pulvinar.
+        Once this has been calculated for all summoners, we are ready to make recommendations. If someone asks for a recommendation for champion C, we sum up the adjusted devotion of every summoner in the database for each champion D and multiply that by the same summoner's adjusted devotion for C. In this way, people who love C (have high devotion for C) have more of an impact on the recommendation. Whoever loves C will contribute a lot to the recommendation value of other champions they have high devotion on. Conversely, those who don't like C will have negative devotion and recommendations for the champions they love will decrease.
     </p>
+
+    <div class="code">
+recommendations(champion C) {
+    // an array of all the adjusted devotions of summoner S
+    aD_arr(S) = [aD(S, D) for all champions D]
+
+    // aD_arr(S) weighted by S's devotion for C
+    aD_arr(S, C) = aD_arr(S) * aD(S, C)
+
+    // The sum of all such arrays for each summoner
+    return sum(aD_arr(S, C) for all summoners S)
+}
+    </div>
+
+    <p>
+        If someone wishes to get a recommendation based on several champions at once, we simply sum up the recommendation arrays for each individual champion.
+    </p>
+
+    <div class="code">
+recommendations(champions [C1..Cn]) {
+    return sum(recommendations(C) for C in C1..Cn)
+}
+    </div>
+
+    <p>
+        If someone wishes to get a recommendation on their personal favorite champions (by entering their summoner name), we simply choose their top five champions by mastery and weight the recommendations by their relative devotion (instead of directly summing as seen above.)
+    </p>
+
+
 
     <h2>
         Technological Aspects
