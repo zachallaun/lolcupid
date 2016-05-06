@@ -198,6 +198,82 @@
     }
   }
 
+  class PickableChampion extends Component {
+    static propTypes = {
+      pickChampion: PropTypes.func,
+    }
+
+    pickChampion = (e) => {
+      e.preventDefault();
+      if (!this.props.disabled) this.props.pickChampion(this.props.champion);
+    }
+
+    render() {
+      const { champion, disabled } = this.props;
+      let className = 'champion-picker__champion';
+
+      if (disabled) {
+        className += ' champion-picker__champion--picked';
+      }
+
+      return (
+        <a className={className} onClick={this.pickChampion} href="">
+          <div className="champion-picker__champion__image">
+            <img src={champion.image_url} alt={champion.name} />
+          </div>
+          <div className="champion-picker__champion__name">
+            {champion.name}
+          </div>
+        </a>
+      );
+    }
+  }
+
+  @connect()
+  class ChampionPicker extends Component {
+    componentWillMount() {
+      this.setPickedById(this.props.picked);
+    }
+
+    componentWillReceiveProps(nextProps) {
+      if (this.props.picked !== nextProps.picked) {
+        this.setPickedById(nextProps.picked);
+      }
+    }
+
+    setPickedById(picked) {
+      this.pickedById = _.fromPairs(picked.map(c => [c.id, true]));
+    }
+
+    pickChampion = (champion) => {
+      this.props.dispatch(Actions.fetchRecommendations(
+        this.props.picked.concat(champion)
+      ));
+    }
+
+    render() {
+      const { champions, picked, max } = this.props;
+
+      return (
+        <div className="champion-picker">
+          <div className="champion-picker__top">
+          </div>
+
+          <div className="champion-picker__champions">
+            {champions.map(champion =>
+              <PickableChampion
+                key={champion.id}
+                champion={champion}
+                disabled={picked.length >= max ? true : this.pickedById[champion.id]}
+                pickChampion={this.pickChampion}
+              />
+            )}
+          </div>
+        </div>
+      );
+    }
+  }
+
   @connect(state => state)
   class ChampionRecommendations extends Component {
     removeChampion = (champion) => {
@@ -222,6 +298,7 @@
             </div>
 
             <div className="pane-layout__main">
+              <ChampionPicker champions={champions} picked={queryChampions} max={5} />
             </div>
 
             <div className="pane-layout__sidebar">

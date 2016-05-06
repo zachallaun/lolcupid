@@ -1,0 +1,75 @@
+.champion-picker {
+  @include flexbox;
+  @include flex-direction(column);
+
+  height: 571px; // magic as fuck
+  overflow-y: scroll;
+  background-color: rgba(0, 0, 0, .2);
+}
+
+.champion-picker__top {
+  height: 50px;
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
+
+.champion-picker__champions {
+  @include flex(1);
+  @include flexbox;
+  @include flex-wrap(wrap);
+  @include justify-content(space-between);
+
+  padding: 1.5rem;
+  overflow-y: scroll;
+}
+
+.champion-picker__champion {
+  @include flexbox;
+  @include flex-direction(column);
+  @include align-items(center);
+
+  margin: .5rem;
+  padding: .5rem;
+  width: 90px;
+  border-radius: 3px;
+
+  &.champion-picker__champion--picked {
+    @include filter(grayscale(100%));
+    opacity: .5;
+  }
+}
+
+.champion-picker__champion__image {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 3px solid rgba(243, 193, 101, .3);
+  perspective: 1px; // fixes a Chrome bug rendering this element
+
+  > img {
+    position: absolute;
+    height: 74px;
+    width: 74px;
+    left: -5px;
+    top: -5px;
+  }
+}
+
+.champion-picker__champion__name {
+  font-size: 13px;
+  color: darken($gray-lighter, 20%);
+}
+
+.champion-picker__champion:hover {
+  text-decoration: none;
+
+  .champion-picker__champion__name {
+    color: $gray-lighter;
+  }
+
+  &:not(.champion-picker__champion--picked) {
+    cursor: pointer;
+    background-color: $gray-light;
+  }
+}

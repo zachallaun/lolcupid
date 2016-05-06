@@ -19,9 +19,9 @@
 }
 
 .sidebar-champ__image {
+  position: relative;
   width: 86px;
   height: 86px;
-  position: relative;
   overflow: hidden;
   border-radius: 50%;
   border: 3px solid rgba(243, 193, 101, .3);
