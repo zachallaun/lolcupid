@@ -14,6 +14,7 @@ Recommendation page
 ==========
 selection side bar
 ---------------
+- make hovering anywhere on the champion light up the x and be clickable. If this is the case then maybe the x can go back to the right
 
 selection window
 -----------------

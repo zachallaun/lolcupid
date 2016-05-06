@@ -124,7 +124,7 @@
             <img src={DEFAULT_CHAMP_IMAGE_URL} alt="No champion selected" />
           </div>
           <div className="sidebar-champ__text">
-            <div className="sidebar-champ__name">Champion {i}</div>
+            <div className="sidebar-champ__name">Champion {i+1}</div>
           </div>
         </div>
       );
@@ -150,15 +150,13 @@
         return <DefaultChampionItem i={i} />;
       }
 
-      var hidden_style = {visibility: 'hidden'};
-
       return (
         <div className="sidebar-champ">
           <div className="sidebar-champ__image">
             <img src={image_url} alt={name} />
           </div>
           <div className="sidebar-champ__text">
-            <a className="sidebar-champ__remove" href="" style={hidden_style}> x </a>
+            <a className="sidebar-champ__remove" href="" style={{visibility: 'hidden'}}> x </a>
             <div className="sidebar-champ__name">{name}</div>
             <a className="sidebar-champ__remove" onClick={this.removeChampion} href="" key={name}>
               ×
@@ -287,10 +285,20 @@
           <div className="champion-overview__splash">
             <img src={champion.splash_url} alt={champion.name} data-champion={champion.name} />
           </div>
-          <div>
-            {champion.spells.map(s =>
-              <img src={s.image_url} alt={s.name} key={s.name} />
-            )}
+          <div className="champion-overview__abilities">
+            <div className="champion-overview__abilities__header">
+              Abilities:
+            </div>
+            <div className="champion-overview__abilities__bar">
+              {champion.spells.map(s =>
+                <div className="champion-overview__abilities__bar__ability">
+                  <img src={s.image_url} alt={s.name} key={s.name}/>
+                  <div className="tooltip">
+                    {s.name} ({s.cost == null? "No Cost":s.cost}): {s.description}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       );
