@@ -60,15 +60,20 @@
   color: darken($gray-lighter, 20%);
 }
 
-.champion-picker__champion:hover {
+.champion-picker__champion:hover,
+.champion-picker__champion:focus {
   text-decoration: none;
-
-  .champion-picker__champion__name {
-    color: $gray-lighter;
-  }
 
   &:not(.champion-picker__champion--picked) {
     cursor: pointer;
     background-color: $gray-light;
+
+    .champion-picker__champion__name {
+      color: $gray-lighter;
+    }
+  }
+
+  &.champion-picker__champion--picked {
+    cursor: default;
   }
 }

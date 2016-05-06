@@ -10,7 +10,7 @@
 
   const API = {
     recommendations: {
-      show: (queryString) => {
+      search: (queryString) => {
         return fetch('/api/recommendations' + queryString).then(r => r.json());
       },
     },
@@ -38,22 +38,27 @@
     }));
   }
 
+  function setLocationQuery(query) {
+    if (window.history && window.history.pushState) {
+      window.history.pushState(null, null, location.pathname + query);
+    }
+  }
+
   /*** Actions ***/
 
   let Actions = {};
 
   Actions.fetchRecommendations = (champions) => {
-    // TODO handle case where champions is empty
-    // TODO change route query params
+    const query = championsToQueryString(champions);
+    setLocationQuery(query);
+
     return {
       types: [
         'fetchRecommendations',
         'fetchRecommendationsSuccess',
         'fetchRecommendationsFailure',
       ],
-      promise: () => API.recommendations.show(
-        championsToQueryString(champions)
-      ),
+      promise: () => API.recommendations.search(query),
       champions,
     };
   };
@@ -140,8 +145,8 @@
           <div className="sidebar-champ__text">
             <div className="sidebar-champ__name">{name}</div>
           </div>
-          <a href="" onClick={this.removeChampion}>
-            x
+          <a className="sidebar-champ__remove" onClick={this.removeChampion} href="" key={name}>
+            ×
           </a>
         </div>
       );
