@@ -1,0 +1,154 @@
+.champion-overview {
+  @include flexbox;
+  @include flex-direction(column);
+  @include align-items(center);
+}
+
+.champion-overview__name {
+}
+
+.champion-overview__splash {
+  position: relative;
+  height: 300px;
+  width: 300px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 2px solid #DAD7AE;
+
+  > img {
+    position: absolute;
+    height: 300px;
+    left: -160px;
+
+    &[data-champion="Aatrox"]       { }
+    &[data-champion="Ahri"]         { }
+    &[data-champion="Akali"]        { }
+    &[data-champion="Alistar"]      { }
+    &[data-champion="Amumu"]        { }
+    &[data-champion="Anivia"]       { }
+    &[data-champion="Annie"]        { }
+    &[data-champion="Ashe"]         { }
+    &[data-champion="Aurelion Sol"] { }
+    &[data-champion="Azir"]         { }
+    &[data-champion="Bard"]         { }
+    &[data-champion="Blitzcrank"]   { }
+    &[data-champion="Brand"]        { }
+    &[data-champion="Braum"]        { }
+    &[data-champion="Caitlyn"]      { }
+    &[data-champion="Cassiopeia"]   { }
+    &[data-champion="Cho'Gath"]     { }
+    &[data-champion="Corki"]        { }
+    &[data-champion="Darius"]       { }
+    &[data-champion="Diana"]        { }
+    &[data-champion="Dr. Mundo"]    { }
+    &[data-champion="Draven"]       { }
+    &[data-champion="Ekko"]         { }
+    &[data-champion="Elise"]        { }
+    &[data-champion="Evelynn"]      { }
+    &[data-champion="Ezreal"]       { }
+    &[data-champion="Fiddlesticks"] { }
+    &[data-champion="Fiora"]        { }
+    &[data-champion="Fizz"]         { left: -185px; }
+    &[data-champion="Galio"]        { }
+    &[data-champion="Gangplank"]    { }
+    &[data-champion="Garen"]        { }
+    &[data-champion="Gnar"]         { }
+    &[data-champion="Gragas"]       { }
+    &[data-champion="Graves"]       { }
+    &[data-champion="Hecarim"]      { }
+    &[data-champion="Heimerdinger"] { }
+    &[data-champion="Illaoi"]       { left: -168px; }
+    &[data-champion="Irelia"]       { }
+    &[data-champion="Janna"]        { }
+    &[data-champion="Jarvan IV"]    { }
+    &[data-champion="Jax"]          { }
+    &[data-champion="Jayce"]        { }
+    &[data-champion="Jhin"]         { }
+    &[data-champion="Jinx"]         { }
+    &[data-champion="Kalista"]      { }
+    &[data-champion="Karma"]        { }
+    &[data-champion="Karthus"]      { }
+    &[data-champion="Kassadin"]     { }
+    &[data-champion="Katarina"]     { }
+    &[data-champion="Kayle"]        { }
+    &[data-champion="Kennen"]       { }
+    &[data-champion="Kha'Zix"]      { }
+    &[data-champion="Kindred"]      { }
+    &[data-champion="Kog'Maw"]      { }
+    &[data-champion="LeBlanc"]      { }
+    &[data-champion="Lee Sin"]      { }
+    &[data-champion="Leona"]        { }
+    &[data-champion="Lissandra"]    { }
+    &[data-champion="Lucian"]       { }
+    &[data-champion="Lulu"]         { }
+    &[data-champion="Lux"]          { }
+    &[data-champion="Malphite"]     { }
+    &[data-champion="Malzahar"]     { }
+    &[data-champion="Maokai"]       { }
+    &[data-champion="Master Yi"]    { }
+    &[data-champion="Miss Fortune"] { }
+    &[data-champion="Mordekaiser"]  { }
+    &[data-champion="Morgana"]      { }
+    &[data-champion="Nami"]         { }
+    &[data-champion="Nasus"]        { }
+    &[data-champion="Nautilus"]     { }
+    &[data-champion="Nidalee"]      { }
+    &[data-champion="Nocturne"]     { }
+    &[data-champion="Nunu"]         { left: -197px; }
+    &[data-champion="Olaf"]         { }
+    &[data-champion="Orianna"]      { }
+    &[data-champion="Pantheon"]     { }
+    &[data-champion="Poppy"]        { }
+    &[data-champion="Quinn"]        { }
+    &[data-champion="Rammus"]       { }
+    &[data-champion="Rek'Sai"]      { }
+    &[data-champion="Renekton"]     { }
+    &[data-champion="Rengar"]       { }
+    &[data-champion="Riven"]        { }
+    &[data-champion="Rumble"]       { }
+    &[data-champion="Ryze"]         { }
+    &[data-champion="Sejuani"]      { }
+    &[data-champion="Shaco"]        { }
+    &[data-champion="Shen"]         { }
+    &[data-champion="Shyvana"]      { }
+    &[data-champion="Singed"]       { }
+    &[data-champion="Sion"]         { }
+    &[data-champion="Sivir"]        { }
+    &[data-champion="Skarner"]      { }
+    &[data-champion="Sona"]         { }
+    &[data-champion="Soraka"]       { }
+    &[data-champion="Swain"]        { }
+    &[data-champion="Syndra"]       { }
+    &[data-champion="Tahm Kench"]   { }
+    &[data-champion="Talon"]        { }
+    &[data-champion="Taric"]        { }
+    &[data-champion="Teemo"]        { }
+    &[data-champion="Thresh"]       { }
+    &[data-champion="Tristana"]     { }
+    &[data-champion="Trundle"]      { }
+    &[data-champion="Tryndamere"]   { }
+    &[data-champion="Twisted Fate"] { }
+    &[data-champion="Twitch"]       { }
+    &[data-champion="Udyr"]         { }
+    &[data-champion="Urgot"]        { }
+    &[data-champion="Varus"]        { }
+    &[data-champion="Vayne"]        { }
+    &[data-champion="Veigar"]       { }
+    &[data-champion="Vel'Koz"]      { }
+    &[data-champion="Vi"]           { }
+    &[data-champion="Viktor"]       { }
+    &[data-champion="Vladimir"]     { }
+    &[data-champion="Volibear"]     { }
+    &[data-champion="Warwick"]      { }
+    &[data-champion="Wukong"]       { }
+    &[data-champion="Xerath"]       { }
+    &[data-champion="Xin Zhao"]     { }
+    &[data-champion="Yasuo"]        { }
+    &[data-champion="Yorick"]       { }
+    &[data-champion="Zac"]          { }
+    &[data-champion="Zed"]          { }
+    &[data-champion="Ziggs"]        { }
+    &[data-champion="Zilean"]       { }
+    &[data-champion="Zyra"]         { }
+  }
+}

@@ -73,8 +73,7 @@ class Champion < ActiveRecord::Base
   def self.random_splash
     random_champ = Champion.order("RANDOM()").first
     random_skin_num = random_champ.skins.sample["num"]
-    splash_name = "#{random_champ.key}_#{random_skin_num}"
-    RiotClient::ASSET_PREFIX + "img/champion/splash/#{splash_name}.jpg"
+    random_champ.splash_url(random_skin_num)
   end
 
   # def self.get_id(name)
@@ -97,6 +96,14 @@ class Champion < ActiveRecord::Base
 
   def image_url
     RiotClient::ASSET_PREFIX + "#{asset_version}/img/champion/#{image}"
+  end
+
+  def loading_screen_url
+    RiotClient::ASSET_PREFIX + "img/champion/loading/#{key}_0.jpg"
+  end
+
+  def splash_url(n = 0)
+    RiotClient::ASSET_PREFIX + "img/champion/splash/#{key}_#{n}.jpg"
   end
 
   def display_title

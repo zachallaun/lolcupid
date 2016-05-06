@@ -277,6 +277,21 @@
     }
   }
 
+  class ChampionOverview extends Component {
+    render () {
+      const { champion } = this.props;
+
+      return (
+        <div className="champion-overview">
+          <h1 className="champion-overview__name">{champion.name}</h1>
+          <div className="champion-overview__splash">
+            <img src={champion.splash_url} alt={champion.name} data-champion={champion.name} />
+          </div>
+        </div>
+      );
+    }
+  }
+
   @connect(state => ({ selectedChampion: state.selectedChampion }))
   class ChampionPicker extends Component {
     state = {
@@ -377,7 +392,7 @@
           <div className="champion-picker__back-panel">
             {
               selectedChampion ?
-              <h1 style={{ textAlign: 'center' }}>{selectedChampion.name}</h1> :
+              <ChampionOverview champion={selectedChampion} /> :
               null
             }
           </div>
