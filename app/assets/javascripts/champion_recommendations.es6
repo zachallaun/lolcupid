@@ -6,27 +6,6 @@
 
   const DEFAULT_CHAMP_IMAGE_URL = 'https://ddragon.leagueoflegends.com/cdn/6.9.1/img/profileicon/16.png';
 
-  /*** State management ***/
-
-  let handlers = {};
-
-  function makeReducer(serverData) {
-    const initialState = {
-      champions: serverData.champions,
-      queryChampions: serverData.query_champions,
-      recommendations: serverData.recommendations,
-    };
-
-    return function reducer(state = initialState, action) {
-      const handler = handlers[action.type];
-      if (handler) {
-        return handler(state, action);
-      } else {
-        return state;
-      }
-    }
-  }
-
   /*** Action helpers ***/
 
   const API = {
@@ -61,6 +40,37 @@
       champions,
     };
   };
+
+  /*** State management ***/
+
+  let Handlers = {};
+
+  Handlers.fetchRecommendations = (state, { champions }) => ({
+    ...state,
+    queryChampions: champions,
+  });
+
+  Handlers.fetchRecommendationsSuccess = (state, { result }) => ({
+    ...state,
+    recommendations: result.recommendations,
+  });
+
+  function makeReducer(serverData) {
+    const initialState = {
+      champions: serverData.champions,
+      queryChampions: serverData.query_champions,
+      recommendations: serverData.recommendations,
+    };
+
+    return function reducer(state = initialState, action) {
+      const handler = Handlers[action.type];
+      if (handler) {
+        return handler(state, action);
+      } else {
+        return state;
+      }
+    }
+  }
 
   /*** Components ***/
 
