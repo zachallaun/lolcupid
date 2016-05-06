@@ -190,7 +190,7 @@
     }
 
     render() {
-      const { i, item } = this.props;
+      const { i, item, selected } = this.props;
       const { role, recommendations } = item;
       const [ primary, ...secondary ] = recommendations;
 
@@ -198,26 +198,29 @@
         return <DefaultChampionItem invert i={i} />;
       }
 
-      var hidden_style = {visibility: 'hidden'};
+      const primarySelected = selected && primary.id === selected.id;
 
       return (
         <div className="sidebar-champ sidebar-champ--invert">
           <div className="sidebar-champ__mini-images">
-            {secondary.map((champion) =>
-              <div key={champion.name} onMouseEnter={ e => this.hovering(champion)} onMouseLeave={e => this.leaving(champion)}>
-                <img src={champion.image_url} alt={champion.name} />
-                <div className="sidebar-champ__image-hover-effect sidebar-champ__image-hover-effect--mini" />
-              </div>
-             )}
+            {secondary.map((champion) => {
+              const championSelected = selected && champion.id === selected.id;
+              return (
+                <div className={'sidebar-champ__mini-image' + (championSelected ? ' sidebar-champ__mini-image--selected' : '')} key={champion.name} onMouseEnter={ e => this.hovering(champion)} onMouseLeave={e => this.leaving(champion)}>
+                  <img src={champion.image_url} alt={champion.name} />
+                  <div className="sidebar-champ__image-hover-effect sidebar-champ__image-hover-effect--mini" />
+                </div>
+              );
+             })}
           </div>
-          <div className="sidebar-champ__image" onMouseEnter={e => this.hovering(primary)} onMouseLeave={e => this.leaving(primary)}>
+          <div className={'sidebar-champ__image' + (primarySelected ? ' sidebar-champ__image--selected' : '')} onMouseEnter={e => this.hovering(primary)} onMouseLeave={e => this.leaving(primary)}>
             <img src={primary.image_url} alt={primary.name} />
             <div className="sidebar-champ__image-hover-effect" />
           </div>
           <div className="sidebar-champ__text">
             <div className="sidebar-champ__role">{role}</div>
             <div className="sidebar-champ__name">{primary.name}</div>
-            <div className="sidebar-champ__role" style={hidden_style}>{role}</div>
+            <div className="sidebar-champ__role" style={{visibility: 'hidden'}}>{role}</div>
           </div>
         </div>
       );
@@ -392,7 +395,12 @@
     }
 
     render() {
-      const { queryChampions, recommendations, champions } = this.props;
+      const {
+        queryChampions,
+        recommendations,
+        champions,
+        selectedChampion,
+      } = this.props;
 
       return (
         <div className="champ-select-container">
@@ -414,54 +422,11 @@
               <ChampionSelectSidebar
                 title="Recommendations"
                 items={recommendationsByRole(recommendations)}
+                itemProps={{selected: selectedChampion}}
                 ItemComponent={RecommendedChampion}
               />
             </div>
           </div>
-        </div>
-      );
-    }
-  }
-
-  class Championpage extends Component {
-    render_rec_panel({ name, score, image_url }) {
-      return (
-        <div className="recommendation-panel">
-          <img className="recommendation-panel__portrait" src={image_url} />
-          <div className="recommendation-panel__name"> {name} </div>
-          <div className="recommendation-panel__score"> {score.toPrecision(2)} </div>
-        </div>
-      );
-    }
-
-    render_recs_for_role(role_name, champs) {
-      return (
-        <div>
-            <h4> {role_name} </h4>
-            <div className="recommendation-container">
-              {_.take(champs, 10).map(champ => this.render_rec_panel(champ))}
-            </div>
-        </div>
-      );
-    }
-
-    render() {
-      const recs_top = _.filter(this.props.recommended_champions, 'can_top');
-      const recs_jungle = _.filter(this.props.recommended_champions, 'can_jungle');
-      const recs_mid = _.filter(this.props.recommended_champions, 'can_mid');
-      const recs_bot_carry = _.filter(this.props.recommended_champions, 'can_bot_carry');
-      const recs_bot_support = _.filter(this.props.recommended_champions, 'can_bot_support');
-
-      return (
-        <div className="aboutpage-content">
-            <h1 className="aboutpage-content__header">
-                Recommendations
-            </h1>
-            {this.render_recs_for_role("Top", recs_top)}
-            {this.render_recs_for_role("Jungle", recs_jungle)}
-            {this.render_recs_for_role("Middle", recs_mid)}
-            {this.render_recs_for_role("Bottom Carry", recs_bot_carry)}
-            {this.render_recs_for_role("Bottom Support", recs_bot_support)}
         </div>
       );
     }
