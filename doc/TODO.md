@@ -7,30 +7,29 @@ RiotClient
 Homepage
 ===========
 - get a logo
+- hovering on drop down should have href cursor
 
 
 Recommendation page
 ==========
 selection side bar
 ---------------
-- Make x's bigger, make them all in the same place so you can just clear all champs quickly
-- index champions from 1, not 0
 
 selection window
 -----------------
 - Center the selector panel
 - make scrollbar look good in all browsers
 - fix spacing in the last row of the selector
-- make the filter text box large, just take up that whole top section
-- make it so clicking on a champ pops the cursor back into the filter textbox
-- or perhaps the cursor should just always stay in there
 - clicking a greyed out champion should remove it from the picks
 
+
+Databases
+==========
+- from_api does the role of updating, which means default values need to be reset inside of it, which seems out of line. Pull doesn't quite do what the name implies
 
 Mockup
 ==========
 - what should go in the finished champion selector area
--
 
 
 About page
