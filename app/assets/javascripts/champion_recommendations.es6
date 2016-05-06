@@ -236,6 +236,10 @@
 
   @connect()
   class ChampionPicker extends Component {
+    state = {
+      championFilter: '',
+    }
+
     componentWillMount() {
       this.setPickedById(this.props.picked);
     }
@@ -247,7 +251,17 @@
     }
 
     setPickedById(picked) {
-      this.pickedById = _.fromPairs(picked.map(c => [c.id, true]));
+      this.pickedById = _.fromPairs(picked.map(c => [ c.id, true ]));
+    }
+
+    filteredChampions() {
+      return this.props.champions.filter(c =>
+        c.name.toLowerCase().indexOf(this.state.championFilter) === 0
+      );
+    }
+
+    changeFilter = (e) => {
+      this.setState({ championFilter: e.target.value });
     }
 
     pickChampion = (champion) => {
@@ -257,22 +271,31 @@
     }
 
     render() {
-      const { champions, picked, max } = this.props;
+      const { picked, max } = this.props;
+      const champions = this.filteredChampions();
 
       return (
         <div className="champion-picker">
           <div className="champion-picker__top">
+            <input
+              className="champion-picker__filter"
+              value={this.state.championFilter}
+              onChange={this.changeFilter}
+              placeholder="Filter champions"
+            />
           </div>
 
-          <div className="champion-picker__champions">
-            {champions.map(champion =>
-              <PickableChampion
-                key={champion.id}
-                champion={champion}
-                disabled={picked.length >= max ? true : this.pickedById[champion.id]}
-                pickChampion={this.pickChampion}
-              />
-            )}
+          <div className="champion-picker__champions-container">
+            <div className="champion-picker__champions">
+              {champions.map(champion =>
+                <PickableChampion
+                  key={champion.id}
+                  champion={champion}
+                  disabled={picked.length >= max ? true : this.pickedById[champion.id]}
+                  pickChampion={this.pickChampion}
+                />
+              )}
+            </div>
           </div>
         </div>
       );

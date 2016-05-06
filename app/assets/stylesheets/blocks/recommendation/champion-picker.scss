@@ -7,18 +7,36 @@
 }
 
 .champion-picker__top {
-  height: 50px;
+  padding: 1rem 0 1rem 0;
   border-bottom: 1px solid rgba(0, 0, 0, .1);
 }
 
-.champion-picker__champions {
+.champion-picker__filter {
+  float: right;
+  margin-right: 2.5rem;
+  padding: .2em .5em;
+  width: 200px;
+  font-size: 14px;
+  color: inherit;
+  background-color: #1C2B38;
+  outline: 0;
+  border: 0;
+
+  &:focus {
+    background-color: #18242f;
+  }
+}
+
+.champion-picker__champions-container {
   @include flex(1);
+  overflow-y: scroll;
+}
+
+.champion-picker__champions {
   @include flexbox;
   @include flex-wrap(wrap);
-  @include justify-content(space-between);
 
   padding: 1.5rem;
-  overflow-y: scroll;
 }
 
 .champion-picker__champion {
@@ -28,6 +46,7 @@
 
   margin: .5rem;
   padding: .5rem;
+  height: 100px;
   width: 90px;
   border-radius: 3px;
 
