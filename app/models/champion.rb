@@ -58,11 +58,10 @@ class Champion < ActiveRecord::Base
     champion.release_date = ChampionConstants::CHAMP_RELEASE_DATES[name]
     champion.nickname     = ChampionConstants::CHAMP_NICKNAMES[name]
 
-    champion.can_top = false;
-    champion.can_jungle = false;
-    champion.can_mid = false;
-    champion.can_bot_carry = false;
-    champion.can_bot_support = false;
+    champion.spells = ([api_data[:passive]] + api_data[:spells]).map.with_index do |s, i|
+      ChampionConstants.spell_info(s, asset_version, passive: i == 0)
+    end
+
     ChampionConstants.roles_for(name).each do |role|
       champion.send("#{role}=", true)
     end

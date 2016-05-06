@@ -325,6 +325,91 @@ module ChampionConstants
     end
 
     def self.roles_for(champ_name)
-      CHAMP_ROLES[champ_name].map { |role_key| ROLE_MAP[role_key] }
+        CHAMP_ROLES[champ_name].map { |role_key| ROLE_MAP[role_key] }
+    end
+
+    def self.spell_info(spell, asset_version, passive:)
+        if passive
+            image_url = RiotClient::ASSET_PREFIX + "#{asset_version}/img/passive/#{spell["image"]["full"]}"
+        else
+            image_url = RiotClient::ASSET_PREFIX + "#{asset_version}/img/spell/#{spell["image"]["full"]}"
+        end
+
+        {
+            name: spell["name"],
+            image_url: image_url,
+            description: spell["description"] == "BadDesc" ? nil : spell["description"],
+            cost: fill_in_spell_info(spell["resource"], spell),
+            cooldown: spell["cooldownBurn"]
+        }
+    end
+
+    def self.fill_in_spell_info(str, spell)
+        if str
+            str.gsub(/\{\{ ([^\}]+) \}\}/) do
+                placeholder = Regexp.last_match[1]
+                replace_spell_placeholder(placeholder, spell)
+            end
+        end
+    end
+
+    def self.replace_spell_placeholder(placeholder, spell)
+        case placeholder
+        when "cost"
+            spell["costBurn"]
+        when /^e/
+            spell["effectBurn"][placeholder[1].to_i]
+        when /^(f|a)/
+            var = spell["vars"].find { |v| v["key"] == placeholder }
+            replace_spell_var(var, spell)
+        end
+    end
+
+    # TODO WIP
+    def self.replace_spell_var(var, spell)
+        coeff = var["coeff"].join("/")
+
+        case var
+        when "spelldamage"
+            coeff + " Spell Damage"
+        when "bonusattackdamage"
+            coeff + " Bonus Attack Damage"
+        when "@special.dariusr3" # Maximum Damage
+            coeff
+        when "attackdamage"
+            coeff + " Attack Damage"
+        when "@special.viw" # Vi denting blows
+            "(1 per #{coeff} Bonus AD)"
+        when "@text"
+            coeff
+        when "@cooldownchampion"
+
+        when "@dynamic.abilitypower"
+
+        when "bonusarmor"
+
+        when "bonusspellblock"
+
+        when "@dynamic.attackdamage"
+
+        when "bonushealth"
+
+        when "@special.jaxrarmor"
+
+        when "@special.jaxrmr"
+
+        when "armor"
+
+        when "@stacks"
+
+        when "@special.BraumWArmor"
+
+        when "@special.BraumWMR"
+
+        when "health"
+
+        when "@special.nautilusq"
+
+        end
     end
 end

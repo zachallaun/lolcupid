@@ -111,7 +111,8 @@ CREATE TABLE champions (
     can_mid boolean DEFAULT false,
     can_bot_carry boolean DEFAULT false,
     can_bot_support boolean DEFAULT false,
-    skins jsonb
+    skins jsonb,
+    spells jsonb
 );
 
 
@@ -392,4 +393,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160503011152');
 INSERT INTO schema_migrations (version) VALUES ('20160504022331');
 
 INSERT INTO schema_migrations (version) VALUES ('20160505191858');
+
+INSERT INTO schema_migrations (version) VALUES ('20160506194628');
 

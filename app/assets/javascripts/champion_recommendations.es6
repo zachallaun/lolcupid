@@ -287,6 +287,11 @@
           <div className="champion-overview__splash">
             <img src={champion.splash_url} alt={champion.name} data-champion={champion.name} />
           </div>
+          <div>
+            {champion.spells.map(s =>
+              <img src={s.image_url} alt={s.name} key={s.name} />
+            )}
+          </div>
         </div>
       );
     }
