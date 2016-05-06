@@ -1,0 +1,13 @@
+.champion-select-sidebar {
+}
+
+.champion-select-sidebar__title {
+  display: block;
+  margin: 0 0 1em 0;
+  padding-bottom: 3px;
+  font-size: 18px;
+  text-align: center;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  color: $brand-warning;
+}

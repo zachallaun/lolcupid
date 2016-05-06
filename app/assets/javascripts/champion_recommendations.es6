@@ -6,7 +6,7 @@
 
   const DEFAULT_CHAMP_IMAGE_URL = 'https://ddragon.leagueoflegends.com/cdn/6.9.1/img/profileicon/16.png';
 
-  /*** Action helpers ***/
+  /*** Helpers ***/
 
   const API = {
     recommendations: {
@@ -19,6 +19,23 @@
   function championsToQueryString(champions) {
     const championNames = champions.map(c => c.name.replace(' ', '_')).join(',');
     return `?name=${championNames}`;
+  }
+
+  // Top 5 recommendations for each role:
+  // [{role: 'Top', recommendations: [...]}, ...]
+  function recommendationsByRole(recommendations) {
+    const roleMapping = [
+      ['can_top', 'Top'],
+      ['can_jungle', 'Jungle'],
+      ['can_mid', 'Middle'],
+      ['can_bot_carry', 'Bottom Carry'],
+      ['can_bot_support', 'Support'],
+    ];
+
+    return roleMapping.map(([attr, role]) => ({
+      role,
+      recommendations: _(recommendations).filter(attr).take(5).value()
+    }));
   }
 
   /*** Actions ***/
@@ -74,60 +91,108 @@
 
   /*** Components ***/
 
-  class ChampionSelectSidebar extends Component {
-    static propTypes = {
-      invert: PropTypes.bool,
-      removeChampion: PropTypes.func,
-    }
+  class DefaultChampionItem extends Component {
+    render() {
+      const { invert, i } = this.props;
+      let className = 'sidebar-champ sidebar-champ--using-defaults';
 
-    static defaultProps = {
-      champions: [],
-    }
-
-    removeChampion = (e, champion) => {
-      e.preventDefault();
-      this.props.removeChampion(champion);
-    }
-
-    renderChampion(champion = {}, i) {
-      let { name, image_url } = champion;
-      let className = 'sidebar-champ';
-
-      if (!name) {
-        className += ' sidebar-champ--using-defaults';
-        name = `Champion ${i}`;
-        image_url = DEFAULT_CHAMP_IMAGE_URL;
-      }
-
-      if (this.props.invert) {
+      if (invert) {
         className += ' sidebar-champ--invert';
       }
 
       return (
-        <div className={className} key={name || i}>
+        <div className={className}>
+          <div className="sidebar-champ__image">
+            <img src={DEFAULT_CHAMP_IMAGE_URL} alt="No champion selected" />
+          </div>
+          <div className="sidebar-champ__text">
+            <div className="sidebar-champ__name">Champion {i}</div>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  @connect()
+  class RemovableChampion extends Component {
+    static propTypes = {
+      removeChampion: PropTypes.func,
+    }
+
+    removeChampion = (e) => {
+      e.preventDefault();
+      this.props.removeChampion(this.props.item);
+    }
+
+    render() {
+      const { i, item: champion } = this.props;
+      const { name, image_url } = champion;
+
+      if (!name) {
+        return <DefaultChampionItem i={i} />;
+      }
+
+      return (
+        <div className="sidebar-champ">
           <div className="sidebar-champ__image">
             <img src={image_url} alt={name} />
           </div>
           <div className="sidebar-champ__text">
             <div className="sidebar-champ__name">{name}</div>
           </div>
-          {
-            this.props.removeChampion ?
-            <a href="" onClick={e => this.removeChampion(e, champion)}>
-              x
-            </a> :
-            null
-          }
+          <a href="" onClick={this.removeChampion}>
+            x
+          </a>
         </div>
       );
     }
+  }
 
+  class RecommendedChampion extends Component {
     render() {
-      const { champions } = this.props;
+      const { i, item } = this.props;
+      const { role, recommendations } = item;
+      const [ primary, ...secondary ] = recommendations;
+
+      if (!primary) {
+        return <DefaultChampionItem invert i={i} />;
+      }
 
       return (
-        <div className="champ-select-sidebar">
-          {_.times(5).map(i => this.renderChampion(champions[i], i+1))}
+        <div className="sidebar-champ sidebar-champ--invert">
+          <div className="sidebar-champ__mini-images">
+            {secondary.map(({ name, image_url }) =>
+              <div>
+                <img src={image_url} alt={name} />
+              </div>
+             )}
+          </div>
+          <div className="sidebar-champ__image">
+            <img src={primary.image_url} alt={primary.name} />
+          </div>
+          <div className="sidebar-champ__text">
+            <div className="sidebar-champ__role">{role}</div>
+            <div className="sidebar-champ__name">{primary.name}</div>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  class ChampionSelectSidebar extends Component {
+    render() {
+      const { items, ItemComponent, itemProps, title } = this.props;
+
+      return (
+        <div className="champion-select-sidebar">
+          <h2 className="champion-select-sidebar__title">
+            {title}
+          </h2>
+          <div>
+            {items.map((item, i) =>
+              <ItemComponent key={i} {...itemProps} item={item} i={i} />
+             )}
+          </div>
         </div>
       );
     }
@@ -149,19 +214,21 @@
           <div className="pane-layout">
             <div className="pane-layout__sidebar">
               <ChampionSelectSidebar
-                champions={queryChampions}
-                removeChampion={this.removeChampion}
+                title="Your champions"
+                items={_.range(5).map(i => queryChampions[i] || {})}
+                itemProps={{removeChampion: this.removeChampion}}
+                ItemComponent={RemovableChampion}
               />
             </div>
 
             <div className="pane-layout__main">
-              main
             </div>
 
             <div className="pane-layout__sidebar">
               <ChampionSelectSidebar
-                invert
-                champions={_.take(recommendations, 5)}
+                title="Recommendations"
+                items={recommendationsByRole(recommendations)}
+                ItemComponent={RecommendedChampion}
               />
             </div>
           </div>

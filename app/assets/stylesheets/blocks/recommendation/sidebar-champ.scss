@@ -23,7 +23,7 @@
   height: 86px;
   position: relative;
   overflow: hidden;
-  border-radius: 50px;
+  border-radius: 50%;
   border: 3px solid rgba(243, 193, 101, .3);
 
   > img {
@@ -41,4 +41,40 @@
 
 .sidebar-champ__name {
   font-weight: normal;
+}
+
+.sidebar-champ__role {
+  font-weight: lighter;
+  color: #728BA2;
+}
+
+.sidebar-champ__mini-images {
+  @include flexbox;
+  @include flex-wrap(wrap);
+
+  width: 64px;
+
+  margin-left: 5px;
+
+  > div {
+    margin-right: 2px;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 1px solid rgba(243, 193, 101, .3);
+
+    &:first-child {
+      margin-bottom: 2px;
+    }
+
+    > img {
+      position: absolute;
+      height: 34px;
+      width: 34px;
+      left: -2px;
+      top: -2px;
+    }
+  }
 }
