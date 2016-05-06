@@ -278,9 +278,12 @@
         <div className="champion-picker">
           <div className="champion-picker__top">
             <input
+              id="theFilter"
               className="champion-picker__filter"
+              autoFocus
               value={this.state.championFilter}
               onChange={this.changeFilter}
+              onBlur={() => document.getElementById("theFilter").focus()}
               placeholder="Filter champions"
             />
           </div>
