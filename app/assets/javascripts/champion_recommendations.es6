@@ -63,6 +63,13 @@
     };
   };
 
+  Actions.selectChampion = (champion) => {
+    return {
+      type: 'selectChampion',
+      champion,
+    };
+  }
+
   /*** State management ***/
 
   let Handlers = {};
@@ -77,11 +84,17 @@
     recommendations: result.recommendations,
   });
 
+  Handlers.selectChampion = (state, { champion }) => ({
+    ...state,
+    selectedChampion: champion,
+  });
+
   function makeReducer(serverData) {
     const initialState = {
       champions: serverData.champions,
       queryChampions: serverData.query_champions,
       recommendations: serverData.recommendations,
+      selectedChampion: null,
     };
 
     return function reducer(state = initialState, action) {
@@ -156,7 +169,26 @@
     }
   }
 
+  @connect()
   class RecommendedChampion extends Component {
+    selectHovering = () => {
+      if (this.championHovering) {
+        this.props.dispatch(
+          Actions.selectChampion(this.championHovering)
+        );
+      }
+    }
+
+    hovering = (champion) => {
+      this.championHovering = champion;
+      this.timeout = setTimeout(() => this.selectHovering(), 400);
+    }
+
+    leaving = (champion) => {
+      this.championHovering = null;
+      clearTimeout(this.timeout);
+    }
+
     render() {
       const { i, item } = this.props;
       const { role, recommendations } = item;
@@ -171,14 +203,16 @@
       return (
         <div className="sidebar-champ sidebar-champ--invert">
           <div className="sidebar-champ__mini-images">
-            {secondary.map(({ name, image_url }) =>
-              <div key={name}>
-                <img src={image_url} alt={name} />
+            {secondary.map((champion) =>
+              <div key={champion.name} onMouseEnter={ e => this.hovering(champion)} onMouseLeave={e => this.leaving(champion)}>
+                <img src={champion.image_url} alt={champion.name} />
+                <div className="sidebar-champ__image-hover-effect sidebar-champ__image-hover-effect--mini" />
               </div>
              )}
           </div>
-          <div className="sidebar-champ__image">
+          <div className="sidebar-champ__image" onMouseEnter={e => this.hovering(primary)} onMouseLeave={e => this.leaving(primary)}>
             <img src={primary.image_url} alt={primary.name} />
+            <div className="sidebar-champ__image-hover-effect" />
           </div>
           <div className="sidebar-champ__text">
             <div className="sidebar-champ__role">{role}</div>
@@ -240,7 +274,7 @@
     }
   }
 
-  @connect()
+  @connect(state => ({ selectedChampion: state.selectedChampion }))
   class ChampionPicker extends Component {
     state = {
       championFilter: '',
@@ -254,6 +288,19 @@
     componentWillReceiveProps(nextProps) {
       if (this.props.picked !== nextProps.picked) {
         this.setPickedById(nextProps.picked);
+      }
+
+      if (nextProps.selectedChampion && this.props.selectedChampion !== nextProps.selectedChampion) {
+        this.setState({ menuShowing: false });
+      }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+      if (this.state.menuShowing && !prevState.menuShowing) {
+        setTimeout(
+          () => this.props.dispatch(Actions.selectChampion(null)),
+          400
+        );
       }
     }
 
@@ -285,7 +332,7 @@
 
     render() {
       const { menuShowing, championFilter } = this.state;
-      const { picked, max } = this.props;
+      const { picked, max, selectedChampion } = this.props;
       const champions = this.filteredChampions();
 
       let className = 'champion-picker';
@@ -325,7 +372,11 @@
             </div>
           </div>
           <div className="champion-picker__back-panel">
-            <h1 style={{ textAlign: 'center' }}>SURPRISE!!!</h1>
+            {
+              selectedChampion ?
+              <h1 style={{ textAlign: 'center' }}>{selectedChampion.name}</h1> :
+              null
+            }
           </div>
         </div>
       );

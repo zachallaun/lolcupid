@@ -33,6 +33,31 @@
     left: -6px;
     top: -6px;
   }
+
+  &:hover {
+    .sidebar-champ__image-hover-effect {
+      top: -3px; // account for border
+      left: -3px;
+      width: 86px;
+      height: 86px;
+    }
+  }
+}
+
+.sidebar-champ__image-hover-effect {
+  position: absolute;
+  top: 43px;
+  left: 43px;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, .3);
+  transition: width .4s ease-in, height .4s ease-in, left .4s ease-in, top .4s ease-in;
+
+  &.sidebar-champ__image-hover-effect--mini {
+    left: 15px;
+    top: 15px;
+  }
 }
 
 .sidebar-champ__text {
@@ -57,10 +82,10 @@
   margin-left: 5px;
 
   > div {
+    position: relative;
     margin-right: 2px;
     width: 30px;
     height: 30px;
-    position: relative;
     overflow: hidden;
     border-radius: 50%;
     border: 1px solid rgba(243, 193, 101, .3);
@@ -75,6 +100,15 @@
       width: 34px;
       left: -2px;
       top: -2px;
+    }
+
+    &:hover {
+      .sidebar-champ__image-hover-effect--mini {
+        left: -1px;
+        top: -1px;
+        width: 30px;
+        height: 30px;
+      }
     }
   }
 }
