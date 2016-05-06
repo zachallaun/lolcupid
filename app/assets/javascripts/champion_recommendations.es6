@@ -167,7 +167,7 @@
         <div className="sidebar-champ sidebar-champ--invert">
           <div className="sidebar-champ__mini-images">
             {secondary.map(({ name, image_url }) =>
-              <div>
+              <div key={name}>
                 <img src={image_url} alt={name} />
               </div>
              )}
