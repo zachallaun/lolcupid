@@ -16,11 +16,13 @@ body {
 
 .page-with-footer__content {
   @include flex(1);
+  z-index: 2;
 }
 
 .page-with-footer__footer {
   /*width: 100%;*/
   padding: 10px 15px;
+  z-index: 1;
 
   background-color: rgba(42, 62, 80, .6);
 

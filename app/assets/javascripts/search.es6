@@ -96,7 +96,7 @@
             }
 
             return results;
-          }, [])).sortBy('matchAt').take(6).value();
+          }, [])).sortBy('matchAt').take(5).value();
         }
 
         if (results.length > 0) {
