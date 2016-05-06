@@ -137,17 +137,20 @@
         return <DefaultChampionItem i={i} />;
       }
 
+      var hidden_style = {visibility: 'hidden'};
+
       return (
         <div className="sidebar-champ">
           <div className="sidebar-champ__image">
             <img src={image_url} alt={name} />
           </div>
           <div className="sidebar-champ__text">
+            <a className="sidebar-champ__remove" href="" style={hidden_style}> x </a>
             <div className="sidebar-champ__name">{name}</div>
+            <a className="sidebar-champ__remove" onClick={this.removeChampion} href="" key={name}>
+              ×
+            </a>
           </div>
-          <a className="sidebar-champ__remove" onClick={this.removeChampion} href="" key={name}>
-            ×
-          </a>
         </div>
       );
     }
@@ -162,6 +165,8 @@
       if (!primary) {
         return <DefaultChampionItem invert i={i} />;
       }
+
+      var hidden_style = {visibility: 'hidden'};
 
       return (
         <div className="sidebar-champ sidebar-champ--invert">
@@ -178,6 +183,7 @@
           <div className="sidebar-champ__text">
             <div className="sidebar-champ__role">{role}</div>
             <div className="sidebar-champ__name">{primary.name}</div>
+            <div className="sidebar-champ__role" style={hidden_style}>{role}</div>
           </div>
         </div>
       );
