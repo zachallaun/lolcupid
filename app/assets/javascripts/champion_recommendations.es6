@@ -279,6 +279,7 @@
 
     toggleMenu = (e) => {
       e.preventDefault();
+      e.target.blur();
       this.setState({ menuShowing: !this.state.menuShowing });
     }
 
