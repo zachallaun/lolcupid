@@ -244,6 +244,7 @@
   class ChampionPicker extends Component {
     state = {
       championFilter: '',
+      menuShowing: true,
     }
 
     componentWillMount() {
@@ -276,35 +277,54 @@
       ));
     }
 
+    toggleMenu = (e) => {
+      e.preventDefault();
+      this.setState({ menuShowing: !this.state.menuShowing });
+    }
+
     render() {
+      const { menuShowing, championFilter } = this.state;
       const { picked, max } = this.props;
       const champions = this.filteredChampions();
 
-      return (
-        <div className="champion-picker">
-          <div className="champion-picker__top">
-            <input
-              id="theFilter"
-              className="champion-picker__filter"
-              autoFocus
-              value={this.state.championFilter}
-              onChange={this.changeFilter}
-              onBlur={() => document.getElementById("theFilter").focus()}
-              placeholder="Filter champions"
-            />
-          </div>
+      let className = 'champion-picker';
 
-          <div className="champion-picker__champions-container">
-            <div className="champion-picker__champions">
-              {champions.map(champion =>
-                <PickableChampion
-                  key={champion.id}
-                  champion={champion}
-                  disabled={picked.length >= max ? true : this.pickedById[champion.id]}
-                  pickChampion={this.pickChampion}
-                />
-              )}
+      if (!menuShowing) {
+        className += ' champion-picker--menu-hidden';
+      }
+
+      return (
+        <div className={className}>
+          <div className="champion-picker__menu">
+            <a className="champion-picker__toggle" onClick={this.toggleMenu} href="">
+              {menuShowing ? '▼' : '▲'}
+            </a>
+
+            <div className="champion-picker__top">
+              <input
+                autoFocus
+                className="champion-picker__filter"
+                value={championFilter}
+                onChange={this.changeFilter}
+                placeholder="Filter champions"
+              />
             </div>
+
+            <div className="champion-picker__champions-container">
+              <div className="champion-picker__champions">
+                {champions.map(champion =>
+                  <PickableChampion
+                    key={champion.id}
+                    champion={champion}
+                    disabled={picked.length >= max ? true : this.pickedById[champion.id]}
+                    pickChampion={this.pickChampion}
+                  />
+                 )}
+              </div>
+            </div>
+          </div>
+          <div className="champion-picker__back-panel">
+            <h1 style={{ textAlign: 'center' }}>SURPRISE!!!</h1>
           </div>
         </div>
       );

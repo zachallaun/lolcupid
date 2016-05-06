@@ -1,9 +1,56 @@
+$champion-picker-toggle-height: 20px;
+$champion-picker-toggle-width: 40px;
+
 .champion-picker {
+  position: relative;
+  padding-top: $champion-picker-toggle-height;
+  height: 571px; // magic as fuck
+  overflow: hidden;
+}
+
+.champion-picker__menu {
   @include flexbox;
   @include flex-direction(column);
+  position: absolute;
+  z-index: 1;
+  height: 100%;
+  background-color: #223240;
+  border-radius: 3px 3px 0 0;
+  transition: all .3s ease-in-out;
+}
 
-  height: 571px; // magic as fuck
-  background-color: rgba(0, 0, 0, .2);
+.champion-picker__back-panel {
+  height: 100%;
+}
+
+.champion-picker--menu-hidden {
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
+
+  .champion-picker__menu {
+    @include transform(translateY(calc(100% - #{$champion-picker-toggle-height})));
+  }
+}
+
+.champion-picker__toggle {
+  @include flexbox;
+  @include align-items(center);
+  @include justify-content(center);
+  position: absolute;
+  width: $champion-picker-toggle-width;
+  height: $champion-picker-toggle-height;
+  bottom: 100%;
+  left: 50%;
+  left: calc(50% - #{$champion-picker-toggle-width / 2});
+  font-size: 10px;
+  background-color: #223240;
+  border-radius: 3px 3px 0 0;
+  color: #E3A54E;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
 }
 
 .champion-picker__top {
