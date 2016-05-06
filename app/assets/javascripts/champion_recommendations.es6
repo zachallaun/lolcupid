@@ -303,7 +303,7 @@
 
             <div className="champion-picker__top">
               <input
-                autoFocus
+                autoFocus={picked.length < max}
                 className="champion-picker__filter"
                 value={championFilter}
                 onChange={this.changeFilter}
