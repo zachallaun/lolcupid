@@ -7,6 +7,7 @@
   const KEY_CODES = {
     up: 38,
     down: 40,
+    enter: 13
   };
 
   class RegionSelector extends Component {
@@ -135,6 +136,8 @@
           // this.setState({ selected: this.state.selected - 1 });
         }
         this.setState({ selected: new_select }, this.selectedChanged);
+      } else if (e.keyCode === KEY_CODES.enter) {
+        this.props.commenceSearch();
       }
     }
 
@@ -186,8 +189,9 @@
         <li key={result.querySummoner ? 'query-summoner' : result.id}>
           <a
             className={championOptionClass}
-            href=""
+            // href=""
             onMouseEnter={e => this.setState({ selected: index }, this.selectedChanged)}
+            onClick={this.props.commenceSearch}
           >
             {content}
           </a>
@@ -261,7 +265,7 @@
       return (
         <div className="search">
           <div className="search__input-container">
-            <ChampionSelector champions={this.props.champions} alertParent={this.selectedChanged} />
+            <ChampionSelector champions={this.props.champions} alertParent={this.selectedChanged} commenceSearch={this.commenceSearch} />
             <div className="search__region-selector">
               <RegionSelector defaultRegion='na' alertParent={this.regionChanged} />
             </div>
