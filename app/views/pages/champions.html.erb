@@ -1,6 +1,7 @@
 <%=
   react_component "LolCupid.ChampionRecommendations", render('champions_data.json.jbuilder',
     query_champions: @query_champions,
-    recommendations: @recommendations
+    recommendations: @recommendations,
+    summoner: nil
   )
 %>
