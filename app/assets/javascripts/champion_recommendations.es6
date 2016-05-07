@@ -275,8 +275,67 @@
     }
   }
 
+  const SPELL_MAPPING = ['Passive', 'Q', 'W', 'E', 'R'];
+
   class ChampionOverview extends Component {
-    render () {
+    state = {
+      selectedSpell: 0,
+    };
+
+    componentWillReceiveProps(nextProps) {
+      if (this.props.champion !== nextProps.champion) {
+        this.setState({ selectedSpell: 0 });
+      }
+    }
+
+    selectSpell = (index) => {
+      this.setState({ selectedSpell: index });
+    }
+
+    renderSpell = (spell, i) => {
+      const { selectedSpell } = this.state;
+      let className = 'champion-overview__spells__bar__spell';
+
+      if (i === selectedSpell) {
+        className += ' champion-overview__spells__bar__spell--selected';
+      }
+
+      return (
+        <div
+          key={spell.name}
+          className={className}
+          onMouseEnter={e => this.selectSpell(i)}
+        >
+          <img src={spell.image_url} alt={spell.name} />
+        </div>
+      );
+    }
+
+    renderSelectedSpell() {
+      const { selectedSpell } = this.state;
+      const { champion } = this.props;
+      const spell = champion.spells[selectedSpell];
+
+      return (
+        <div className="spell-overview">
+          <div>
+            <span className="spell-overview__key">
+              {SPELL_MAPPING[selectedSpell]}
+            </span>
+
+            <span className="spell-overview__name">
+              {spell.name}
+            </span>
+          </div>
+
+          <div className="spell-overview__description">
+            {spell.description}
+          </div>
+        </div>
+      );
+    }
+
+    render() {
       const { champion } = this.props;
 
       return (
@@ -285,20 +344,11 @@
           <div className="champion-overview__splash">
             <img src={champion.splash_url} alt={champion.name} data-champion={champion.name} />
           </div>
-          <div className="champion-overview__abilities">
-            <div className="champion-overview__abilities__header">
-              Abilities:
+          <div className="champion-overview__spells">
+            <div className="champion-overview__spells__bar">
+              {champion.spells.map(this.renderSpell)}
             </div>
-            <div className="champion-overview__abilities__bar">
-              {champion.spells.map(s =>
-                <div className="champion-overview__abilities__bar__ability">
-                  <img src={s.image_url} alt={s.name} key={s.name}/>
-                  <div className="tooltip">
-                    {s.name} ({s.cost == null? "No Cost":s.cost}): {s.description}
-                  </div>
-                </div>
-              )}
-            </div>
+            {this.renderSelectedSpell()}
           </div>
         </div>
       );

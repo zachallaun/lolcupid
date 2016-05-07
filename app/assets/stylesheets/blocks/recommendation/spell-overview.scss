@@ -1,0 +1,19 @@
+.spell-overview {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.spell-overview__key {
+  @extend .sidebar-champ__role;
+  margin-right: .5em;
+}
+
+.spell-overview__name {
+  @extend .sidebar-champ__name;
+}
+
+.spell-overview__description {
+  margin-top: .8rem;
+  max-width: 450px;
+  font-size: 13px;
+}

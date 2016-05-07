@@ -14,6 +14,7 @@
   overflow: hidden;
   border-radius: 50%;
   border: 2px solid #DAD7AE;
+  zoom: 80%;
 
   > img {
     position: absolute;
@@ -153,81 +154,50 @@
   }
 }
 
+.champion-overview__spells {
+  @include flexbox;
+  @include flex(column);
+  @include flex-wrap(wrap);
+  @include align-items(center);
+  @include justify-content(center);
 
-
-.champion-overview__abilities {
-    @include flexbox;
-    @include flex(column);
-    @include flex-wrap(wrap);
-    @include align-items(center);
-    @include justify-content(center);
-
-    margin:1em;
+  margin-top: 2rem;
 }
 
-.champion-overview__abilities > * {
-    width:100%;
+.champion-overview__spells__bar {
+  @include flexbox;
+  @include flex(row);
+  @include flex-wrap(nowrap);
+  @include justify-content(center);
+
+  margin-bottom: 1rem;
 }
 
-.champion-overview__abilities__header {
-    text-align: center;
-    font-size: 1.2em;
-}
+.champion-overview__spells__bar__spell {
+  > img {
+    position: relative;
+    margin: 0 .5rem;
+    width: 50px;
+    height: 50px;
+    border: 2px solid rgba(243, 193, 101, 0.3);
+  }
 
+  &.champion-overview__spells__bar__spell--selected {
+    position: relative;
 
-.champion-overview__abilities__bar {
-    @include flexbox;
-    @include flex(row);
-    @include flex-wrap(nowrap);
-    /*@include justify-content(space-between);*/
-    @include justify-content(center);
-    /*@include align-items(center);*/
-}
-
-.champion-overview__abilities__bar__ability {
-
-  position: relative;
-  display: inline;
-
-
-    img {
-      border: 2px solid #DAD7AE;
-      margin: 0 1em;
+    > img {
+      border-color: #DAD7AE;
     }
 
-    .tooltip {
+    &:before {
+      content: '';
       position: absolute;
-      width:400px;
-      color: #FFFFFF;
-      background: #000000;
-      text-align: center;
-      visibility: hidden;
-      border-radius: 6px;
+      width: 6px;
+      height: 6px;
+      bottom: -3px;
+      left: calc(50% - 3px);
+      background-color: #DAD7AE;
+      @include transform(rotate(45deg));
     }
-
-    .tooltip:after {
-        content: '';
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        margin-left: -8px;
-        width: 0; height: 0;
-        border-top: 8px solid #000000;
-        border-right: 8px solid transparent;
-        border-left: 8px solid transparent;
-    }
-
-
-}
-
-
-.champion-overview__abilities__bar__ability:hover {
-    .tooltip {
-        visibility: visible;
-        opacity: 0.8;
-        bottom: 30px;
-        left: 50%;
-        margin-left: -76px;
-        z-index: 999;
-    }
+  }
 }
