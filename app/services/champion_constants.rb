@@ -338,7 +338,7 @@ module ChampionConstants
         {
             name: spell["name"],
             image_url: image_url,
-            description: spell["description"] == "BadDesc" ? nil : spell["description"],
+            description: spell["sanitizedDescription"] == "BadDesc" ? nil : spell["sanitizedDescription"],
             cost: fill_in_spell_info(spell["resource"], spell),
             cooldown: spell["cooldownBurn"]
         }

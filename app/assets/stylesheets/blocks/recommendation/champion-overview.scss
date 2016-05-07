@@ -156,7 +156,7 @@
 
 .champion-overview__spells {
   @include flexbox;
-  @include flex(column);
+  @include flex-direction(column);
   @include flex-wrap(wrap);
   @include align-items(center);
   @include justify-content(center);
