@@ -151,7 +151,7 @@
       }
 
       return (
-        <div className="sidebar-champ">
+        <div className="sidebar-champ" onClick={this.removeChampion}>
           <div className="sidebar-champ__image">
             <img src={image_url} alt={name} />
           </div>
@@ -282,6 +282,26 @@
       selectedSpell: 0,
     };
 
+    getChampionGgUrl = (champName) => {
+      var ret = champName.replace(/ /g, "");
+      ret = ret.replace(/'/g, "");
+      return "http://champion.gg/champion/"+ret;
+    };
+
+    getProBuildsUrl = (champName) => {
+      var ret = champName;
+      if (champName == "Jarvan IV") {
+        ret = "JarvanIV";
+      } else {
+        while (ret.indexOf("'") != -1) {
+          var idx = ret.indexOf("'");
+          ret = ret.substr(0,idx) + ret[idx+1].toLowerCase() + ret.substr(idx+2);
+        }
+        ret = ret.replace(/ /g, "");
+      }
+      return "http://www.probuilds.net/champions/details/"+ret;
+    };
+
     componentWillReceiveProps(nextProps) {
       if (this.props.champion !== nextProps.champion) {
         this.setState({ selectedSpell: 0 });
@@ -344,6 +364,8 @@
           <div className="champion-overview__splash">
             <img src={champion.splash_url} alt={champion.name} data-champion={champion.name} />
           </div>
+          <a href={this.getChampionGgUrl(champion.name)}>Champion.gg info</a>
+          <a href={this.getProBuildsUrl(champion.name)}>ProBuilds.net info</a>
           <div className="champion-overview__spells">
             <div className="champion-overview__spells__bar">
               {champion.spells.map(this.renderSpell)}
