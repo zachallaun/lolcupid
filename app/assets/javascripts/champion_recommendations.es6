@@ -282,7 +282,7 @@
       selectedSpell: 0,
     };
 
-    getChampionGgUrl = (champName) => {
+    getChampionGGUrl = (champName) => {
       var ret = champName.replace(/ /g, "");
       ret = ret.replace(/'/g, "");
       return "http://champion.gg/champion/"+ret;
@@ -360,12 +360,21 @@
 
       return (
         <div className="champion-overview">
-          <h1 className="champion-overview__name">{champion.name}</h1>
+          <div className="champion-overview__header">
+            <h1 className="champion-overview__name">{champion.name}</h1>
+            <div className="champion-overview__links">
+              <a href={this.getProBuildsUrl(champion.name)} target="_blank">
+                on ProBuilds.net
+              </a>
+              <a href={this.getChampionGGUrl(champion.name)} target="_blank">
+                on Champion.gg
+              </a>
+            </div>
+          </div>
+
           <div className="champion-overview__splash">
             <img src={champion.splash_url} alt={champion.name} data-champion={champion.name} />
           </div>
-          <a href={this.getChampionGgUrl(champion.name)}>Champion.gg info</a>
-          <a href={this.getProBuildsUrl(champion.name)}>ProBuilds.net info</a>
           <div className="champion-overview__spells">
             <div className="champion-overview__spells__bar">
               {champion.spells.map(this.renderSpell)}

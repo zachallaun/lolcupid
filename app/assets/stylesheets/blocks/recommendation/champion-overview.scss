@@ -4,7 +4,22 @@
   @include align-items(center);
 }
 
+.champion-overview__header {
+  @include flexbox;
+  @include align-items(baseline);
+
+  margin-bottom: 2rem;
+}
+
 .champion-overview__name {
+  margin: 0 1rem 0 0;
+}
+
+.champion-overview__links {
+  @include flexbox;
+  @include flex-direction(column-reverse);
+
+  font-size: 12px;
 }
 
 .champion-overview__splash {
