@@ -28,7 +28,7 @@ class FetchMastery
       "last_scraped_at IS NULL OR last_scraped_at < ?", too_old
     ).limit(limit)
 
-    chunks = summoners.each_slice((summoners.size / threads).round)
+    chunks = summoners.each_slice((summoners.size / threads).round + 1)
 
     chunks.map do |summoners|
       Thread.new do
