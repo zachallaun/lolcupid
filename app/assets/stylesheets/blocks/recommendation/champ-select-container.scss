@@ -3,6 +3,6 @@
   max-width: 1100px;
 }
 
-@media screen and (device-aspect-ratio: 2560/1440) {
+@media screen and (min-device-width: 1450px) and (min-device-height: 900px) {
   zoom: 125%;
 }
