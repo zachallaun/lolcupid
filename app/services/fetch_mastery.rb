@@ -173,8 +173,8 @@ class FetchMastery
     update_devotion
   end
 
-  def update_outdated_mastery_data(limit: nil, threads: 1)
-    fetch_outdated(limit: limit, threads: threads)
+  def update_outdated_mastery_data(region: "na", limit: nil, threads: 1)
+    fetch_outdated(region, limit: limit, threads: threads)
     update_champion_points
     update_mastery_points
     update_devotion
