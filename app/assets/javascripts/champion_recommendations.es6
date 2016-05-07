@@ -151,7 +151,7 @@
       }
 
       return (
-        <div className="sidebar-champ" onClick={this.removeChampion}>
+        <div className="sidebar-champ sidebar-champ--removable" onClick={this.removeChampion}>
           <div className="sidebar-champ__image">
             <img src={image_url} alt={name} />
           </div>

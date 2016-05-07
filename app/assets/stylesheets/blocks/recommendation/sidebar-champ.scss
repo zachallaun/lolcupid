@@ -129,3 +129,11 @@
     color: $brand-warning;
   }
 }
+
+.sidebar-champ--removable:hover {
+  cursor: pointer;
+
+  .sidebar-champ__remove {
+    color: $brand-warning;
+  }
+}
