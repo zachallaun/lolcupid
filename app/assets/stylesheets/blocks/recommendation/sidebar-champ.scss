@@ -11,6 +11,7 @@
 
   &.sidebar-champ--invert {
     @include flex-direction(row-reverse);
+    min-width: 285px;
 
     .sidebar-champ__text {
       text-align: right;
