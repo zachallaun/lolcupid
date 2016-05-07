@@ -11,39 +11,6 @@ class Summoner < ActiveRecord::Base
   TIER_MAP = {"CHALLENGER"=>:challenger, "MASTER"=>:master, "DIAMOND"=>:diamond, "PLATINUM"=>:platinum, "GOLD"=>:gold, "SILVER"=>:silver, "BRONZE"=>:bronze}
   DIVISION_MAP = {"I"=>:i, "II"=>:ii, "III"=>:iii, "IV"=>:iv, "V"=>:v}
 
-  # def self.save_from_api(summoner_api_data, league_api_data, region)
-  #   tier_map = {"CHALLENGER"=>:challenger, "MASTER"=>:master, "DIAMOND"=>:diamond, "PLATINUM"=>:platinum, "GOLD"=>:gold, "SILVER"=>:silver, "BRONZE"=>:bronze}
-  #   division_map = {"I"=>:i, "II"=>:ii, "III"=>:iii, "IV"=>:iv, "V"=>:v}
-
-  #   for standardized_name in summoner_api_data.keys() do
-  #     s = summoner_api_data[standardized_name]
-  #     s_id = s[:id]
-  #     where(id: s_id).first_or_initialize do |summoner|
-  #       summoner.standardized_name = standardized_name
-  #       summoner.display_name = s[:name]
-  #       summoner.summoner_level = s[:summonerLevel]
-  #       summoner.profile_icon_id = s[:profileIconId]
-  #       summoner.region = region
-
-  #       # what happens if unranked? returned 404 earlier
-  #       if league_api_data then
-  #         leagues = league_api_data[s[:id].to_s]
-  #         for league in leagues do
-  #           if league[:queue] == "RANKED_SOLO_5x5" then
-  #             summoner.tier = tier_map[league[:tier]]
-  #             # I don't understand what the zero is for... Why is it a list of entries
-  #             summoner.division = division_map[league[:entries][0][:division]]
-  #           end
-  #         end
-  #       end
-
-  #       summoner.save!
-  #     end
-  #   end
-
-  #   # if summoner.persisted?
-  # end
-
   def self.set_entry(
     id, # bigint NOT NULL,
     standardized_name, # character varying NOT NULL,
@@ -57,20 +24,20 @@ class Summoner < ActiveRecord::Base
     region # integer
     )
 
-    # puts "hello"
-    # # s = summoner_api_data[standardized_name]
-      summoner = where(id: id).first_or_initialize
+    summoner = where(id: id).first_or_initialize
 
-      summoner.standardized_name = standardized_name
-      summoner.display_name = display_name
-      summoner.summoner_level = summoner_level
-      summoner.tier = TIER_MAP[tier]
-      summoner.division = DIVISION_MAP[division]
-      summoner.profile_icon_id = profile_icon_id
-      summoner.last_scraped_at = last_scraped_at
-      summoner.region = region
+    summoner.standardized_name = standardized_name
+    summoner.display_name = display_name
+    summoner.summoner_level = summoner_level
+    summoner.tier = TIER_MAP[tier]
+    summoner.division = DIVISION_MAP[division]
+    summoner.profile_icon_id = profile_icon_id
+    summoner.last_scraped_at = last_scraped_at
+    summoner.region = region
 
-      summoner.save!
+    summoner.save!
+
+    summoner
   end
 
 
@@ -79,6 +46,13 @@ class Summoner < ActiveRecord::Base
     list_of_ids.delete_if {|id| where(id: id).present?}
   end
 
+  def top_champions(n = 5)
+    Champion.joins(:champion_masteries).
+      where(champion_masteries: {summoner: self}).
+      where("champion_masteries.devotion > 0").
+      order("champion_masteries.devotion DESC").
+      limit(n)
+  end
 
   private
 

@@ -255,7 +255,7 @@
 
     commenceSearch = () => {
       if (this.state.selected != '' && this.state.isSummoner) {
-        window.location.href = "/summoner?region="+this.state.region+"&name="+this.state.selected;
+        window.location.href = `/summoner/${this.state.region}/${this.state.selected}`;
       } else if (this.state.selected != '' && !this.state.isSummoner) {
         window.location.href = "/champions?name="+this.state.selected;
       }

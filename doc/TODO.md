@@ -9,7 +9,6 @@ Homepage
 - get a logo
 - hovering on drop down should have href cursor
 
-
 Recommendation page
 ==========
 selection side bar
@@ -23,6 +22,9 @@ selection window
 - fix spacing in the last row of the selector
 - clicking a greyed out champion should remove it from the picks
 
+summoner
+-----------
+- Redirect back to homepage with a flash message if unable to load summoner (incorrect name, region, error from Riot server, etc.)
 
 Databases
 ==========

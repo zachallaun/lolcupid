@@ -10,6 +10,8 @@ class PagesController < ApplicationController
   end
 
   def summoner
+    @query_champions, @recommendations, @summoner = summoner_recs
+    render layout: "about"
   end
 
   def champions

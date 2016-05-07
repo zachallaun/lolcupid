@@ -51,37 +51,58 @@ class FetchMastery
     )
   end
 
+  def mult_factor_for(champion)
+    if champion.release_date < MASTERY_INTRODUCED_ON
+      mult_factor = 1
+    else
+      days_since_release = (Date.today - champion.release_date.to_date).to_i
+      mult_factor = MASTERY_AGE.to_f / days_since_release
+      mult_factor = 1 + (mult_factor-1)*RECENCY_DAMPENING
+    end
+
+    mult_factor
+  end
+
+  def dampen_masteries(masteries)
+    md = (1.0/MASTERY_DAMPENING)
+    masteries.where("champion_points > #{MASTERY_CUTOFF}").update_all(
+      "champion_points = #{MASTERY_CUTOFF} + (champion_points - #{MASTERY_CUTOFF})^(#{md})"
+    )
+  end
+
   def update_champion_points
     # multiplicative factor to account for release date > mastery introduction
-    mult_factors = []
     Champion.all.each do |champion|
-      if champion.release_date < MASTERY_INTRODUCED_ON
-        mult_factor = 1
-      else
-        days_since_release = (Date.today - champion.release_date.to_date).to_i
-        mult_factor = MASTERY_AGE.to_f / days_since_release
-        mult_factor = 1 + (mult_factor-1)*RECENCY_DAMPENING
-        mult_factors.push([champion.name, mult_factor])
-      end
+      mult_factor = mult_factor_for(champion)
 
       champion.champion_masteries.update_all(
         "champion_points = uw_champion_points * #{mult_factor}"
       )
     end
-    puts mult_factors
 
-    # Champion.where("release_date > :mastery_intro", {:mastery_intro => MASTERY_INTRODUCED_ON}).each do |champion|
-    # end
-
-    # dampening to account for mastery levels over 100,000
-    md = (1.0/MASTERY_DAMPENING)
-    ChampionMastery.where("champion_points > #{MASTERY_CUTOFF}").update_all(
-      "champion_points = #{MASTERY_CUTOFF} + (champion_points - #{MASTERY_CUTOFF})^(#{md})"
-    )
+    dampen_masteries(ChampionMastery.all)
   end
 
-  def update_mastery_points
-    Summoner.connection.update_sql(<<-SQL)
+  def update_champion_points_s(summoner)
+    values = summoner.champion_masteries.includes(:champion).map do |mastery|
+      "(#{mastery.id}, #{mastery.uw_champion_points * mult_factor_for(mastery.champion)})"
+    end.join(", ")
+
+    ChampionMastery.connection.update_sql(<<-SQL)
+      WITH new_champion_masteries (id, champion_points) AS (
+          VALUES #{values}
+      )
+      UPDATE champion_masteries
+          SET champion_points = new_champion_masteries.champion_points
+      FROM new_champion_masteries
+      WHERE new_champion_masteries.id = champion_masteries.id
+    SQL
+
+    dampen_masteries(summoner.champion_masteries)
+  end
+
+  def update_mastery_points_sql
+    <<-SQL
       UPDATE summoners
         SET mastery_points = (
           SELECT sum(cm.champion_points)
@@ -91,22 +112,30 @@ class FetchMastery
     SQL
   end
 
-  # def update_devotion
-  #   avg_mastery_points = Summoner.average(:mastery_points).to_i
+  def update_mastery_points
+    Summoner.connection.update_sql(update_mastery_points_sql)
+  end
 
-  #   ChampionMastery.update_all(
-  #     "devotion = champion_points::float / #{avg_mastery_points}"
-  #   )
-  # end
-
+  def update_mastery_points_s(s)
+    Summoner.connection.update_sql(<<-SQL)
+      #{update_mastery_points_sql}
+      WHERE summoners.id = #{s.id}
+    SQL
+  end
 
   def update_devotion
     avg_mastery_points = Summoner.average(:mastery_points).to_i
-    Summoner.all.each { |s| update_devotion_s(s.id, avg_mastery_points) }
+    Summoner.all.each { |s| update_devotion_s(s, avg_mastery_points) }
     return nil
   end
 
-  def update_devotion_s(s_id, avg_mastery_points)
+  def update_devotion_s(summoner, avg_mastery_points=nil)
+    s_id = summoner.id
+
+    if avg_mastery_points.nil?
+      avg_mastery_points = Summoner.average(:mastery_points).to_i
+    end
+
     mastery_points_s = Summoner.find(s_id).mastery_points
     champs_played_s = ChampionMastery.where(summoner_id: s_id).count
     if champs_played_s == 0 then return nil end
@@ -118,25 +147,15 @@ class FetchMastery
       )
     end
 
-    # preference(s, x) = champion_points::float / #{mastery_points_s}
-    # uw_devotion = preference(s, x) - #{champs_played_s_frac}
-    # devotion = uw_devotion * (#{mastery_points_s} / #{avg_mastery_points.to_f})
-
-    # devotion = (champion_points::float / #{mastery_points_s} - #{champs_played_s_frac}) * (#{mastery_points_s} / #{avg_mastery_points.to_f})
     return nil
   end
 
-  # def update_devotion
-  #   Summoner.all.each { |s| update_devotion_s(s) }
-  # end
-
-  # def update_devotion_s(s_id)
-  #   s_points = Summoner.find(s_id).mastery_points
-  #   ChampionMastery.where(summoner_id: s_id).update_all(
-  #     "devotion = champion_points::float / #{s_points}"
-  #   )
-  #   return nil
-  # end
+  def update_mastery_data_for(summoner)
+    fetch_mastery(summoner)
+    update_champion_points_s(summoner)
+    update_mastery_points_s(summoner)
+    update_devotion_s(summoner)
+  end
 
   def update_all_mastery_data
     fetch_all
