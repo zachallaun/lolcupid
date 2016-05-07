@@ -9,22 +9,29 @@ Homepage
 - get a logo
 - hovering on drop down should have href cursor
 
+
 Recommendation page
 ==========
 selection side bar
 ---------------
-- make hovering anywhere on the champion light up the x and be clickable. If this is the case then maybe the x can go back to the right
 
 selection window
 -----------------
 - Center the selector panel
 - make scrollbar look good in all browsers
-- fix spacing in the last row of the selector
-- clicking a greyed out champion should remove it from the picks
 
 summoner
 -----------
 - Redirect back to homepage with a flash message if unable to load summoner (incorrect name, region, error from Riot server, etc.)
+
+rec side bar
+----------------
+- + sign to add champs like x on selections
+
+overview panel
+----------------
+- find better place for links
+
 
 Databases
 ==========
@@ -37,8 +44,6 @@ Mockup
 
 About page
 ==========
-- Write about the math: doc/about_math.txt
-    - Figure out mathjax
 - Write about the tech: doc/about_tech.txt
 
 
