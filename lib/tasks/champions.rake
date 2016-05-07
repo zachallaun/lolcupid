@@ -10,6 +10,10 @@ namespace :champions do
     end
   end
 
+  task update_recommendations: :environment do
+    UpdateRecommendationsJob.perform_later
+  end
+
   task clean: :environment do
     Champion.destroy_all
   end

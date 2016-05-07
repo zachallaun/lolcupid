@@ -4,4 +4,8 @@ namespace :summoners do
     GrowDbJob.perform_later(Summoner.na.count + 10_000, "na")
     GrowDbJob.perform_later(Summoner.euw.count + 10_000, "euw")
   end
+
+  task update: :environment do
+    UpdateDbJob.perform_later
+  end
 end
