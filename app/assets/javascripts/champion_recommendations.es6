@@ -434,6 +434,7 @@
       this.props.dispatch(Actions.fetchRecommendations(
         this.props.picked.concat(champion)
       ));
+      setTimeout(() => this.setState({ championFilter: '' }), 100);
     }
 
     toggleMenu = (e) => {
