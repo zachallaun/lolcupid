@@ -5,6 +5,7 @@ $champion-picker-toggle-width: 40px;
   position: relative;
   padding-top: $champion-picker-toggle-height;
   height: 571px; // magic as fuck
+  min-width: 430px;
   overflow: hidden;
 }
 
