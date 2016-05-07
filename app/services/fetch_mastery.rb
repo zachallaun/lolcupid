@@ -21,14 +21,20 @@ class FetchMastery
     Summoner.all.each { |s| fetch_mastery(s) }
   end
 
-  def fetch_outdated(region = "na", limit: nil)
+  def fetch_outdated(region = "na", limit: nil, threads: 1)
     too_old = 3.days.ago
 
-    Summoner.where(region: Summoner.regions[region]).where(
+    summoners = Summoner.where(region: Summoner.regions[region]).where(
       "last_scraped_at IS NULL OR last_scraped_at < ?", too_old
-    ).limit(limit).each do |s|
-      fetch_mastery(s)
-    end
+    ).limit(limit)
+
+    chunks = summoners.each_slice((summoners.size / threads).round)
+
+    chunks.map do |summoners|
+      Thread.new do
+        summoners.each { |s| fetch_mastery(s) }
+      end
+    end.map(&:join)
   end
 
   def fetch_mastery(summoner)
@@ -167,8 +173,8 @@ class FetchMastery
     update_devotion
   end
 
-  def update_outdated_mastery_data(limit: nil)
-    fetch_outdated(limit: limit)
+  def update_outdated_mastery_data(limit: nil, threads: 1)
+    fetch_outdated(limit: limit, threads: threads)
     update_champion_points
     update_mastery_points
     update_devotion
