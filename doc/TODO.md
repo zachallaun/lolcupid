@@ -20,7 +20,6 @@ selection window
 
 summoner
 -----------
-- Redirect back to homepage with a flash message if unable to load summoner (incorrect name, region, error from Riot server, etc.)
 - Pull the most recent icon version. Somehow figure out the ddragon version number
 
 rec side bar
@@ -31,10 +30,6 @@ overview panel
 ----------------
 - find better place for links
 
-
-Databases
-==========
-- from_api does the role of updating, which means default values need to be reset inside of it, which seems out of line. Pull doesn't quite do what the name implies
 
 Mockup
 ==========
