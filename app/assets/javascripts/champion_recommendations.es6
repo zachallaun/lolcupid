@@ -95,6 +95,7 @@
       queryChampions: serverData.query_champions,
       recommendations: serverData.recommendations,
       selectedChampion: null,
+      summoner: serverData.summoner
     };
 
     return function reducer(state = initialState, action) {
@@ -504,16 +505,44 @@
       ));
     }
 
+    iconUrl = (summoner) => {
+      return 'https://ddragon.leagueoflegends.com/cdn/6.9.1/img/profileicon/'+summoner.profile_icon_id+'.png';
+
+    }
+
+    rankedInfo = (summoner) => {
+      if (summoner.tier) {
+        if (summoner.tier == "master") {
+          return "Master";
+        } else if (summoner.tier == "challenger") {
+          return "Challenger";
+        } else {
+          return summoner.tier[0].toUpperCase() + summoner.tier.substr(1) + " " + summoner.division.toUpperCase();
+        }
+      } else {
+        return "Level "+summoner.summoner_level;
+        // return "Unranked Level "+summoner.summoner_level;
+      }
+    }
+
+    renderSummonerInfo = (summoner) => {
+      return (
+        <div> <img src={this.iconUrl(summoner)} />{summoner.display_name} ({this.rankedInfo(summoner)}) </div>
+      );
+    }
+
     render() {
       const {
         queryChampions,
         recommendations,
         champions,
         selectedChampion,
+        summoner
       } = this.props;
 
       return (
         <div className="champ-select-container">
+          {summoner? this.renderSummonerInfo(summoner) : (<div></div>)}
           <div className="pane-layout">
             <div className="pane-layout__sidebar">
               <ChampionSelectSidebar
