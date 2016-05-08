@@ -416,7 +416,7 @@
   class ChampionPicker extends Component {
     state = {
       championFilter: '',
-      menuShowing: true,
+      menuShowing: this.props.picked.length < this.props.max,
     }
 
     componentWillMount() {
@@ -429,6 +429,10 @@
       }
 
       if (nextProps.selectedChampion && this.props.selectedChampion !== nextProps.selectedChampion) {
+        this.setState({ menuShowing: false });
+      }
+
+      if (this.props.picked.length < nextProps.max && nextProps.picked.length === nextProps.max) {
         this.setState({ menuShowing: false });
       }
     }
@@ -533,7 +537,7 @@
 
       return (
         <div className={className}>
-          {summonerPresent? (<div></div>): this.renderPicker()}
+          {summonerPresent ? <div></div> : this.renderPicker()}
           {this.renderOverview()}
         </div>
       );
