@@ -54,6 +54,10 @@ class Summoner < ActiveRecord::Base
       limit(n)
   end
 
+  def profile_icon_url
+    RiotClient::ASSET_PREFIX + "6.9.1/img/profileicon/#{profile_icon_id}.png"
+  end
+
   private
 
   def validate_tier_and_division

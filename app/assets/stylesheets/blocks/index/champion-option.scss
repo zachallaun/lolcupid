@@ -41,6 +41,8 @@
 }
 
 .champion-option:hover {
+  cursor: pointer;
+
   .champion-option__title {
     color: lighten($gray-light, 35%);
   }

@@ -1,0 +1,25 @@
+.summoner-overview {
+  @include flexbox;
+  @include align-items(center);
+}
+
+.summoner-overview__icon {
+  width: 75px;
+  height: 75px;
+  margin-right: 1rem;
+}
+
+.summoner-overview__text {
+  @include flexbox;
+  @include flex-direction(column);
+}
+
+.summoner-overview__name {
+  font-size: 24px;
+  font-weight: normal;
+}
+
+.summoner-overview__rank {
+  color: #728BA2;
+  font-size: 18px;
+}

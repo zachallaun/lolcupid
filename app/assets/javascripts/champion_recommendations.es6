@@ -552,29 +552,33 @@
       ));
     }
 
-    iconUrl = (summoner) => {
-      return 'https://ddragon.leagueoflegends.com/cdn/6.9.1/img/profileicon/'+summoner.profile_icon_id+'.png';
-
-    }
-
     rankedInfo = (summoner) => {
       if (summoner.tier) {
-        if (summoner.tier == "master") {
-          return "Master";
-        } else if (summoner.tier == "challenger") {
-          return "Challenger";
+        if (summoner.tier == 'master') {
+          return 'Master';
+        } else if (summoner.tier == 'challenger') {
+          return 'Challenger';
         } else {
-          return summoner.tier[0].toUpperCase() + summoner.tier.substr(1) + " " + summoner.division.toUpperCase();
+          return summoner.tier[0].toUpperCase() + summoner.tier.substr(1) + ' ' + summoner.division.toUpperCase();
         }
       } else {
-        return "Level "+summoner.summoner_level;
-        // return "Unranked Level "+summoner.summoner_level;
+        return 'Level ' + summoner.summoner_level;
       }
     }
 
-    renderSummonerInfo = (summoner) => {
+    renderSummonerOverview = (summoner) => {
       return (
-        <div> <img src={this.iconUrl(summoner)} />{summoner.display_name} ({this.rankedInfo(summoner)}) </div>
+        <div className="summoner-overview">
+          <img className="summoner-overview__icon" src={summoner.profile_icon_url} />
+          <div className="summoner-overview__text">
+            <span className="summoner-overview__name">
+              {summoner.display_name}
+            </span>
+            <span className="summoner-overview__rank">
+              {this.rankedInfo(summoner)}
+            </span>
+          </div>
+        </div>
       );
     }
 
@@ -591,7 +595,7 @@
 
       return (
         <div className="champ-select-container">
-          {summoner? this.renderSummonerInfo(summoner) : null}
+          {summoner? this.renderSummonerOverview(summoner) : null}
           <div className="pane-layout">
             <div className="pane-layout__sidebar">
               {
