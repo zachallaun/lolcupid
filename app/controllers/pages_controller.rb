@@ -10,8 +10,13 @@ class PagesController < ApplicationController
   end
 
   def summoner
-    @query_champions, @recommendations, @summoner = summoner_recs
-    render layout: "about"
+    begin
+      @query_champions, @recommendations, @summoner = summoner_recs
+      render layout: "about"
+    rescue RiotClient::RequestError => e
+      flash.alert = "Couldn't fetch summoner info. The summoner name and region may have been invalid."
+      redirect_to root_url
+    end
   end
 
   def champions

@@ -1,1 +1,7 @@
+<% if flash.alert %>
+  <div class="alert-message">
+    <%= flash.alert %>
+  </div>
+<% end %>
+
 <%= react_component("LolCupid.Homepage", render('index_data.json.jbuilder')) %>

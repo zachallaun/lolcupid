@@ -4,8 +4,7 @@ class FetchSummoner
     end
 
     def fetch_by_name(region, name)
-        summoner = fetch_summoner region, name
-        if summoner == nil then return end
+        summoner = @client.summoner.by_name region, name
 
         standardized_name = summoner.keys[0]
         id = summoner[standardized_name][:id]
