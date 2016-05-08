@@ -23,7 +23,7 @@ body {
 
   width: 100%;
 
-  padding: 10px 15px;
+  padding: .5rem 2rem;
   margin: 0 0 2rem 0;
 
   background-color: darken(rgba(42, 62, 80, 1), 10%);
@@ -42,9 +42,6 @@ body {
   a:hover {
       text-decoration: none;
   }
-}
-
-.page-with-header-footer__header__searchbar {
 }
 
 .page-with-header-footer__content {

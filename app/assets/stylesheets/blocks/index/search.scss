@@ -6,6 +6,25 @@
   background-color: $gray-light;
 }
 
+.search--topbar {
+  margin-left: 2rem;
+  padding: .5rem;
+  width: 400px;
+
+  .search__input-container {
+    margin-right: .5rem;
+  }
+
+  .search__region-selector {
+    top: 3px;
+    height: 21px;
+  }
+
+  .search__button {
+    padding: 3px 10px;
+  }
+}
+
 .search__input-container {
   position: relative;
   width: 100%;

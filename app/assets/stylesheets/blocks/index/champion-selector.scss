@@ -5,6 +5,13 @@
   width: 100%;
 }
 
+.champion-selector--topbar {
+  .champion-selector__input {
+    padding: 4px 46px 4px 8px;
+    height: inherit;
+  }
+}
+
 .champion-selector__input {
   padding-right: 54px;
 }

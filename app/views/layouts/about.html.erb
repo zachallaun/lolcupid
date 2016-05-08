@@ -10,11 +10,9 @@
   <div class="page-with-header-footer">
     <div class="page-with-header-footer__header">
       <div class="page-with-header-footer__header__logo">
-        <a href="/"> lolCupid </a>
+        <a href="/">lolCupid</a>
       </div>
-      <div class="page-with-header-footer__header__searchbar">
-        SEARCH
-      </div>
+      <%= react_component("LolCupid.TopbarSearch", render('index_data.json.jbuilder')) %>
     </div>
     <div class="page-with-header-footer__content">
       <%= yield %>

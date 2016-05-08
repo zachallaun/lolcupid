@@ -2,7 +2,7 @@
 
   const { Component, PropTypes } = React;
 
-  const REGIONS = ['br', 'eune', 'euw', 'jp', 'kr', 'lan', 'las', 'na', 'oce', 'ru', 'tr'];
+  const REGIONS = ['BR', 'EUNE', 'EUW', 'JP', 'KR', 'LAN', 'LAS', 'NA', 'OCE', 'RU', 'TR'];
 
   const KEY_CODES = {
     up: 38,
@@ -13,7 +13,7 @@
   class RegionSelector extends Component {
     state = {
       dropdown: false,
-      selected: 'na',
+      selected: 'NA',
     };
 
     openDropdown  = () => this.setState({ dropdown: true });
@@ -215,10 +215,10 @@
       const { query } = this.state;
 
       return (
-        <div className="champion-selector">
+        <div className={'champion-selector' + (this.props.topbar ? ' champion-selector--topbar' : '')}>
           <input
             className="form-control champion-selector__input"
-            autoFocus
+            autoFocus={!this.props.topbar}
             value={query}
             onKeyDown={this.handleKeyDown}
             onChange={this.updateQuery}
@@ -234,7 +234,7 @@
     state = {
       selected: '',
       isSummoner: true,
-      region: 'na'
+      region: 'NA'
     };
 
     static propTypes = {
@@ -255,7 +255,7 @@
 
     commenceSearch = () => {
       if (this.state.selected != '' && this.state.isSummoner) {
-        window.location.href = `/summoner/${this.state.region}/${this.state.selected}`;
+        window.location.href = `/summoner/${this.state.region.toLowerCase()}/${this.state.selected}`;
       } else if (this.state.selected != '' && !this.state.isSummoner) {
         window.location.href = "/champions?name="+this.state.selected;
       }
@@ -263,19 +263,28 @@
 
     render() {
       return (
-        <div className="search">
+        <div className={'search' + (this.props.topbar ? ' search--topbar' : '')}>
           <div className="search__input-container">
-            <ChampionSelector champions={this.props.champions} alertParent={this.selectedChanged} commenceSearch={this.commenceSearch} />
+            <ChampionSelector topbar={this.props.topbar} champions={this.props.champions} alertParent={this.selectedChanged} commenceSearch={this.commenceSearch} />
             <div className="search__region-selector">
-              <RegionSelector defaultRegion='na' alertParent={this.regionChanged} />
+              <RegionSelector topbar={this.props.topbar} defaultRegion='na' alertParent={this.regionChanged} />
             </div>
           </div>
-          <button className="btn btn-primary" onClick={this.commenceSearch}>Search</button>
+          <button className="search__button btn btn-primary" onClick={this.commenceSearch}>Search</button>
         </div>
       );
     }
   }
 
+  class TopbarSearch extends Component {
+    render() {
+      return (
+        <Search topbar champions={this.props.champions} />
+      );
+    }
+  }
+
   LolCupid.Search = Search;
+  LolCupid.TopbarSearch = TopbarSearch;
 
 }();
