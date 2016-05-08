@@ -21,16 +21,16 @@
 
 .sidebar-champ__image {
   position: relative;
-  width: 86px;
-  height: 86px;
+  width: 76px;
+  height: 76px;
   overflow: hidden;
   border-radius: 50%;
   border: 3px solid rgba(243, 193, 101, .3);
 
   > img {
     position: absolute;
-    height: 92px;
-    width: 92px;
+    height: 82px;
+    width: 82px;
     left: -6px;
     top: -6px;
   }
@@ -39,16 +39,16 @@
     .sidebar-champ__image-hover-effect {
       top: -3px; // account for border
       left: -3px;
-      width: 86px;
-      height: 86px;
+      width: 76px;
+      height: 76px;
     }
   }
 }
 
 .sidebar-champ__image-hover-effect {
   position: absolute;
-  top: 43px;
-  left: 43px;
+  top: 37px;
+  left: 37px;
   width: 0;
   height: 0;
   border-radius: 50%;

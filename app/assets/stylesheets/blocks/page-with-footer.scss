@@ -20,15 +20,21 @@ body {
 }
 
 .page-with-footer__footer {
-  /*width: 100%;*/
+  @include flexbox;
+  @include align-items(center);
+  @include justify-content(center);
+
   padding: 10px 15px;
   z-index: 1;
 
-  background-color: rgba(42, 62, 80, .6);
+  background-color: rgba(42, 62, 80, .25);
 
   a {
-    text-align: right;
-    font-size: 1.5em;
+    font-size: 1em;
     color: white;
+
+    &:not(:last-child) {
+      margin-right: 2em;
+    }
   }
 }
