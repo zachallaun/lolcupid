@@ -537,7 +537,7 @@
 
       return (
         <div className={className}>
-          {summonerPresent ? <div></div> : this.renderPicker()}
+          {summonerPresent ? null : this.renderPicker()}
           {this.renderOverview()}
         </div>
       );
@@ -587,14 +587,15 @@
         summoner
       } = this.props;
 
-      var summonerPresent = (typeof summoner !== "undefined");
+      var summonerPresent = !!summoner;
 
       return (
         <div className="champ-select-container">
-          {summoner? this.renderSummonerInfo(summoner) : (<div></div>)}
+          {summoner? this.renderSummonerInfo(summoner) : null}
           <div className="pane-layout">
             <div className="pane-layout__sidebar">
-              {summonerPresent?
+              {
+                summonerPresent ?
                 <ChampionSelectSidebar
                   title="Your champions"
                   items={_.range(5).map(i => queryChampions[i] || {})}
@@ -614,7 +615,8 @@
                 summonerPresent={summonerPresent}
                 champions={champions}
                 picked={queryChampions}
-                max={5} />
+                max={5}
+              />
             </div>
 
             <div className="pane-layout__sidebar">
