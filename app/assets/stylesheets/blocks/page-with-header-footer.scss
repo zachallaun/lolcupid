@@ -31,16 +31,13 @@ body {
 }
 
 .page-with-header-footer__header__logo {
-  /*background-color: rgba(42, 62, 80, .6);*/
   a {
-    text-align: right;
-    font-size: 1.5em;
-    color: white;
-
-
+    display: inline-block;
+    color: $gray-lighter;
   }
   a:hover {
-      text-decoration: none;
+    color: white;
+    text-decoration: none;
   }
 }
 

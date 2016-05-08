@@ -21,6 +21,7 @@
   @extend .dropdown-menu-right;
 
   display: block;
+  padding: 0;
   min-width: inherit;
   background-color: darken($brand-info, 15%);
 
