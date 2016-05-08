@@ -517,8 +517,8 @@
           {
             selectedChampion ?
             <ChampionOverview champion={selectedChampion} /> :
-            <div style={{width:'50%', margin:'auto', textAlign:'center', fontSize:'1.3em'}}>
-              Hover over a recommendation to display details about the champion.
+            <div style={{width:'50%', margin:'4rem auto', textAlign:'center', fontSize:'1.3em'}}>
+              Hover over a recommendation on the right to show details about the champion.
             </div>
           }
         </div>
