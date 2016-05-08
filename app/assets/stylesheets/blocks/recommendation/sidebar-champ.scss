@@ -119,8 +119,10 @@
 }
 
 .sidebar-champ__remove {
+  display: inline-block;
   color: #1B2935;
   font-size: 23px;
+  line-height: 20px;
   font-weight: bold;
   text-shadow: rgb(55, 72, 88) 1px 1px 0px;
 
