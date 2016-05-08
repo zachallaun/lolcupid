@@ -23,6 +23,7 @@ selection window
 summoner
 -----------
 - Redirect back to homepage with a flash message if unable to load summoner (incorrect name, region, error from Riot server, etc.)
+- Pull the most recent icon version. Somehow figure out the ddragon version number
 
 rec side bar
 ----------------

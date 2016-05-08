@@ -133,6 +133,33 @@
   }
 
   @connect()
+  class NonremovableChampion extends Component {
+    static propTypes = {
+      removeChampion: PropTypes.func,
+    }
+
+    render() {
+      const { i, item: champion } = this.props;
+      const { name, image_url } = champion;
+
+      if (!name) {
+        return <DefaultChampionItem i={i} />;
+      }
+
+      return (
+        <div className="sidebar-champ">
+          <div className="sidebar-champ__image">
+            <img src={image_url} alt={name} />
+          </div>
+          <div className="sidebar-champ__text">
+            <div className="sidebar-champ__name">{name}</div>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  @connect()
   class RemovableChampion extends Component {
     static propTypes = {
       removeChampion: PropTypes.func,
@@ -236,9 +263,7 @@
             {title}
           </h2>
           <div>
-            {items.map((item, i) =>
-              <ItemComponent key={i} {...itemProps} item={item} i={i} />
-             )}
+            {items.map((item, i) => <ItemComponent key={i} {...itemProps} item={item} i={i} /> )}
           </div>
         </div>
       );
@@ -444,54 +469,72 @@
       this.setState({ menuShowing: !this.state.menuShowing });
     }
 
-    render() {
+    renderPicker = () => {
+      const { summonerPresent, picked, max, selectedChampion } = this.props;
       const { menuShowing, championFilter } = this.state;
-      const { picked, max, selectedChampion } = this.props;
       const champions = this.filteredChampions();
+
+      return (
+        <div className="champion-picker__menu">
+          <a className="champion-picker__toggle" onClick={this.toggleMenu} href="">
+            {menuShowing ? '▼' : '▲'}
+          </a>
+
+          <div className="champion-picker__top">
+            <input
+              autoFocus={picked.length < max}
+              className="champion-picker__filter"
+              value={championFilter}
+              onChange={this.changeFilter}
+              placeholder="Filter champions"
+            />
+          </div>
+
+          <div className="champion-picker__champions-container">
+            <div className="champion-picker__champions">
+              {champions.map(champion =>
+                <PickableChampion
+                  key={champion.id}
+                  champion={champion}
+                  disabled={picked.length >= max ? true : this.pickedById[champion.id]}
+                  pickChampion={this.pickChampion}
+                />
+               )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    renderOverview = () => {
+      const { summonerPresent, picked, max, selectedChampion } = this.props;
+      return (
+        <div className="champion-picker__back-panel">
+          {
+            selectedChampion ?
+            <ChampionOverview champion={selectedChampion} /> :
+            <div style={{width:'50%', margin:'auto', textAlign:'center', fontSize:'1.3em'}}>
+              Hover over a recommendation to display details about the champion.
+            </div>
+          }
+        </div>
+      );
+    }
+
+    render() {
+      const { summonerPresent, picked, max, selectedChampion } = this.props;
+      const { menuShowing, championFilter } = this.state;
 
       let className = 'champion-picker';
 
-      if (!menuShowing) {
+      if (!summonerPresent && !menuShowing) {
         className += ' champion-picker--menu-hidden';
       }
 
       return (
         <div className={className}>
-          <div className="champion-picker__menu">
-            <a className="champion-picker__toggle" onClick={this.toggleMenu} href="">
-              {menuShowing ? '▼' : '▲'}
-            </a>
-
-            <div className="champion-picker__top">
-              <input
-                autoFocus={picked.length < max}
-                className="champion-picker__filter"
-                value={championFilter}
-                onChange={this.changeFilter}
-                placeholder="Filter champions"
-              />
-            </div>
-
-            <div className="champion-picker__champions-container">
-              <div className="champion-picker__champions">
-                {champions.map(champion =>
-                  <PickableChampion
-                    key={champion.id}
-                    champion={champion}
-                    disabled={picked.length >= max ? true : this.pickedById[champion.id]}
-                    pickChampion={this.pickChampion}
-                  />
-                 )}
-              </div>
-            </div>
-          </div>
-          <div className="champion-picker__back-panel">
-            {
-              selectedChampion ?
-              <ChampionOverview champion={selectedChampion} /> :
-              null
-            }
-          </div>
+          {summonerPresent? (<div></div>): this.renderPicker()}
+          {this.renderOverview()}
         </div>
       );
     }
@@ -540,21 +583,34 @@
         summoner
       } = this.props;
 
+      var summonerPresent = (typeof summoner !== "undefined");
+
       return (
         <div className="champ-select-container">
           {summoner? this.renderSummonerInfo(summoner) : (<div></div>)}
           <div className="pane-layout">
             <div className="pane-layout__sidebar">
-              <ChampionSelectSidebar
-                title="Your champions"
-                items={_.range(5).map(i => queryChampions[i] || {})}
-                itemProps={{removeChampion: this.removeChampion}}
-                ItemComponent={RemovableChampion}
-              />
+              {summonerPresent?
+                <ChampionSelectSidebar
+                  title="Your champions"
+                  items={_.range(5).map(i => queryChampions[i] || {})}
+                  ItemComponent={NonremovableChampion}
+                /> :
+                <ChampionSelectSidebar
+                  title="Your champions"
+                  items={_.range(5).map(i => queryChampions[i] || {})}
+                  itemProps={{removeChampion: this.removeChampion}}
+                  ItemComponent={RemovableChampion}
+                />
+              }
             </div>
 
             <div className="pane-layout__main">
-              <ChampionPicker champions={champions} picked={queryChampions} max={5} />
+              <ChampionPicker
+                summonerPresent={summonerPresent}
+                champions={champions}
+                picked={queryChampions}
+                max={5} />
             </div>
 
             <div className="pane-layout__sidebar">
