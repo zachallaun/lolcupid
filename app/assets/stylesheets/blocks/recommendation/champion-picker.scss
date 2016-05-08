@@ -7,6 +7,7 @@ $champion-picker-toggle-width: 40px;
   height: 553px; // magic as fuck
   min-width: 435px;
   overflow: hidden;
+  border-bottom: 2px solid #1C2B38;
 }
 
 .champion-picker__menu {
@@ -26,8 +27,6 @@ $champion-picker-toggle-width: 40px;
 }
 
 .champion-picker--menu-hidden {
-  border-bottom: 2px solid #1C2B38;
-
   .champion-picker__menu {
     @include transform(translateY(calc(100% - #{$champion-picker-toggle-height})));
     border-radius: 0;
