@@ -324,10 +324,6 @@ module ChampionConstants
         end
     end
 
-    def self.roles_for(champ_name)
-        CHAMP_ROLES[champ_name].map { |role_key| ROLE_MAP[role_key] }
-    end
-
     def self.spell_info(spell, asset_version, passive:)
         if passive
             image_url = RiotClient::ASSET_PREFIX + "#{asset_version}/img/passive/#{spell["image"]["full"]}"

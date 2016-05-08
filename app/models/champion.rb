@@ -62,8 +62,8 @@ class Champion < ActiveRecord::Base
       ChampionConstants.spell_info(s, asset_version, passive: i == 0)
     end
 
-    ChampionConstants.roles_for(name).each do |role|
-      champion.send("#{role}=", true)
+    ChampionConstants::ROLE_MAP.each do |key, role|
+      champion.send("#{role}=", ChampionConstants::CHAMP_ROLES[name].include?(key))
     end
 
     champion
