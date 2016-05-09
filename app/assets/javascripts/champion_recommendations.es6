@@ -535,6 +535,10 @@
         className += ' champion-picker--menu-hidden';
       }
 
+      if (summonerPresent) {
+        className += ' champion-picker--hide-border';
+      }
+
       return (
         <div className={className}>
           {summonerPresent ? null : this.renderPicker()}

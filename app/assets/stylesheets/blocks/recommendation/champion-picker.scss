@@ -10,6 +10,10 @@ $champion-picker-toggle-width: 40px;
   border-bottom: 2px solid #1C2B38;
 }
 
+.champion-picker--hide-border {
+  border-bottom: 0;
+}
+
 .champion-picker__menu {
   @include flexbox;
   @include flex-direction(column);
