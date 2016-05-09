@@ -2,6 +2,7 @@ class PagesController < ApplicationController
   include ChampionRecommendations
 
   def index
+    @summoner_count = Summoner.count
     render layout: "index"
   end
 

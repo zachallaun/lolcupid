@@ -5,7 +5,7 @@ RiotClient
 
 Homepage
 ===========
-- get a logo
+- add screenshots+blurb to homepage, stay in character
 
 
 Recommendation page
@@ -29,6 +29,7 @@ rec side bar
 overview panel
 ----------------
 - find better place for links
+- perhaps darken the panel?
 
 
 Mockup
@@ -39,6 +40,7 @@ Mockup
 About page
 ==========
 - Write about the tech: doc/about_tech.txt
+- fix github readme
 
 
 Other documentation
