@@ -96,7 +96,7 @@ class RiotClient
       elsif attempt < @config.retries
         get(region, path, query_params, attempt: attempt + 1)
       else
-        raise RequestError, "\nRiotClient::Resource GET failure\nResponse code: #{resp.code}\nResponse body: #{resp.raw_body}".gsub(/^/, "  ")
+        raise RequestError, "\nRiotClient::Resource GET failure: #{url(region,path)} - #{query_params}\nResponse code: #{resp.code}\nResponse body: #{resp.raw_body}".gsub(/^/, "  ")
       end
     end
 
