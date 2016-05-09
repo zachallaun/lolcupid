@@ -24,17 +24,17 @@ Ruby, Rails, and PostgreSQL are used on the backend to fetch and analyze Summone
 
 **User interface.** To convey results, we focused on creating a user experience that was simple, familiar, and compelling. We took cues from some of our favorite existing tools to create a set of UI elements that we hope League players will immediately understand.
 
-![champion select](http://i.imgur.com/h4D7SlN.png)
-
 Building up a team of champions using a Champion Select-inspired interface dynamically updates the set of recommendations you see on the right. We break it down by lane, highlighting the strongest recommendation and providing four secondary recommendations.
 
-![champion overview](http://i.imgur.com/bTzcaQH.png)
+![champion select](http://i.imgur.com/h4D7SlN.png)
 
 Hovering over one of our recommendations drops the Champion Select menu, providing an overview of that champion's abilities and some helpful links to learn more should you choose to try them out.
 
-![summoner recommendations](http://i.imgur.com/uldWeJ8.png)
+![champion overview](http://i.imgur.com/bTzcaQH.png)
 
 Searching by Summoner name removes the Champion Select widget, offering recommendations tailored to that Summoner. Instead of weighting all of the input champions equally, we weight recommendations based on what the Summoner plays most. While it's fun to see how recommendations change as you add and remove champions, searching by Summoner will offer the best personalized recommendations.
+
+![summoner recommendations](http://i.imgur.com/uldWeJ8.png)
 
 ## Development
 
