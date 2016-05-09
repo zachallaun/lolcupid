@@ -105,10 +105,6 @@ class RiotClient
     def wait_for_rate_limiter(region)
       l1 = @config.limiter_per_10_seconds.wait(region)
       l2 = @config.limiter_per_10_minutes.wait(region)
-
-      if l1 || l2
-        puts "Warning: rate limited #{l1} #{l2}"
-      end
     end
 
     def make_path(path_spec, args)
