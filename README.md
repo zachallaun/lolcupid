@@ -10,6 +10,8 @@
 
 We chose to focus on *usability/practicality*, and created a tool that offers champion recommendations based on what you and thousands of other Summoners have already mastered. Are you a Wukong one-trick-pony looking to break out of your lane? We look at other Summoners who play a ton of Wukong and provide recommendations based on the champions they've also loved.
 
+Due to time constraints, the website was optimized for the Chrome web browser. We recommend using Chrome for the complete experience.
+
 This project was jointly created by [Troy Baker](https://github.com/rekabat) (rekabat) and [Zach Allaun](https://github.com/zachallaun) (mutinyonthebay).
 
 ## Tools and techniques
