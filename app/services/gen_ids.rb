@@ -131,7 +131,11 @@ class GenIds
         fs = FetchSummoner.new
         for id in filtered_s_ids do
             puts "Adding summoner: #{id}"
-            fs.fetch_by_id @region, id
+            begin
+                fs.fetch_by_id @region, id
+            rescue RiotClient::RequestError => e
+                # skip
+            end
         end
     end
 
