@@ -10,6 +10,7 @@ Dir.chdir APP_ROOT do
   system "bundle check || bundle install"
 
   puts "\n== Preparing database =="
+  system "bin/rake db:drop"
   system "bin/rake db:setup"
 
   puts "\n== Configuring environment =="
