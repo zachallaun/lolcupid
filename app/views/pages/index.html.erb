@@ -5,3 +5,26 @@
 <% end %>
 
 <%= react_component("LolCupid.Homepage", render('index_data.json.jbuilder')) %>
+
+<div class="blurbs">
+  <div class="blurbs__blurb">
+    <img src="<%= image_path("ss1.png") %>" />
+    <div class="blurbs__blurb-text">
+      LoLCupid offers champion recommendations based on what you as a summoner have mastered, or based on champions that you select.
+    </div>
+  </div>
+
+  <div class="blurbs__blurb">
+    <img src="<%= image_path("ss2.png") %>" />
+    <div class="blurbs__blurb-text">
+      Recommendations appear organized by role. Find the perfect champion for that role that you don't always play!
+    </div>
+  </div>
+
+  <div class="blurbs__blurb">
+    <img src="<%= image_path("ss3.png") %>" />
+    <div class="blurbs__blurb-text">
+      Champion recommendation overviews give you more insight into how that champion plays.
+    </div>
+  </div>
+</div>

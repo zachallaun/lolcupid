@@ -1,0 +1,26 @@
+.blurbs {
+  @include flexbox;
+  @include flex-wrap(wrap);
+  @include justify-content(center);
+
+  margin-top: 4rem;
+}
+
+.blurbs__blurb {
+  margin: 2rem 3rem;
+  padding: 1rem;
+  width: 270px;
+  background-color: darken(rgba(42, 62, 80, 1), 10%);
+  //background-color: rgba(42, 62, 80, 0.6);
+
+  > img {
+    width: 250px;
+    height: 150px;
+  }
+}
+
+.blurbs__blurb-text {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 14px;
+}
