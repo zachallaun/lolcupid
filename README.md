@@ -89,9 +89,3 @@ bin/setup
 ```sh
 foreman start # visit http://localhost:5000
 ```
-
-
-
-# README TODOs
-
-- Talk about experience implementing the recommendation algorithm, how it was too slow at first until we moved it all into the database and cached intermediary values and final recommendation scores.
