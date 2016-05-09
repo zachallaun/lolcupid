@@ -48,7 +48,7 @@ For a detailed explanation of determining the recommendations, see the About pag
 ## Running the code
 We assume you have the following installed and available:
 
-- Ruby 2.3.0
+- Ruby 2.3.0 (we recommend [rvm](https://rvm.io/rvm/basics) if you're on a Unix system)
 - PostgreSQL (if you're on a Mac, we recommend [Postgress.app](http://postgresapp.com/))
 
 We also assume you have a Riot Games Developer account and an API Key available to you. First-time setup:
