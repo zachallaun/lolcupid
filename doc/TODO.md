@@ -5,7 +5,7 @@ RiotClient
 
 Homepage
 ===========
-- add screenshots+blurb to homepage, stay in character
+- Scrolling isn't smooth.
 
 
 Recommendation page
@@ -39,11 +39,19 @@ Other
 
 About page
 ==========
-- Write about the tech: doc/about_tech.txt
-- fix github readme
 
 
 Other documentation
 ==========
-- More detailed setup: doc/setup_basic.txt
-- Improve readme: README.md
+
+
+Other Browsers
+==========
+Firefox
+---------
+- Scrollbar does look nice
+- Skill descriptions run off the bottom of the overview panel
+
+Safari
+---------
+- Homepage: Blurb: Screenshots get squished.
