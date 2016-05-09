@@ -32,9 +32,9 @@ overview panel
 - perhaps darken the panel?
 
 
-Mockup
+Other
 ==========
-- what should go in the finished champion selector area
+- Search for a summoner without mastery points = error. Should go to page that says "this summoner has no mastery points, try searching by champion instead"
 
 
 About page
