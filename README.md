@@ -41,7 +41,10 @@ Searching by Summoner name removes the Champion Select widget, offering recommen
 `bin/setup`
 
 
+## Data Collection
+Integral to the application is a large collection of summoners on which to base the recommendations. Our collection of summoners on live is ~90k, coming from both the NA servers and EUW. Collecting this data was not a trivial task, and the script `app/services/gen_ids.rb` is interesting independent of the rest of the application. It first requires a seed of summoner names collected manually; we used ourselves, our friends, and some pros. Next we grow the database by selecting a random summoner already in the database and adding all of the summoners in their past ten matches (we only wanted players active since champion mastery came out.)
 
+However, we also wanted the database to be approximately balanced by ranked tier, based on the assumption that this would give the most well-rounded recommendations. We found a breakdown of tiers from a third party source and manually added this to the script. Instead of randomly drawing from the database every time we wanted to grow, we determined the distribution of our database by tier and selected a summoner from the tier with the least summoners relative to the true distribution. Since people in a tier tend to play against summoners also in their tier, over a large number of samples this resulted in a well-balanced database.
 
 
 
