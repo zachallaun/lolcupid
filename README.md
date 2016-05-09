@@ -51,16 +51,36 @@ We assume you have the following installed and available:
 - Ruby 2.3.0 (we recommend [rvm](https://rvm.io/rvm/basics) if you're on a Unix system)
 - PostgreSQL (if you're on a Mac, we recommend [Postgress.app](http://postgresapp.com/))
 
-We also assume you have a Riot Games Developer account and an API Key available to you. First-time setup:
+We also assume you have a Riot Games Developer account and an API Key available to you.
+
+**Clone the project.**
 
 ```sh
 git clone https://github.com/zachallaun/lolcupid.git lolcupid
 cd lolcupid
+```
+
+**Set up your API Key.**
+
+If you have a temporary production API Key available, you can create a `.env` file in the root of the project that looks like the below. If you have a developer API Key, you can skip this step.
+
+```sh
+RIOT_API_KEY=MY_API_KEY
+RIOT_REQUESTS_PER_10_SECONDS=1400
+RIOT_REQUESTS_PER_10_MINUTES=85000
+```
+
+**Set up your database and environment.**
+
+```sh
 bin/setup
 ```
 
+**Start the server.**
 
-
+```sh
+foreman start # visit http://localhost:5000
+```
 
 
 

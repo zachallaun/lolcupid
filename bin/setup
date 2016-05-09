@@ -19,8 +19,8 @@ Dir.chdir APP_ROOT do
     api_key = gets.chomp
     File.open(".env", "w") do |f|
       f.write("RIOT_API_KEY=#{api_key}\n")
-      f.write("RIOT_REQUESTS_PER_10_SECONDS=9\n")
-      f.write("RIOT_REQUESTS_PER_10_MINUTES=450\n")
+      f.write("RIOT_REQUESTS_PER_10_SECONDS=8\n")
+      f.write("RIOT_REQUESTS_PER_10_MINUTES=400\n")
     end
   end
 
