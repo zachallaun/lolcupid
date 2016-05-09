@@ -1,6 +1,6 @@
 .fixed-bg-layout {
   padding-top: 100px;
-  height: 500px;
+  height: 650px;
   outline: 5px solid #18242f;
   border: 5px solid #18242f;
   overflow: hidden;
@@ -16,5 +16,5 @@
 
   @include filter(blur(3px));
 
-  height: 500px;
+  height: 650px;
 }
