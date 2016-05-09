@@ -8,4 +8,11 @@ namespace :summoners do
   task update: :environment do
     UpdateDbJob.perform_later
   end
+
+  desc "Seed summoners, mastery, and recs"
+  task seed: :environment do
+    GenIds.new.seed_with_file("id_seeds/small_seed.txt")
+    FetchMastery.new.update_outdated_mastery_data
+    Recommendations.new.update_all_champions
+  end
 end

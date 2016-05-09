@@ -36,7 +36,9 @@ Searching by Summoner name removes the Champion Select widget, offering recommen
 
 ![summoner recommendations](http://i.imgur.com/uldWeJ8.png)
 
-## Development
+## Running the code
+
+`bin/setup`
 
 
 

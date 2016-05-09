@@ -57,7 +57,11 @@ class GenIds
         fs = FetchSummoner.new
         File.open(file, "r") do |f|
             while line = f.gets
-                fs.fetch_by_id @region, line.to_i
+                begin
+                    fs.fetch_by_id @region, line.to_i
+                rescue RiotClient::RequestError => e
+                    # skip
+                end
             end
         end
     end
