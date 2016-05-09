@@ -73,7 +73,12 @@ RIOT_REQUESTS_PER_10_MINUTES=85000
 
 **Set up your database and environment.**
 
-This will take a while, as it needs to make a number of requests to the Riot API to seed your database.
+This will take a while, as it needs to make a number of requests to the Riot API to seed your database. This command will:
+
+- Create the database
+- Pull in all champions and their data
+- Fetch Summoner and mastery data using a seed of 50 Summoners
+- Pre-compute recommendation scores between each pair of champions
 
 ```sh
 bin/setup
