@@ -222,7 +222,7 @@
             value={query}
             onKeyDown={this.handleKeyDown}
             onChange={this.updateQuery}
-            placeholder="Search champion or summoner"
+            placeholder="Search by champion or summoner"
           />
           {this.renderResults()}
         </div>
