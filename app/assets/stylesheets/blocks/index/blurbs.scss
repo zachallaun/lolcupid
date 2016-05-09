@@ -1,26 +1,40 @@
 .blurbs {
   @include flexbox;
+  @include flex-direction(column);
   @include flex-wrap(wrap);
   @include justify-content(center);
 
-  margin-top: 4rem;
+  margin: 0 auto;
+  padding: 8rem 0;
+  max-width: 700px;
 }
 
 .blurbs__blurb {
-  margin: 2rem 3rem;
-  padding: 1rem;
-  width: 270px;
-  background-color: darken(rgba(42, 62, 80, 1), 10%);
-  //background-color: rgba(42, 62, 80, 0.6);
+  @include flexbox;
+  @include align-items(center);
+  @include justify-content(space-between);
+
+  width: 100%;
+
+  &:not(:last-child) {
+    margin-bottom: 8rem;
+  }
+
+  &:nth-child(2) {
+    @include flex-direction(row-reverse);
+  }
 
   > img {
-    width: 250px;
-    height: 150px;
+    margin: 0 1rem;
+    width: 300px;
+    height: 180px;
+    padding: 1rem;
+    background-color: darken(rgba(42, 62, 80, 1), 10%);
   }
 }
 
 .blurbs__blurb-text {
-  margin-top: 1rem;
+  margin: 0 1rem;
   text-align: center;
-  font-size: 14px;
+  font-size: 18px;
 }

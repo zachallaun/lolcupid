@@ -1,0 +1,20 @@
+.fixed-bg-layout {
+  padding-top: 100px;
+  height: 500px;
+  outline: 5px solid #18242f;
+  border: 5px solid #18242f;
+  overflow: hidden;
+}
+
+.fixed-bg-layout__bg {
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+
+  @include filter(blur(3px));
+
+  height: 500px;
+}

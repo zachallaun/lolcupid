@@ -3,7 +3,8 @@
   @include flex-direction(column);
   @include align-items(center);
 
-  margin: 8rem auto 0;
+  position: relative;
+  margin: 0 auto;
   max-width: 550px;
   padding: 2rem;
   background-color: rgba(42, 62, 80, .6);
