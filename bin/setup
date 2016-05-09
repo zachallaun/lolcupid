@@ -6,12 +6,12 @@ APP_ROOT = Pathname.new File.expand_path('../../',  __FILE__)
 
 Dir.chdir APP_ROOT do
   puts "== Installing dependencies =="
-  system "gem install bundler foreman --conservative"
-  system "bundle check || bundle install"
+  system "gem install bundler foreman --conservative" or exit 1
+  system "bundle check || bundle install" or exit 1
 
   puts "\n== Preparing database =="
-  system "bin/rake db:drop"
-  system "bin/rake db:setup"
+  system "bin/rake db:drop" or exit 1
+  system "bin/rake db:setup" or exit 1
 
   puts "\n== Configuring environment =="
   unless Pathname.new(".env").exist?
@@ -25,8 +25,8 @@ Dir.chdir APP_ROOT do
   end
 
   puts "\n== Fetching and analyzing initial seed data (this may take a while) =="
-  system "bin/rake champions:pull"
-  system "bin/rake summoners:seed"
+  system "bin/rake champions:pull" or exit 1
+  system "bin/rake summoners:seed" or exit 1
 
   puts "\n== Finished! Run `foreman start` and visit http://localhost:5000 =="
 end
