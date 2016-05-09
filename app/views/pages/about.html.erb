@@ -20,7 +20,7 @@
     </h2>
 
     <p>
-        How do we come up with the recommendations? Without some insight into this, the entire project is meaningless. We begin with the mastery points of a large collection of summoners (distributed across all tiers of ranked.)
+        How do we come up with the recommendations? Without some insight into this, the entire project is meaningless. We begin with the mastery points of a large collection of summoners (distributed across all tiers of ranked).
     </p>
 
     <div class="code">
@@ -29,7 +29,7 @@ MP(S) = Total mastery points for summoner S
     </div>
 
     <p>
-        What does a champion mastery point mean? Does it mean that the summoner has mastered the champion? Perhaps. What it really means is that the summoner played the champion. The more points you have the more you played (or perhaps you played a little less, but you got higher rankings.) So this is the premise. As such, we need to account for recently released champions that haven't been around as long as the mastery system.
+        What does a champion mastery point mean? Does it mean that the summoner has mastered the champion? Perhaps. What it really means is that the summoner played the champion. The more points you have the more you played (or perhaps you played a little less, but you got higher rankings). So this is the premise. As such, we need to account for recently released champions that haven't been around as long as the mastery system.
     </p>
 
     <div class="code">
@@ -87,7 +87,7 @@ recommendations(champions [C1..Cn]) {
     </div>
 
     <p>
-        If someone wishes to get a recommendation on their personal favorite champions (by entering their summoner name), we simply choose their top five champions by mastery and weight the recommendations by their relative devotion (instead of directly summing as seen above.)
+        If someone wishes to get a recommendation on their personal favorite champions (by entering their summoner name), we simply choose their top five champions by mastery and weight the recommendations by their relative devotion (instead of directly summing as seen above).
     </p>
 
 
