@@ -30,11 +30,15 @@ class FetchMastery
 
     chunks = summoners.each_slice((summoners.size / threads).round + 1)
 
-    chunks.map do |summoners|
-      Thread.new do
-        summoners.each { |s| fetch_mastery(s) }
-      end
-    end.map(&:join)
+    if threads == 1
+      summoners.each { |s| fetch_mastery(s) }
+    else
+      chunks.map do |summoners|
+        Thread.new do
+          summoners.each { |s| fetch_mastery(s) }
+        end
+      end.map(&:join)
+    end
   end
 
   def fetch_mastery(summoner)
