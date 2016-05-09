@@ -36,69 +36,33 @@ Searching by Summoner name removes the Champion Select widget, offering recommen
 
 ![summoner recommendations](http://i.imgur.com/uldWeJ8.png)
 
-## Running the code
-
-`bin/setup`
-
-
 ## Data Collection
+
 Integral to the application is a large collection of summoners on which to base the recommendations. Our collection of summoners on live is ~90k, coming from both the NA servers and EUW. Collecting this data was not a trivial task, and the script `app/services/gen_ids.rb` is interesting independent of the rest of the application. It first requires a seed of summoner names collected manually; we used ourselves, our friends, and some pros. Next we grow the database by selecting a random summoner already in the database and adding all of the summoners in their past ten matches (we only wanted players active since champion mastery came out.)
 
 However, we also wanted the database to be approximately balanced by ranked tier, based on the assumption that this would give the most well-rounded recommendations. We found a breakdown of tiers from a third party source and manually added this to the script. Instead of randomly drawing from the database every time we wanted to grow, we determined the distribution of our database by tier and selected a summoner from the tier with the least summoners relative to the true distribution. Since people in a tier tend to play against summoners also in their tier, over a large number of samples this resulted in a well-balanced database.
+
+## Running the code
+
+We assume you have the following installed and available:
+
+- Ruby 2.3.0
+- PostgreSQL (if you're on a Mac, we recommend [Postgress.app](http://postgresapp.com/))
+
+=======
+We also assume you have a Riot Games Developer account and an API Key available to you. First-time setup:
+
+```sh
+git clone https://github.com/zachallaun/lolcupid.git lolcupid
+cd lolcupid
+bin/setup
+```
+
+
+
 
 
 
 # README TODOs
 
 - Talk about experience implementing the recommendation algorithm, how it was too slow at first until we moved it all into the database and cached intermediary values and final recommendation scores.
-
-
-
-
-
-Riot API Challenge
-===========
-The **BIG** idea: A website that helps Summoners find new Champions by using champion mastery points. Champion mastery points are a reflection on a Summoners passion for that champion. By analyzing many summoners and finding which champions often have high mastery by the same summoner, we can gain insight into which champions complement each others play style. Unlike [other services](http://lolrecommender.com/), which tag champions with descriptions of their skill set, we can recommend champions across roles and those that capture some sort of *je ne sais quoi* that just can't be characterized.
-
-Some designer goals:
-
-- Ease of use (simplicity)
-    - Minimal use of text boxes, form completion dropdowns
-    - Obvious intent with minimal explanation
-- Attractive design
-    - Simple, flat design
-    - Minimal landing page
-    - Fun, memorable logo
-- Lighthearted/humorous atmosphere
-    - Don't take it too seriously. But don't let it detract from the design
-    - Memes? Let's hope so
-- A beautiful code base
-    - Modularity
-    - Good documentation
-
-
-Important links
-===========
-[The blog post](http://na.leagueoflegends.com/en/news/community/contests/riot-games-api-challenge-2016?ref=rss)
-[The challenge rules](https://developer.riotgames.com/discussion/announcements/show/eoq3tZd1)
-
-[The API](https://developer.riotgames.com/api/methods)
-
-[Past winners (2014)](http://na.leagueoflegends.com/en/news/community/contests/riot-games-api-challenge-winners)
-[Past winners (2015)](http://na.leagueoflegends.com/en/news/community/contests/riot-games-api-challenge-20-winners)
-
-The Stack
-===========
-
-The Algorithms
-===========
-##Sampling
-##Devotion determination
-##Correlation determination
-
-
-LolCupid
-===========
-LolCupid's advanced matching algorithm is designed to find a true connection between *Summoner* and *Champion*. We take a quick look through your profile and champion mastery points and find a champion you're going to love!
-
-Copy OkCupid logo?
