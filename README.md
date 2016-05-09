@@ -72,6 +72,8 @@ RIOT_REQUESTS_PER_10_MINUTES=85000
 
 **Set up your database and environment.**
 
+This will take a while, as it needs to make a number of requests to the Riot API to seed your database.
+
 ```sh
 bin/setup
 ```
