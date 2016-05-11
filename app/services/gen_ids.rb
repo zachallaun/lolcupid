@@ -142,7 +142,11 @@ class GenIds
 private
 
     def get_match_ids_from_summoner_id(s_id)
-        ml = @client.matchlist.by_id @region, s_id
+        begin
+            ml = @client.matchlist.by_id @region, s_id
+        rescue RiotClient::RequestError => e
+            return []
+        end
 
         if ml[:matches].empty? then
             return []
