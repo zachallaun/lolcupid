@@ -6,7 +6,7 @@ namespace :summoners do
   end
 
   task update: :environment do
-    UpdateDbJob.perform_later
+    UpdateMasteryDataJob.perform_later
   end
 
   desc "Seed summoners, mastery, and recs"
