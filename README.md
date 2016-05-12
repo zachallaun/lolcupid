@@ -54,7 +54,7 @@ We assume you have the following installed and available:
 - Ruby 2.3.0 (we recommend [rvm](https://rvm.io/rvm/basics) if you're on a Unix system)
 - PostgreSQL (if you're on a Mac, we recommend [Postgress.app](http://postgresapp.com/))
 
-We also assume you have a Riot Games Developer account and an API Key available to you.
+We also assume you have a Riot Games Developer account and an API key available to you.
 
 **Clone the project and install basic Ruby dependencies.**
 
@@ -64,9 +64,9 @@ cd lolcupid
 gem install bundler foreman
 ```
 
-**Set up your API Key.**
+**Set up your production API key.**
 
-If you have a temporary production API Key available, you can create a `.env` file in the root of the project that looks like the below. If you have a developer API Key, you can skip this step.
+If you have a temporary production API key available, you can create a `.env` file in the root of the project that looks like the below. If you have a developer API key, you can skip this step.
 
 ```sh
 RIOT_API_KEY=MY_API_KEY
