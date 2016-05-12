@@ -56,11 +56,12 @@ We assume you have the following installed and available:
 
 We also assume you have a Riot Games Developer account and an API Key available to you.
 
-**Clone the project.**
+**Clone the project and install basic Ruby dependencies.**
 
 ```sh
 git clone https://github.com/zachallaun/lolcupid.git lolcupid
 cd lolcupid
+gem install bundler foreman
 ```
 
 **Set up your API Key.**
