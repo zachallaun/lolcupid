@@ -48,3 +48,34 @@ Questions
 - How do we get summoner list? Start with list of challengers and traverse their match list. Add in anyone how manually enters their summoner name.
 - How do we determine 'devotion level'? Something to do with fraction of mastery points relative to the summoner's other favored champs. Then, relative to other champions, which champs tend to have the highest average ratio. Should also account for time since mastery was released and time since champ was released (whichever is sooner).
 - How do we determine which champs are similarly 'favored'? Of summoners who highly favor champ x, determine who else they highly favor. Somehow weight based on relative position in their favored list.
+
+
+
+
+
+
+
+
+commands
+========
+bin/rails g migration update_summoners
+
+use console: bin/rails c
+    reload!
+
+
+Blurbs
+=========
+Advanced matching algorithms to find the champion of your dreams
+
+
+
+
+bin/rake db:drop && heroku pg:pull DATABASE lolcupid-development
+
+
+
+Interesting relations
+============
+- Most selfish adc -> vayne - only 2 positive, thresh and blitz
+- does anyone have only negative supports?
