@@ -55,7 +55,7 @@ class Summoner < ActiveRecord::Base
   end
 
   def profile_icon_url
-    RiotClient::ASSET_PREFIX + "6.9.1/img/profileicon/#{profile_icon_id}.png"
+    RiotClient::ASSET_PREFIX + "#{ENV["SUMMONER_STATIC_ASSET_VERSION"] || "6.10.1"}/img/profileicon/#{profile_icon_id}.png"
   end
 
   private
