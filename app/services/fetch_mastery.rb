@@ -101,6 +101,10 @@ class FetchMastery
       "(#{mastery.id}, #{mastery.uw_champion_points * mult_factor_for(mastery.champion)})"
     end.join(", ")
 
+    if values.blank?
+      return
+    end
+
     ChampionMastery.connection.update_sql(<<-SQL)
       WITH new_champion_masteries (id, champion_points) AS (
           VALUES #{values}
