@@ -16,7 +16,9 @@ class Recommendations
     def update_champion(x)
         recs = recommendations_for(x)
 
-        values_tuples = recs.map do |champ|
+        values_tuples = recs.select do |champ|
+          !champ.score.nil?
+        end.map do |champ|
             "(#{x}, #{champ.id}, #{champ.score})"
         end.join(", ")
 
